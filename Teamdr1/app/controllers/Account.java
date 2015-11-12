@@ -22,35 +22,22 @@ public class Account extends Controller {
         // convert HTML form to an Account model object, containing the params
         UserAccount newAccount = form.get();
 
-        System.out.println(newAccount.username + " " + newAccount.password); // these are null!
         if (UserAccount.exists(newAccount.username)) {
             form.reject("username", "User already exists!");
             return badRequest(account.render(form));
         }
         // save the data sent through HTTP POST
         newAccount.save();
-        return redirect(routes.Account.signIn());
-        //return redirect(routes.Profile.viewProfile());
+        return redirect(routes.Profile.viewProfile());
     }
 
+    // Get the signup form
     public Result newAccount() {
         return ok(account.render(AccountForm));
     }
 
     public Result signIn() {
-        return TODO;
-    }
-
-    // Check to see if this user exists
-    private Boolean userExists(String username) {
-        List<UserAccount> allUsers = UserAccount.findAll();
-        for (int i = 0; i < allUsers.size(); i++) {
-            UserAccount currentUser = allUsers.get(i);
-            if (currentUser.username.equals(username)) {
-                return true;
-            }
-        }
-        return false;
+        return ok(login.render());
     }
 
     public Result checkExistingUser() {
