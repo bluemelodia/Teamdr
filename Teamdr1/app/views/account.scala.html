@@ -2,13 +2,13 @@
 @import helper._
 @main("Teamdr") { <!--Passed into main.scala.html as the page title-->
     <!--Passed into main.scala.html as the content-->
-    @helper.form(action = routes.Account.createUser()) {
+    @helper.form(action = routes.Account.createUser(), 'id -> "SignUp") {
         <fieldset>
             <legend>Sign Up</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:")
             @helper.inputText(serviceForm.field("password"), '_label -> "Password:")
         </fieldset>
-        <input type="submit" value="Create Account"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
+        <input type="submit" value="Create Account" onclick="validateParams();"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
     }
     <button onclick="window.location='@routes.Account.signIn()';" value="login">Login</button>
 }

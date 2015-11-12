@@ -16,19 +16,22 @@ public class Account extends Controller {
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
-        if (!form.hasErrors()) {
-            System.out.println("no errors");
-            // convert HTML form to an Account model object, containing the params
-            UserAccount account = form.get();
-            System.out.println(form);
+        if (form.hasErrors()) {
+            return badRequest(account.render(form));
+            //return badRequest(form.render(form));
+        }
+        // convert HTML form to an Account model object, containing the params
+        UserAccount account = form.get();
 
-            //TODO: validate the input!
+        System.out.println(account.username + " " + account.password); // these are null!
 
-            System.out.println(account.username + " " + account.password); // these are null!
-            // save the data sent through HTTP POST
-            account.save();
-            return redirect(routes.Account.checkExistingUser());
-        } return redirect(routes.Account.signIn());
+        if (UserAccount.exists(account.username)) {
+            System.out.println("This user already exists!");
+        }
+        // save the data sent through HTTP POST
+        account.save();
+        //return redirect(routes.Account.checkExistingUser());
+        return redirect(routes.Account.signIn());
         //return redirect(routes.Profile.viewProfile());
     }
 
@@ -38,6 +41,18 @@ public class Account extends Controller {
 
     public Result signIn() {
         return TODO;
+    }
+
+    // Check to see if this user exists
+    private Boolean userExists(String username) {
+        List<UserAccount> allUsers = UserAccount.findAll();
+        for (int i = 0; i < allUsers.size(); i++) {
+            UserAccount currentUser = allUsers.get(i);
+            if (currentUser.username.equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Result checkExistingUser() {
