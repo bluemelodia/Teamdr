@@ -11,7 +11,7 @@ public class Account extends Controller {
     }
 
     public Result newAccount() {
-        return TODO;
+        return ok(info.render()); // Account refers to the account in account.scala.html
     }
 
     public Result signIn() {
