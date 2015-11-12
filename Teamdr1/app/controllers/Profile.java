@@ -22,9 +22,9 @@ public class Profile extends Controller {
         }
         UserAccount getUser = UserAccount.getUser(user);
 
-        //JsonNode json = toJson(getUser);
-        //return ok(profile.render(json));
-        return ok(update_profile.render());
+        JsonNode json = toJson(getUser);
+        return ok(profile.render(json));
+        //return ok(update_profile.render());
     }
 
     public Result updateProfile() {
