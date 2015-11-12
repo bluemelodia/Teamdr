@@ -10,7 +10,7 @@ GET     /signup                    controllers.Account.newAccount()
 POST    /signup                    controllers.Account.createUser()
 GET     /existing                  controllers.Account.checkExistingUser()
 
-# @Bailey, I made an empty Profile class just so that my page had something to redirect towards
+# TODO: Bailey, I made an empty Profile class just so that my page had something to redirect towards
 GET     /profile                   controllers.Profile.viewProfile()
 
 # Map static resources from the /public folder to the /assets URL path

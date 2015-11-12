@@ -16,13 +16,19 @@ public class Account extends Controller {
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
-        // convert HTML form to an Account model object, containing the params
-        UserAccount account = form.get();
-        System.out.println(form);
-        System.out.println(account.username + " " + account.password); // these are null!
-        // save the data sent through HTTP POST
-        account.save();
-        return redirect(routes.Account.checkExistingUser());
+        if (!form.hasErrors()) {
+            System.out.println("no errors");
+            // convert HTML form to an Account model object, containing the params
+            UserAccount account = form.get();
+            System.out.println(form);
+
+            //TODO: validate the input!
+
+            System.out.println(account.username + " " + account.password); // these are null!
+            // save the data sent through HTTP POST
+            account.save();
+            return redirect(routes.Account.checkExistingUser());
+        } return redirect(routes.Account.signIn());
         //return redirect(routes.Profile.viewProfile());
     }
 
@@ -36,7 +42,6 @@ public class Account extends Controller {
 
     public Result checkExistingUser() {
         List<UserAccount> allUsers = UserAccount.findAll();
-        // This isn't getting encoded correctly!
         for (int i = 0; i < allUsers.size(); i++) {
             System.out.println(allUsers.get(i).username);
             System.out.println(allUsers.get(i).password);
