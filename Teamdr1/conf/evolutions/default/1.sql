@@ -13,14 +13,21 @@ create sequence user_account_seq;
 
 
 
-create table teams (
-  username                  varchar(255) not null,
-  password                  varchar(255),
-  constraint pk_teams primary key (username))
+create table team (
+  name                  varchar(255) not null,
+  class_name                  varchar(255),
+  username					varchar(225),
+  constraint pk_team primary key (username))
 ;
 
-create sequence teams_seq;
+create sequence team_seq;
 
+create table class (
+  name                  varchar(255) not null,
+  constraint pk_class primary key (username))
+;
+
+create sequence class_seq;
 
 
 
@@ -29,10 +36,12 @@ create sequence teams_seq;
 SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists user_account;
-drop table if exists teams;
+drop table if exists team;
+drop table if exists class;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists user_account_seq;
-drop sequence if exists teams_seq;
+drop sequence if exists team_seq;
+drop sequence if exists class_seq;
 
