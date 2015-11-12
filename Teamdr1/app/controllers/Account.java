@@ -13,6 +13,7 @@ import java.util.List;
 public class Account extends Controller {
     // Enables passing of params into the form
     private static final Form<UserAccount> AccountForm = Form.form(UserAccount.class);
+    private static final Form<UserAccount> LoginForm = Form.form(UserAccount.class);
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
@@ -37,7 +38,7 @@ public class Account extends Controller {
     }
 
     public Result signIn() {
-        return ok(login.render());
+        return ok(login.render(LoginForm));
     }
 
     public Result checkExistingUser() {
