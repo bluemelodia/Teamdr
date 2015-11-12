@@ -13,6 +13,7 @@ GET     /logout                    controllers.Account.logoutUser()
 
 # TODO: Bailey, I made an empty Profile class just so that my page had something to redirect towards
 GET     /profile                   controllers.Profile.viewProfile()
+GET     /update                    controllers.Profile.updateProfile()
 
 
 GET     /team                       controllers.Team.showTeams()

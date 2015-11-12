@@ -6,6 +6,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.profile;
+import views.html.update_profile;
 
 import static play.libs.Json.*;
 
@@ -23,5 +24,13 @@ public class Profile extends Controller {
 
         JsonNode json = toJson(getUser);
         return ok(profile.render(json));
+    }
+
+    public Result updateProfile() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        return ok(update_profile.render());
     }
 }
