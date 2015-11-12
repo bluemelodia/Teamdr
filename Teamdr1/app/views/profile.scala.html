@@ -1,3 +1,5 @@
+@(user: String)
+@main("Profile") {
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -26,9 +28,6 @@
 				text-decoration: none;
 			}
 		</style>
-		
-		<title>Profile</title>
-		
         <script type="text/javascript" src="Scripts/iWebSite.js"></script>
 		<script type="text/javascript" src="Scripts/iWebImage.js"></script>
 	
@@ -40,10 +39,8 @@
 		<table align = center width=743 bgcolor=#000000>
 		
 			<td>
-			<button aligh=right type="submit" name="Username_change_btn" style="float: right;" onclick="location.href='http://google.com';"/>
-			Signout
-			</button><BR/></BR>
-				
+                <button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
+                <BR/></BR>
 			</tr>
 		</table>
 		</body>
@@ -64,7 +61,7 @@
 					
 					<p color=#000000>
 					<b>Email:</b>
-					<BR>wvb2103@columbia.edu
+					<BR>@user
 					<BR><BR>
 					
 					<b>Class: <a href="www.google.com">COMS 4156</a></b>
@@ -84,7 +81,6 @@
 				</font></td>
 			</tr>
 		</table>
-		
 	</body>
-	
 </html>
+}

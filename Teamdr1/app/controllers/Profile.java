@@ -16,6 +16,6 @@ public class Profile extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-        return ok(profile.render());
+        return ok(profile.render(user));
     }
 }
