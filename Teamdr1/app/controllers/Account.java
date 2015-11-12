@@ -18,6 +18,8 @@ public class Account extends Controller {
         Form<UserAccount> form = AccountForm.bindFromRequest();
         // convert HTML form to an Account model object, containing the params
         UserAccount account = form.get();
+        System.out.println(form);
+        System.out.println(account.username + " " + account.password); // these are null!
         // save the data sent through HTTP POST
         account.save();
         return redirect(routes.Account.checkExistingUser());
@@ -34,7 +36,11 @@ public class Account extends Controller {
 
     public Result checkExistingUser() {
         List<UserAccount> allUsers = UserAccount.findAll();
-
+        // This isn't getting encoded correctly!
+        for (int i = 0; i < allUsers.size(); i++) {
+            System.out.println(allUsers.get(i).username);
+            System.out.println(allUsers.get(i).password);
+        }
         // Iterates through all records, dumping them into JSON format
         return ok(Json.toJson(allUsers));
     }
