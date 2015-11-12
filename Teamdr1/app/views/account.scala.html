@@ -1,3 +1,24 @@
 @main("Teamdr") { <!--Passed into main.scala.html as the page title-->
-    <h1>Sign Up For An Account</h1> <!--Passed into main.scala.html as the content-->
+    <!--Passed into main.scala.html as the content-->
+    <html>
+        <head>
+            <title>User Signup</title>
+        </head>
+        <style>
+        body{
+        font-size: 12pt;
+        font-family: times;
+        }
+        </style>
+
+        <body>
+            <form method="post">
+                E-mail Address:<br>
+                <input type="text" name="username" maxlength="44"><br><br>
+                Password:<br>
+                <input type="text" name="password" maxlength="44"><br><br>
+                <input type="submit" value="Submit">
+            </form>
+        </body>
+    </html>
 }

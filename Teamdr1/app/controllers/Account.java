@@ -13,7 +13,6 @@ public class Account extends Controller {
 
     public Result newAccount() {
         return ok(account.render());
-        //return ok(index.render("Boss kitty2.")); // Account refers to the account in account.scala.html
     }
 
     public Result signIn() {
