@@ -1,24 +1,13 @@
+@(serviceForm : Form[Account]) <!-- Form uses Account model -->
+@import helper._
 @main("Teamdr") { <!--Passed into main.scala.html as the page title-->
     <!--Passed into main.scala.html as the content-->
-    <html>
-        <head>
-            <title>User Signup</title>
-        </head>
-        <style>
-        body{
-        font-size: 12pt;
-        font-family: times;
-        }
-        </style>
-
-        <body>
-            <form method="post">
-                E-mail Address:<br>
-                <input type="text" name="username" maxlength="44"><br><br>
-                Password:<br>
-                <input type="text" name="password" maxlength="44"><br><br>
-                <input type="submit" value="Submit">
-            </form>
-        </body>
-    </html>
+    @helper.form(action = routes.Account.createUser()) {
+        <fieldset>
+            <legend>Sign Up</legend>
+            @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:")
+            @helper.inputText(serviceForm.field("password"), '_label -> "Password:")
+        </fieldset>
+        <input type="submit" value="Create Account"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
+    }
 }
