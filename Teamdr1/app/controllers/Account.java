@@ -20,18 +20,15 @@ public class Account extends Controller {
             return badRequest(account.render(form));
         }
         // convert HTML form to an Account model object, containing the params
-        UserAccount account = form.get();
+        UserAccount newAccount = form.get();
 
-        System.out.println(account.username + " " + account.password); // these are null!
-        if ((account.username).length() < 1) {
-            //filledForm.reject("name","Please provide a username.");
-            //return badRequest(account.render(filledForm));
-        }
-        if (UserAccount.exists(account.username)) {
-            System.out.println("This user already exists!");
+        System.out.println(newAccount.username + " " + newAccount.password); // these are null!
+        if (UserAccount.exists(newAccount.username)) {
+            form.reject("username", "User already exists!");
+            return badRequest(account.render(form));
         }
         // save the data sent through HTTP POST
-        account.save();
+        newAccount.save();
         return redirect(routes.Account.signIn());
         //return redirect(routes.Profile.viewProfile());
     }
