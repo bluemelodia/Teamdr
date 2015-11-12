@@ -12,5 +12,7 @@ Profile, search for and create classes
 Anfal & Amel:
 Team search page (one per class), this lets you go through users and swipe left/right - you only see one Team at a time
 
+Updated specs: pre-populate the database with CS classes. Users are not allowed to add a new class to the database, but they can add a new class to their schedule.
+
 Tips: If DB is storing garbage values, do activator clean, activator run.
 Ex. {"username":"1","password":null} when right value should be {"username":"turtles","password":"flops"}
