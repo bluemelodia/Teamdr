@@ -3,12 +3,13 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+#GET     /                          controllers.Application.index()
 
-GET     /login                     controllers.Account.signIn()
-GET     /signup                    controllers.Account.newAccount()
+GET     /signup                    controllers.Account.signUp()
 POST    /signup                    controllers.Account.createUser()
-GET     /existing                  controllers.Account.checkExistingUser()
+GET     /login                     controllers.Account.signIn()
+POST    /login                     controllers.Account.authenticateUser()
+GET     /logout                    controllers.Account.logoutUser()
 
 # TODO: Bailey, I made an empty Profile class just so that my page had something to redirect towards
 GET     /profile                   controllers.Profile.viewProfile()

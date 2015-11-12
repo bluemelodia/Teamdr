@@ -13,40 +13,59 @@ import java.util.List;
 public class Account extends Controller {
     // Enables passing of params into the form
     private static final Form<UserAccount> AccountForm = Form.form(UserAccount.class);
+    private static final Form<UserAccount> LoginForm = Form.form(UserAccount.class);
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
-        if (!form.hasErrors()) {
-            System.out.println("no errors");
-            // convert HTML form to an Account model object, containing the params
-            UserAccount account = form.get();
-            System.out.println(form);
+        if (form.hasErrors()) { // Redirect with error
+            return badRequest(account.render(form));
+        }
+        // convert HTML form to an Account model object, containing the params
+        UserAccount newAccount = form.get();
 
-            //TODO: validate the input!
-
-            System.out.println(account.username + " " + account.password); // these are null!
-            // save the data sent through HTTP POST
-            account.save();
-            return redirect(routes.Account.checkExistingUser());
-        } return redirect(routes.Account.signIn());
-        //return redirect(routes.Profile.viewProfile());
+        if (UserAccount.exists(newAccount.username)) {
+            form.reject("username", "User already exists.");
+            return badRequest(account.render(form));
+        }
+        // save the data sent through HTTP POST
+        newAccount.save();
+        session("connected", newAccount.username);
+        return redirect(routes.Profile.viewProfile());
     }
 
-    public Result newAccount() {
+    // Get the signup form
+    public Result signUp() {
         return ok(account.render(AccountForm));
     }
 
     public Result signIn() {
-        return TODO;
+        return ok(login.render(LoginForm));
     }
 
-    public Result checkExistingUser() {
-        List<UserAccount> allUsers = UserAccount.findAll();
-        for (int i = 0; i < allUsers.size(); i++) {
-            System.out.println(allUsers.get(i).username);
-            System.out.println(allUsers.get(i).password);
+    // Validate the user's credentials
+    public Result authenticateUser() {
+        Form<UserAccount> form = LoginForm.bindFromRequest();
+        if (form.hasErrors()) { // Redirect with error
+            return badRequest(login.render(form));
         }
-        // Iterates through all records, dumping them into JSON format
-        return ok(Json.toJson(allUsers));
+        UserAccount getAccount = form.get();
+        if (!UserAccount.exists(getAccount.username)) {
+            form.reject("username", "User does not exist.");
+            return badRequest(login.render(form));
+        }
+        UserAccount getUser = UserAccount.getUser(getAccount.username);
+        if (!getUser.password.equals(getAccount.password)) {
+            form.reject("password", "Incorrect password.");
+            return badRequest(login.render(form));
+        }
+        // This stores info about the user's session
+        // Other classes can fetch the username from here
+        session("connected", getAccount.username);
+        return redirect(routes.Profile.viewProfile());
+    }
+
+    public Result logoutUser() {
+        session().remove("connected");
+        return redirect(routes.Account.signIn());
     }
 }
