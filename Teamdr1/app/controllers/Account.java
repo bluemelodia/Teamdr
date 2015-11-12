@@ -3,7 +3,9 @@ import models.UserAccount;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.Form;
+import play.libs.Json;
 import views.html.*;
+import java.util.List;
 
 /**
  * Created by bluemelodia on 11/11/15.
@@ -18,7 +20,8 @@ public class Account extends Controller {
         UserAccount account = form.get();
         // save the data sent through HTTP POST
         account.save();
-        return redirect(routes.Profile.viewProfile());
+        return redirect(routes.Account.checkExistingUser());
+        //return redirect(routes.Profile.viewProfile());
     }
 
     public Result newAccount() {
@@ -27,5 +30,12 @@ public class Account extends Controller {
 
     public Result signIn() {
         return TODO;
+    }
+
+    public Result checkExistingUser() {
+        List<UserAccount> allUsers = UserAccount.findAll();
+
+        // Iterates through all records, dumping them into JSON format
+        return ok(Json.toJson(allUsers));
     }
 }
