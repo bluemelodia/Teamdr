@@ -12,6 +12,7 @@ import views.html.profile;
 public class Profile extends Controller {
     public Result viewProfile() {
         String user = session("connected");
+        System.out.println("Parameter: " + user);
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }

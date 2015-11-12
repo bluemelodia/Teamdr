@@ -59,6 +59,7 @@ public class Account extends Controller {
             return badRequest(login.render(form));
         }
         // This stores info about the user's session
+        // Other classes can fetch the username from here
         session("connected", getAccount.username);
         return redirect(routes.Profile.viewProfile());
     }
