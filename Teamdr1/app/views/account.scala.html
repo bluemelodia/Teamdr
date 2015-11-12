@@ -5,7 +5,7 @@
     @helper.form(action = routes.Account.createUser(), 'id -> "SignUp") {
         <fieldset>
             <legend>Sign Up</legend>
-            @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:")
+            @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:") 
             @helper.inputText(serviceForm.field("password"), '_label -> "Password:")
         </fieldset>
         <input type="submit" value="Create Account" onclick="validateParams();"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->

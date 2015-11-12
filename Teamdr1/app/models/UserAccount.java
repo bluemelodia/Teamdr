@@ -1,6 +1,7 @@
 package models;
-import play.data.validation.Constraints;
 import com.avaje.ebean.Model;
+import play.data.validation.Constraints;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 public class UserAccount extends Model {
     @Id
+    @Constraints.Required
     public String username; // Primary key
     @Constraints.Required
     public String password; // System will not allow invalid data save

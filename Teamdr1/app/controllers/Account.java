@@ -16,21 +16,22 @@ public class Account extends Controller {
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
-        if (form.hasErrors()) {
+        if (form.hasErrors()) { // Redirect with error
             return badRequest(account.render(form));
-            //return badRequest(form.render(form));
         }
         // convert HTML form to an Account model object, containing the params
         UserAccount account = form.get();
 
         System.out.println(account.username + " " + account.password); // these are null!
-
+        if ((account.username).length() < 1) {
+            //filledForm.reject("name","Please provide a username.");
+            //return badRequest(account.render(filledForm));
+        }
         if (UserAccount.exists(account.username)) {
             System.out.println("This user already exists!");
         }
         // save the data sent through HTTP POST
         account.save();
-        //return redirect(routes.Account.checkExistingUser());
         return redirect(routes.Account.signIn());
         //return redirect(routes.Profile.viewProfile());
     }
