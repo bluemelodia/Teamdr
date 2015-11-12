@@ -10,9 +10,15 @@ import views.html.*;
  */
 public class Account extends Controller {
     // Enables passing of params into the form
-    private static final Form<Account> AccountForm = Form.form(Account.class);
+    private static final Form<UserAccount> AccountForm = Form.form(UserAccount.class);
     public Result createUser() {
-        return TODO;
+        // grab HTML form that was sent to this method, and extracts relevant fields from it
+        Form<UserAccount> form = AccountForm.bindFromRequest();
+        // convert HTML form to an Account model object, containing the params
+        UserAccount account = form.get();
+        // save the data sent through HTTP POST
+        account.save();
+        return redirect(routes.Profile.viewProfile());
     }
 
     public Result newAccount() {
