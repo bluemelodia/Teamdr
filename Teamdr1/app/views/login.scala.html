@@ -2,7 +2,7 @@
 @import helper._
 @main("Login") {
     <!--Passed into main.scala.html as the content-->
-    @helper.form(action = routes.Account.checkExistingUser(), 'id -> "SignIn") {
+    @helper.form(action = routes.Account.authenticateUser(), 'id -> "SignIn") {
         <fieldset>
             <legend>Login</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")

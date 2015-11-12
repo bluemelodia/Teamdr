@@ -29,6 +29,7 @@ public class Account extends Controller {
         }
         // save the data sent through HTTP POST
         newAccount.save();
+        session("connected", newAccount.username);
         return redirect(routes.Profile.viewProfile());
     }
 
@@ -41,7 +42,8 @@ public class Account extends Controller {
         return ok(login.render(LoginForm));
     }
 
-    public Result checkExistingUser() {
+    // Validate the user's credentials
+    public Result authenticateUser() {
         Form<UserAccount> form = LoginForm.bindFromRequest();
         if (form.hasErrors()) { // Redirect with error
             return badRequest(login.render(form));
@@ -56,6 +58,13 @@ public class Account extends Controller {
             form.reject("password", "Incorrect password.");
             return badRequest(login.render(form));
         }
+        // This stores info about the user's session
+        session("connected", getAccount.username);
         return redirect(routes.Profile.viewProfile());
+    }
+
+    public Result logoutUser() {
+        session().remove("connected");
+        return redirect(routes.Account.signIn());
     }
 }

@@ -3,6 +3,7 @@ package controllers;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.Form;
+
 import views.html.profile;
 
 /**
@@ -10,7 +11,10 @@ import views.html.profile;
  */
 public class Profile extends Controller {
     public Result viewProfile() {
-        return TODO;
-        //return ok(profile.render());
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        return ok(profile.render());
     }
 }

@@ -8,7 +8,8 @@
 GET     /signup                    controllers.Account.signUp()
 POST    /signup                    controllers.Account.createUser()
 GET     /login                     controllers.Account.signIn()
-GET     /users                     controllers.Account.checkExistingUser()
+POST    /login                     controllers.Account.authenticateUser()
+GET     /logout                    controllers.Account.logoutUser()
 
 # TODO: Bailey, I made an empty Profile class just so that my page had something to redirect towards
 GET     /profile                   controllers.Profile.viewProfile()
