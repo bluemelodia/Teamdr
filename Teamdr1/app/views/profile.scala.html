@@ -1,4 +1,5 @@
-@(user: String)
+@import com.fasterxml.jackson.databind.JsonNode
+@(userAccount: JsonNode)
 @main("Profile") {
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -61,7 +62,10 @@
 					
 					<p color=#000000>
 					<b>Email:</b>
-					<BR>@user
+					<BR><ul>
+                        @for(userdata <- userAccount.fields()){
+                            <li>@userdata.getValue().asText()</li>
+                        }</ul>
 					<BR><BR>
 					
 					<b>Class: <a href="www.google.com">COMS 4156</a></b>
