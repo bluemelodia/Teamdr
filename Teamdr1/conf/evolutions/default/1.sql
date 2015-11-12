@@ -11,6 +11,8 @@ create table user_account (
 
 create sequence user_account_seq;
 
+
+
 create table teams (
   username                  varchar(255) not null,
   password                  varchar(255),
