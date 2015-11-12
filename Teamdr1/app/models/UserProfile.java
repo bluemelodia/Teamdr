@@ -10,5 +10,9 @@ import java.util.List;
  * Created by bluemelodia on 11/12/15.
  */
 public class UserProfile {
-    
+    @Id
+    @Constraints.Required
+    String email;
+    Class[] classes;
+    String description;
 }
