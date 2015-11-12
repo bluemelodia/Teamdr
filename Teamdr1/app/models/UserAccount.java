@@ -31,4 +31,9 @@ public class UserAccount extends Model {
     public static boolean exists(String username) {
         return(find.where().eq("username", username).findRowCount() == 1) ? true : false;
     }
+
+    // Return the record with this matching username
+    public static UserAccount getUser(String username) {
+        return find.ref(username);
+    }
 }

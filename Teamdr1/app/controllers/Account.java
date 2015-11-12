@@ -24,7 +24,7 @@ public class Account extends Controller {
         UserAccount newAccount = form.get();
 
         if (UserAccount.exists(newAccount.username)) {
-            form.reject("username", "User already exists!");
+            form.reject("username", "User already exists.");
             return badRequest(account.render(form));
         }
         // save the data sent through HTTP POST
@@ -33,7 +33,7 @@ public class Account extends Controller {
     }
 
     // Get the signup form
-    public Result newAccount() {
+    public Result signUp() {
         return ok(account.render(AccountForm));
     }
 
@@ -42,12 +42,20 @@ public class Account extends Controller {
     }
 
     public Result checkExistingUser() {
-        List<UserAccount> allUsers = UserAccount.findAll();
-        for (int i = 0; i < allUsers.size(); i++) {
-            System.out.println(allUsers.get(i).username);
-            System.out.println(allUsers.get(i).password);
+        Form<UserAccount> form = LoginForm.bindFromRequest();
+        if (form.hasErrors()) { // Redirect with error
+            return badRequest(login.render(form));
         }
-        // Iterates through all records, dumping them into JSON format
-        return ok(Json.toJson(allUsers));
+        UserAccount getAccount = form.get();
+        if (!UserAccount.exists(getAccount.username)) {
+            form.reject("username", "User does not exist.");
+            return badRequest(login.render(form));
+        }
+        UserAccount getUser = UserAccount.getUser(getAccount.username);
+        if (!getUser.password.equals(getAccount.password)) {
+            form.reject("password", "Incorrect password.");
+            return badRequest(login.render(form));
+        }
+        return redirect(routes.Profile.viewProfile());
     }
 }
