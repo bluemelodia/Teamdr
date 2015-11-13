@@ -1,4 +1,6 @@
 package models;
+import controllers.Classes;
+import models.UserAccount;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 
@@ -11,11 +13,8 @@ import java.util.List;
  */
 @Entity
 public class Team_Lookup extends Model {
-    @Id
-    @Constraints.Required
-    public String username; // Primary key
-    @Constraints.Required
-    public String password; // System will not allow invalid data save
+
+
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     /*private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);*/

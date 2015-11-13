@@ -1,12 +1,12 @@
 @(serviceForm : Form[UserAccount]) <!-- Form uses Account model -->
 @import helper._
-@main("Login") {
+@main("Teamdr") { <!--Passed into main.scala.html as the page title-->
+    <!--Passed into main.scala.html as the content-->
     <table align = center width=275 bgcolor=#000000>
-        <td><button onclick="window.location='@routes.Account.signUp()';" value="signup">Sign Up</button>
+        <td><button onclick="window.location='@routes.Account.signIn()';" value="login">Login</button>
             <BR/></BR></tr>
     </table>
-    <!--Passed into main.scala.html as the content-->
-    @helper.form(action = routes.Account.authenticateUser(), 'id -> "SignIn") {
+    @helper.form(action = routes.Account.createUser(), 'id -> "SignUp") {
         <style type='text/css'>
             body{
                 color:#000000; background-color:#ffffff;
@@ -19,12 +19,12 @@
                 width:250px;
                 line-height:1.8;}
         </style>
+
         <fieldset>
-            <legend>Login</legend>
+            <legend>Create Account</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")
-            @helper.inputText(serviceForm.field("password"), '_label -> "Password:", '_class -> "password-field")
-            <input type="submit" value="Login"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
+            @helper.inputPassword(serviceForm.field("password"), '_label -> "Password:", '_class -> "password-field")
+            <input type="submit" value="Sign Up"/><!-- Once user clicks submit button, goes to routes.Account.createUser() -->
         </fieldset>
     }
-
 }
