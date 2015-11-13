@@ -3,12 +3,28 @@
 @main("Login") {
     <!--Passed into main.scala.html as the content-->
     @helper.form(action = routes.Account.authenticateUser(), 'id -> "SignIn") {
+        <style type='text/css'>
+            body{
+                color:#000000; background-color:#ffffff;
+                font-family:arial, verdana, sans-serif; font-size:12pt;}
+
+            fieldset {
+                margin:auto;
+                font-size:12px;
+                padding:10px;
+                width:250px;
+                line-height:1.8;}
+        </style>
+        <table align = center width=275 bgcolor=#000000>
+            <td><button onclick="window.location='@routes.Account.signUp()';" value="signup">Sign Up</button>
+                <BR/></BR></tr>
+        </table>
         <fieldset>
             <legend>Login</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")
             @helper.inputText(serviceForm.field("password"), '_label -> "Password:", '_class -> "password-field")
+            <input type="submit" value="Login"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
         </fieldset>
-        <input type="submit" value="Login"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
     }
-    <button onclick="window.location='@routes.Account.signUp()';" value="signup">Sign Up</button>
+
 }
