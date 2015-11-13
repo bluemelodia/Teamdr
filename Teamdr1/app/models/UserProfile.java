@@ -1,5 +1,6 @@
 package models;
 import com.avaje.ebean.Model;
+import controllers.Classes;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -13,6 +14,6 @@ public class UserProfile {
     @Id
     @Constraints.Required
     String email;
-    Class[] classes;
+    Classes[] classes;
     String description;
 }

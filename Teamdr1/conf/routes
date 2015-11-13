@@ -11,12 +11,14 @@ GET     /login                     controllers.Account.signIn()
 POST    /login                     controllers.Account.authenticateUser()
 GET     /logout                    controllers.Account.logoutUser()
 
-# TODO: Bailey, I made an empty Profile class just so that my page had something to redirect towards
 GET     /profile                   controllers.Profile.viewProfile()
 GET     /update                    controllers.Profile.updateProfile()
 
 
-GET     /team                       controllers.Team.showTeams()
+GET     /team                      controllers.Team.showTeams()
+
+GET     /class                     controllers.Classes.retrieveClass()
+POST    /class                     controllers.Classes.putClass()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
