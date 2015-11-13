@@ -1,6 +1,11 @@
 @(serviceForm : Form[UserAccount]) <!-- Form uses Account model -->
 @import helper._
 @main("Login") {
+    <table align = center width=275 bgcolor=#000000>
+        <td><button onclick="window.location='@routes.Account.signUp()';" value="signup">Sign Up</button>
+            <button onclick="window.location='@routes.Account.memoryLoss()';" value="login">Forgot Password</button>
+            <BR/></BR></tr>
+    </table>
     <!--Passed into main.scala.html as the content-->
     @helper.form(action = routes.Account.authenticateUser(), 'id -> "SignIn") {
         <style type='text/css'>
@@ -15,11 +20,6 @@
                 width:250px;
                 line-height:1.8;}
         </style>
-        <table align = center width=275 bgcolor=#000000>
-            <td><button onclick="window.location='@routes.Account.signUp()';" value="signup">Sign Up</button>
-                <button onclick="window.location='@routes.Account.memoryLoss()';" value="login">Forgot Password</button>
-                <BR/></BR></tr>
-        </table>
         <fieldset>
             <legend>Login</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")

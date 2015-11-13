@@ -2,6 +2,10 @@
 @import helper._
 @main("Teamdr") { <!--Passed into main.scala.html as the page title-->
     <!--Passed into main.scala.html as the content-->
+    <table align = center width=275 bgcolor=#000000>
+        <td><button onclick="window.location='@routes.Account.signIn()';" value="login">Login</button>
+            <BR/></BR></tr>
+    </table>
     @helper.form(action = routes.Account.createUser(), 'id -> "SignUp") {
         <style type='text/css'>
             body{
@@ -15,10 +19,7 @@
                 width:250px;
                 line-height:1.8;}
         </style>
-        <table align = center width=275 bgcolor=#000000>
-            <td><button onclick="window.location='@routes.Account.signIn()';" value="login">Login</button>
-                <BR/></BR></tr>
-        </table>
+
         <fieldset>
             <legend>Create Account</legend>
             @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")

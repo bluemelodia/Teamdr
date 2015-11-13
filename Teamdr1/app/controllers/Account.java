@@ -5,7 +5,7 @@ import play.mvc.Result;
 import play.data.Form;
 import play.libs.Json;
 import views.html.*;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by bluemelodia on 11/11/15.
@@ -77,6 +77,9 @@ public class Account extends Controller {
             form.reject("username", "User does not exist.");
             return badRequest(forgot.render(form));
         }
+
+        UserAccount thisUser = UserAccount.getUser(getAccount.username);
+
         return redirect(routes.Account.signIn());
     }
 
