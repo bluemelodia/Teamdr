@@ -10,6 +10,8 @@ POST    /signup                    controllers.Account.createUser()
 GET     /login                     controllers.Account.signIn()
 POST    /login                     controllers.Account.authenticateUser()
 GET     /logout                    controllers.Account.logoutUser()
+GET     /forgot                    controllers.Account.memoryLoss()
+POST    /forgot                    controllers.Account.forgotPassword()
 
 GET     /profile                   controllers.Profile.viewProfile()
 GET     /update                    controllers.Profile.updateProfile()
