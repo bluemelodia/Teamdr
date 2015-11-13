@@ -6,7 +6,7 @@
     <td><button onclick="window.location='@routes.Account.signIn()';" value="login">Login</button>
       <BR/></BR></tr>
   </table>
-  @helper.form(action = routes.Account.forgotPassword(), 'id -> "Forgot") {
+  @helper.form(action = routes.Account.signIn(), 'id -> "Forgot") {
     <style type='text/css'>
     body{
     color:#000000; background-color:#ffffff;

@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Created by bluemelodia on 11/13/15.
  */
+@Entity
 public class Team {
     @Id
     @Constraints.Required
