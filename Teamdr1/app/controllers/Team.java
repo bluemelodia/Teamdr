@@ -42,7 +42,12 @@ public class Team extends Controller {
     }
 
     public Result createTeam() {
-        return TODO;
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String teamName = values.get("teamName")[0];
+        String tid = values.get("teamID")[0];
+        System.out.println(teamName + " " + tid);
+        JsonNode json = toJson("COMS4111");
+        return ok(createteam.render(json));
     }
 
 }
