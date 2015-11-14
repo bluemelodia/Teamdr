@@ -1,9 +1,9 @@
 package models;
+import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 import controllers.Classes;
 import models.UserAccount;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.ArrayList;
 @Entity
 public class TeamRecord extends Model {
     @Id
-    String tid;
+    public String tid;
     @Constraints.Required
-    ArrayList<UserAccount> teamMembers;
+    public ArrayList<UserAccount> teamMembers;
     @Constraints.Required
-    String teamName;
+    public String teamName;
     @Constraints.Required
-    String thisClass; // This is the class ID
+    public String thisClass; // This is the class ID
 
     // Create a new team with one person
     public TeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
@@ -47,8 +47,16 @@ public class TeamRecord extends Model {
     }
 
     // Check if user already has a team for this class
-    public static boolean hasTeam(String tid, Classes thisClass) {
-
-        return (find.where().eq("tid", tid).findRowCount() == 1) ? true : false;
+    public static boolean hasTeam(String thisClass, UserAccount user) {
+        List<TeamRecord> classTeams = TeamRecord.find.where().eq("thisClass", thisClass).findList();
+        for (int i = 0; i < classTeams.size(); i++) {
+            TeamRecord thisTeam = classTeams.get(i);
+            ArrayList<UserAccount> teamMembers = thisTeam.teamMembers;
+            if (teamMembers == null) continue;
+            if (teamMembers.contains(user)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

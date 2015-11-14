@@ -16,7 +16,7 @@ public class ClassRecord extends Model {
     public String classID;
     @Constraints.Required
     public String className;
-	public UserAccount[] enrolledStudents;
+	//public UserAccount[] enrolledStudents;
 	public TeamRecord team;
 
 	

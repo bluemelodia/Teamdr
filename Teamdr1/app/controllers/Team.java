@@ -20,6 +20,8 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
+    public static final String currentClass = "COMS4111";
+
     public Result list() {
         return TODO;
     }
@@ -48,7 +50,7 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         };
 
-        JsonNode className = toJson("COMS4111");
+        JsonNode className = toJson(currentClass);
         JsonNode error = toJson("");
         return ok(createteam.render(className, error, error));
     }
@@ -60,7 +62,7 @@ public class Team extends Controller {
         String tid = values.get("teamID")[0];
         JsonNode error;
         JsonNode error2;
-        JsonNode className = toJson("COMS4111");
+        JsonNode className = toJson(currentClass);
 
         if (teamName.length() < 1 && tid.length() < 1) {
             error = toJson("TeamName is required.");
@@ -84,17 +86,21 @@ public class Team extends Controller {
         }
 
         // User cannot have more than one team for this class
-
+        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+        if (TeamRecord.hasTeam(currentClass, thisUser)) {
+            error = toJson("You already created a team for this class.");
+            error2 = toJson("");
+            return badRequest(createteam.render(className, error, error2));
+        }
 
         // Create a new team
-        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
-        TeamRecord newTeam = new TeamRecord(tid, thisUser, teamName, "COMS4111");
+        TeamRecord newTeam = new TeamRecord(tid, thisUser, teamName, currentClass);
         newTeam.save(); // Save this new team into the database
 
-        JsonNode json = toJson("COMS4111");
+        JsonNode json = toJson(currentClass);
         error = toJson("");
         error2 = toJson("");
-        return ok(createteam.render(json, error, error2));
+        return redirect(routes.Account.signIn());
     }
 
 }
