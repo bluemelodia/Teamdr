@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+@import helper._
+@import com.fasterxml.jackson.databind.JsonNode
+@(classRecord: JsonNode)
+@main("Create Team") {
+  <table align = center width=275 bgcolor=#000000>
+    <td><button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
+      <BR/></BR></tr>
+  </table>
+  <!--Passed into main.scala.html as the content-->
+  @helper.form(action = routes.Team.createTeam(), 'id -> "SignIn") {
+    <style type='text/css'>
+    body{
+    color:#000000; background-color:#ffffff;
+    font-family:arial, verdana, sans-serif; font-size:12pt;}
 
-</body>
-</html>
+    fieldset {
+    margin:auto;
+    font-size:12px;
+    padding:10px;
+    width:250px;
+    line-height:1.8;}
+    </style>
+    <fieldset>
+      <legend>Create Team</legend>
+        Team Name:<br>
+        <input type=""text" name="teamName"><br><br>
+        Team ID:<br>
+        <input type=""text" name="teamID"><br><br>
+      <input type="submit" value="Create Team"/>
+    </fieldset>
+  }
+
+}

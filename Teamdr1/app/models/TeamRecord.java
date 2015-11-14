@@ -19,8 +19,8 @@ public class TeamRecord extends Model {
     UserAccount[] teamMembers;
     @Constraints.Required
     String teamName;
-    @Contraints.Required
-    Classes class;
+    @Constraints.Required
+    Classes thisClass;
 
     private static Model.Finder<String, TeamRecord> find = new Model.Finder<>(TeamRecord.class);
 
