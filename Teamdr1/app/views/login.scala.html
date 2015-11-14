@@ -21,7 +21,7 @@
         </style>
         <fieldset>
             <legend>Login</legend>
-            @helper.inputText(serviceForm.field("username"), '_label -> "E-mail:", '_class -> "username-field")
+            @helper.inputText(serviceForm.field("username"), '_label -> "Username:", '_class -> "username-field")
             @helper.inputPassword(serviceForm.field("password"), '_label -> "Password:", '_class -> "password-field")
             <input type="submit" value="Login"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
         </fieldset>
