@@ -26,8 +26,9 @@ public class TeamRecord extends Model {
     // Create a new team with one person
     public TeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
         this.tid = tid;
-        teamMembers = new ArrayList<UserAccount>();
-        teamMembers.add(user);
+        this.teamMembers = new ArrayList<UserAccount>();
+        this.teamMembers.add(user);
+        System.out.println("Adding: " + user.username + " to new team");
         this.teamName = teamName;
         this.thisClass = thisClass;
     }

@@ -91,16 +91,29 @@ public class Team extends Controller {
             error = toJson("You already created a team for this class.");
             error2 = toJson("");
             return badRequest(createteam.render(className, error, error2));
+        } else {
+            // Create a new team
+            TeamRecord newTeam = new TeamRecord(tid, thisUser, teamName, currentClass);
+            newTeam.save(); // Save this new team into the database
+
+            JsonNode json = toJson(currentClass);
+            error = toJson("");
+            error2 = toJson("");
+
+            // Code to check the created teams
+            List<TeamRecord> allTeams = TeamRecord.findAll();
+            for (int i = 0; i < allTeams.size(); i++) {
+                TeamRecord team = allTeams.get(i);
+                System.out.println("Name: " + team.teamName);
+                System.out.println(team.teamMembers);
+                System.out.println("Class: " + team.thisClass);
+                System.out.println();
+            }
+
+            // Todo: we have to make sure there are acutally people in the team...
+
+            return redirect(routes.Account.signIn());
         }
-
-        // Create a new team
-        TeamRecord newTeam = new TeamRecord(tid, thisUser, teamName, currentClass);
-        newTeam.save(); // Save this new team into the database
-
-        JsonNode json = toJson(currentClass);
-        error = toJson("");
-        error2 = toJson("");
-        return redirect(routes.Account.signIn());
     }
 
 }
