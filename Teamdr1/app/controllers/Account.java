@@ -1,5 +1,6 @@
 package controllers;
 import models.UserAccount;
+import models.UserProfile;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.Form;
@@ -15,22 +16,38 @@ public class Account extends Controller {
     private static final Form<UserAccount> AccountForm = Form.form(UserAccount.class);
     private static final Form<UserAccount> LoginForm = Form.form(UserAccount.class);
     private static final Form<UserAccount> ForgotForm = Form.form(UserAccount.class);
+	private static final Form<UserProfile> ProfileForm = Form.form(UserProfile.class);
 
     public Result createUser() {
         // grab HTML form that was sent to this method, and extracts relevant fields from it
         Form<UserAccount> form = AccountForm.bindFromRequest();
+		
         if (form.hasErrors()) { // Redirect with error
             return badRequest(account.render(form));
         }
         // convert HTML form to an Account model object, containing the params
         UserAccount newAccount = form.get();
-
+		String username = form.data().get("username");
+		
         if (UserAccount.exists(newAccount.username)) {
             form.reject("username", "User already exists.");
             return badRequest(account.render(form));
         }
+		
+		if (username.isEmpty()) {
+            form.reject("username", "Must provide username.");
+            return badRequest(account.render(form));
+        }
         // save the data sent through HTTP POST
-        newAccount.save();
+		Form<UserProfile> profileForm = ProfileForm.bindFromRequest();
+		UserProfile newProfile = profileForm.get();
+		UserProfile p = new UserProfile();
+		p.updateProfile(username);
+		newAccount.profile = p;
+		System.out.println(newProfile.email);
+		//newAccount.updateProfile(username);
+		newAccount.save();
+		
         session("connected", newAccount.username);
         return redirect(routes.Profile.viewProfile());
     }
@@ -48,6 +65,7 @@ public class Account extends Controller {
     public Result authenticateUser() {
         Form<UserAccount> form = LoginForm.bindFromRequest();
         if (form.hasErrors()) { // Redirect with error
+			System.out.println("Error.");
             return badRequest(login.render(form));
         }
         UserAccount getAccount = form.get();

@@ -51,7 +51,7 @@
 		<body>
 		<table align = center width=743 bgcolor=#FFFFFF>
 			<tr>
-				<td align=center width=743><font size=9><b> Whitney Bailey </b></font>
+				<td align=center width=743><font size=9><b> @userAccount.findValue("username").asText() </b></font>
 			</tr>
 			
 			<tr>
@@ -63,16 +63,26 @@
 					
 					<p color=#000000>
 					<b>Email:</b>
-					<BR><ul>
-                        @for(userdata <- userAccount.fields()){
-                            <li>@userdata.getValue().asText()</li>
-                        }</ul>
+					<BR>
+                    @userAccount.findValue("email")
 					<BR><BR>
 					
-					<b>Classes: <a href="www.google.com">COMS 4156</a></b>
+					<b>Classes:</b>
+					@userAccount.findValue("profile").findValue("classes")
+					@for(classdata<-userAccount.findValue("profile").findValue("classes").fieldNames()) {
+							<BR><a href="www.google.com"><b>@classdata</a></b>
+							<BR><span style=padding-left:6em> 2b|!2b
+							<button type="submit" name="Team_drop_btn" onclick="location.href='http://google.com';"/>X</button>
+					}
+					@userAccount.findValue("profile").findValue("classes").asText()
+					@if(!userAccount.findValue("profile").findValue("classes").hasNonNull(0)){
+						<BR>No classes</b>
+					}
+					<BR><BR>
 					
-					<BR>Team:
-					<BR>2b|!2b
+					<b>Classes:</b>
+					<BR><a href="www.google.com"><b>COM4156</a></b>
+					<BR><span style=padding-left:6em> 2b|!2b
 					<button type="submit" name="Team_drop_btn" onclick="location.href='http://google.com';"/>X</button>
 					<BR><BR>
 					

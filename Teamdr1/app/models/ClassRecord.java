@@ -16,7 +16,10 @@ public class ClassRecord extends Model {
     public String classID;
     @Constraints.Required
     public String className;
-
+	public UserAccount[] enrolledStudents;
+	public Team team;
+	
+	
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     private static Model.Finder<String, ClassRecord> find = new Model.Finder<>(ClassRecord.class);
 
