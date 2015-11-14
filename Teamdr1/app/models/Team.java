@@ -20,6 +20,4 @@ public class Team extends Model {
     UserAccount[] teamMembers;
     @Constraints.Required
     String teamName;
-
-
 }

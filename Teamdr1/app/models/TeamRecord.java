@@ -14,11 +14,11 @@ import java.util.List;
 @Entity
 public class TeamRecord extends Model {
     @Id
-    String username;
+    String tid;
     @Constraints.Required
-    String[] rejectedTeams;
+    UserAccount[] teamMembers;
     @Constraints.Required
-    String[] teammates;
+    String teamName;
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     /*private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);*/

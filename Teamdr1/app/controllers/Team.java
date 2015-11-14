@@ -17,6 +17,10 @@ public class Team extends Controller {
     }
 
     public Result showTeams() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
         return ok(team.render());
     }
 

@@ -1,4 +1,10 @@
+@import com.fasterxml.jackson.databind.JsonNode
+@(teamRecord: JsonNode))
 @main("TeamSwipe") {
-  <div><button onclick="window.location='@routes.Team.swipeLeft()';" value="left">No</button></div>
-  <div><button onclick="window.location='@routes.Team.swipeRight()';" value="right">Yes</button></div>
+    @for(userdata <- teamRecord.fields()){
+        <li>@userdata.getValue().asText()</li>
+    }</ul>
+    Team up?
+    <div><button onclick="window.location='@routes.Team.swipeRight()';" value="right">Yes</button></div>
+    <div><button onclick="window.location='@routes.Team.swipeLeft()';" value="left">No</button></div>
 }
