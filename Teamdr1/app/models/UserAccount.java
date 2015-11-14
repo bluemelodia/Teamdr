@@ -18,7 +18,7 @@ public class UserAccount extends Model {
     public String password; // System will not allow invalid data save
 	@Constraints.Required
 	public UserProfile profile = new UserProfile();
-	
+
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);
 

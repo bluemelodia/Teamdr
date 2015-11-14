@@ -1,11 +1,6 @@
 package controllers;
-import models.UserAccount;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.data.Form;
-import play.libs.Json;
-import views.html.*;
-import java.util.List;
 
 
 /**
@@ -17,10 +12,12 @@ public class Team extends Controller {
     }
 
     public Result showTeams() {
+        //return TODO;
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
+
         return ok(team.render());
     }
 
@@ -31,4 +28,13 @@ public class Team extends Controller {
     public Result swipeRight() {
         return TODO;
     }
+
+    public Result showCreateTeamPage() {
+
+    }
+
+    public Result createTeam() {
+
+    }
+
 }

@@ -16,8 +16,14 @@ create table team (
 ;
 
 create table team_record (
-  username                  varchar(255) not null,
-  constraint pk_team_record primary key (username))
+  tid                       varchar(255) not null,
+  team_name                 varchar(255),
+  constraint pk_team_record primary key (tid))
+;
+
+create table team_lookup (
+  tid                       varchar(255) not null,
+  constraint pk_team_lookup primary key (tid))
 ;
 
 create table user_account (
@@ -31,6 +37,8 @@ create sequence class_record_seq;
 create sequence team_seq;
 
 create sequence team_record_seq;
+
+create sequence team_lookup_seq;
 
 create sequence user_account_seq;
 
@@ -47,6 +55,8 @@ drop table if exists team;
 
 drop table if exists team_record;
 
+drop table if exists team_lookup;
+
 drop table if exists user_account;
 
 SET REFERENTIAL_INTEGRITY TRUE;
@@ -56,6 +66,8 @@ drop sequence if exists class_record_seq;
 drop sequence if exists team_seq;
 
 drop sequence if exists team_record_seq;
+
+drop sequence if exists team_lookup_seq;
 
 drop sequence if exists user_account_seq;
 
