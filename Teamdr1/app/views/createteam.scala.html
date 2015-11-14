@@ -1,6 +1,6 @@
 @import helper._
 @import com.fasterxml.jackson.databind.JsonNode
-@(classRecord: JsonNode)
+@(classRecord: JsonNode)(errorNote: JsonNode)(errorNote2: JsonNode)
 @main("Create Team") {
   <table align = center width=275 bgcolor=#000000>
     <td><button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
@@ -23,9 +23,13 @@
     <fieldset>
       <legend>Create Team for @classRecord.asText()</legend>
         Team Name:<br>
-        <input type=""text" name="teamName"><br><br>
+        <input type=""text" name="teamName"><br>
+        @errorNote.asText()
+        <br>
         Team ID:<br>
-        <input type=""text" name="teamID"><br><br>
+        <input type=""text" name="teamID"><br>
+        @errorNote2.asText()
+        <br>
       <input type="submit" value="Create Team"/>
     </fieldset>
   }
