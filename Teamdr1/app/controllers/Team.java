@@ -33,13 +33,8 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         }
 
-        // return ok(team.render());
-        UserAccount getUser = UserAccount.getUser(user);
-
-
         TeamRecord td = new TeamRecord(); 
-        System.out.println(td.findAll());
-        System.out.println("SO?");
+        // System.out.println(td.findAll());
 
         JsonNode json = toJson(td.findAll());
 
