@@ -18,6 +18,8 @@ GET     /update                    controllers.Profile.updateProfile()
 
 
 GET     /team                      controllers.Team.showTeams()
+GET     /left                      controllers.Team.swipeLeft()
+GET     /right                     controllers.Team.swipeRight()
 
 GET     /class                     controllers.Classes.retrieveClass()
 POST    /class                     controllers.Classes.putClass()

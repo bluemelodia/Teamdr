@@ -12,10 +12,13 @@ import java.util.List;
  * Created by bluemelodia on 11/11/15.
  */
 @Entity
-public class Team_Lookup extends Model {
+public class TeamRecord extends Model {
     @Id
+    String username;
     @Constraints.Required
-    String tid;
+    String[] rejectedTeams;
+    @Constraints.Required
+    String[] teammates;
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     /*private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);*/
