@@ -1,5 +1,5 @@
 @import com.fasterxml.jackson.databind.JsonNode
-@(userAccount: JsonNode)(classRecord: JsonNode)(profileDescription: JsonNode)
+@(userAccount: JsonNode)(classRecord: JsonNode)(profileDescription: JsonNode)(notifs: JsonNode)
 @main("Profile") {
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,7 +36,7 @@
 	
 	<body align=right class="adder" style="background: #B2B2B2; margin: 0pt; " onload="onPageLoad();">
 		<BR><BR><BR><BR><BR>
-		
+		<table align = center width = 743 bgcolor="#B2B2B2"><td><Font color="#E80000">@notifs.asText()</Font></tr></table>
 		<table align = center width=743 bgcolor=#000000>
 		
 			<td>

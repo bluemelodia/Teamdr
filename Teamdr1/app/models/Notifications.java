@@ -38,4 +38,8 @@ public class Notifications {
     public static List<Notifications> getNotifs(String username) {
         return Notifications.find.where().eq("username", username).orderBy("classID").findList();
     }
+
+    public static boolean hasNotifs(String username) {
+        return (find.where().eq("username", username).findRowCount() > 0) ? true : false;
+    }
 }

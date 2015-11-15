@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Notifications;
 import models.UserAccount;
 import models.UserProfile;
 import models.ClassRecord;
@@ -27,10 +28,18 @@ public class Profile extends Controller {
         }
         UserAccount getUser = UserAccount.getUser(user);
 		//ClassRecord c = UserProfile.getClass(user);
+
+        // If the user has notifications, show them
+        String notifs = "Hi";
+        if (Notifications.hasNotifs(getUser.username)) {
+            notifs = "You have notifications: ";
+        }
+
         JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
-        return ok(profile.render(user_json, class_json, profile_json));
+        JsonNode notifs_json = toJson(notifs);
+        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
         //return ok(update_profile.render());
     }
 
@@ -56,13 +65,23 @@ public class Profile extends Controller {
 		p.description = description;
 		System.out.println("Also here");
 		p.save();
-		UserAccount getUser = UserAccount.getUser(user);
+
+        UserAccount getUser = UserAccount.getUser(user);
+
+        // If the user has notifications, show them
+        String notifs = "Hi";
+        if (Notifications.hasNotifs(getUser.username)) {
+            notifs = "You have notifications: ";
+        }
+
 		JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
         JsonNode profile_json = toJson(p.description);
+        JsonNode notifs_json = toJson(notifs);
         //return redirect(routes.Profile.viewProfile());
+
         System.out.println("RENDERING");
-		return ok(profile.render(user_json, class_json, profile_json));
+		return ok(profile.render(user_json, class_json, profile_json, notifs_json));
     }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
