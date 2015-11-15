@@ -80,12 +80,11 @@
 					}
 					<BR><BR>
 
-
 					
 					<b>Classes:</b>
-                        @helper.form(action = routes.Team.showTeams(), 'id -> "SignUp") {
+                        @helper.form(action = routes.Team.setCurrentClass(), 'id -> "SignUp") {
                             <fieldset>
-                                <input name="text" id="class" value="COMS4111" readonly>
+                                <input type="text" name="myClass" value="COMS4111" readonly>
                                 <input type="submit" value="Search Teams"/><!-- Once user clicks submit button, goes to routes.Account.createUser() -->
                             </fieldset>
                         }

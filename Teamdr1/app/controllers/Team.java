@@ -23,7 +23,7 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
-    public static final String currentClass = "COMS4111";
+    public static String currentClass = "";
 
     public Result list() {
         return TODO;
@@ -82,6 +82,17 @@ public class Team extends Controller {
         }
         JsonNode errorJson = toJson("I think you are lost...");
         return ok(errorPage.render(errorJson));
+    }
+
+    // This method helps pick the correct class, based on form submission, for the team search
+    public Result setCurrentClass() {
+        System.out.println("HERE");
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        System.out.println("VALUES: " + values);
+        String newClass = values.get("myClass")[0];
+        System.out.println("currentClass changed to: " + newClass);
+        currentClass = newClass;
+        return redirect(routes.Team.showTeams());
     }
 
     public Result showTeams() {
