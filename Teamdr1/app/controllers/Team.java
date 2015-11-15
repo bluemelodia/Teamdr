@@ -40,17 +40,21 @@ public class Team extends Controller {
                 continue;
             }
             String[] teamMembers = (team.teamMembers).split(" ");
+            Boolean myTeam = false;
             for (int i = 0; i < teamMembers.length; i++) {
                 if (teamMembers[i].equals(thisUser.username)) {
-                    continue; // don't return your own team!
+                    System.out.println("This is my team...");
+                    myTeam = true;
                 }
             }
+            if (myTeam) continue; // don't return your own team!
             if (!seenTeams.contains(team)) {
                 seenTeams.add(team); // add this team to the ones you have already seen
                 System.out.println("Returning team: " + team.teamName);
                 return team;
             }
         }
+        System.out.println("There are no other teams");
         return null;
     }
 
@@ -77,12 +81,15 @@ public class Team extends Controller {
 
         currentTeam =  showCurrentTeam(user); // Try again now that the field was reset
         if (currentTeam == null) {
-            redirect(routes.Account.signIn()); // There are no other teams available
+            System.out.println("There are no teams...leave!");
+            return redirect(routes.Account.signIn()); // There are no other teams available
         }
         currentTeamJSON = toJson(currentTeam);
         try {
+            System.out.println("No teams!!!!");
             assert(!currentTeamJSON.toString().equals("{}"));
         } catch (Exception e) {
+            System.out.println("No teams");
             return redirect(routes.Account.signIn());
         }
         return ok(team.render(currentTeamJSON));
