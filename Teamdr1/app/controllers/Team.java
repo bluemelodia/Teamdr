@@ -70,9 +70,9 @@ public class Team extends Controller {
     }
 
     // User has already gone through all teams, reset
-    private void resetTeams() {
+    /*private void resetTeams() {
         seenTeams.clear();
-    }
+    }*/
 
     public Result showTeams() {
         String user = session("connected");
@@ -83,19 +83,18 @@ public class Team extends Controller {
         TeamRecord currentTeam = showCurrentTeam(user);
         JsonNode currentTeamJSON;
         if (currentTeam == null) {
-            resetTeams();
-            System.out.println("reset");
+            System.out.println("There are no teams...leave!");
+            return redirect(routes.Account.signIn()); // There are no other teams available
         } else {
             thisTeam = currentTeam.tid;
             System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
             currentTeamJSON = toJson(currentTeam);
             return ok(team.render(currentTeamJSON));
         }
-
+    /*
         currentTeam =  showCurrentTeam(user); // Try again now that the field was reset
         if (currentTeam == null) {
-            System.out.println("There are no teams...leave!");
-            return redirect(routes.Account.signIn()); // There are no other teams available
+
         }
         currentTeamJSON = toJson(currentTeam);
         try {
@@ -105,9 +104,15 @@ public class Team extends Controller {
             System.out.println("No teams");
             return redirect(routes.Account.signIn());
         }
+        System.out.println("I HAVE SEEN: " + seenTeams);
+        if (seenTeams.contains(currentTeam.tid)) {
+            System.out.println("REDIRECT");
+            return redirect(routes.Account.signIn());
+        }
         thisTeam = currentTeam.tid;
         System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
         return ok(team.render(currentTeamJSON));
+        */
     }
 
     public Result swipeRight() {
