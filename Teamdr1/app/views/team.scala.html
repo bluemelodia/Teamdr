@@ -1,5 +1,5 @@
 @import com.fasterxml.jackson.databind.JsonNode
-@(teamRecords: JsonNode)(teamDetails: JsonNode)
+@(teamRecords: JsonNode)(teamDetails: JsonNode)(className: JsonNode)
 @main("Teams") {
 
     <table align="center" width=743 bgcolor=#000000>
@@ -12,6 +12,9 @@
 
 	</table>
     <table align="center">
+       <tr>
+           <td><h4>Team Search For @className.asText()</h4></td>
+       </tr>
        <tr>
            <br>
            <td><strong>Team ID:</strong> @teamRecords.findValue("tid").asText()<br></td>

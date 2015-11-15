@@ -137,7 +137,8 @@ public class Team extends Controller {
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
-            return ok(team.render(currentTeamJSON, teamMembers));
+            JsonNode className = toJson(currentClass);
+            return ok(team.render(currentTeamJSON, teamMembers, className));
         }
     }
 
