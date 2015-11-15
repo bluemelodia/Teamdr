@@ -45,8 +45,11 @@ public class Team extends Controller {
         // System.out.println(td.findAll());
 
         //JsonNode json = toJson(td.findAll());
-        JsonNode json = toJson("Hi");
-        return ok(team.render(json));
+    //    JsonNode json = toJson("Hi");
+    //    return ok(team.render(json));
+
+        List<TeamRecord> allTeams = TeamRecord.findAll();
+        return ok(team.render(allTeams));
     }
 
     public Result swipeLeft() {
