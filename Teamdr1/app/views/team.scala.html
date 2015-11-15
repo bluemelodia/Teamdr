@@ -2,28 +2,33 @@
 @main("Teams") {
 
 
-    <table align = center width=743 bgcolor=#000000>
+    <table align="center" width=743 bgcolor=#000000>
 		
-			<td>
+			<td align="center">
                 <button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
 
                 <BR/></BR>
-			</tr>
+			</td>
 
 	</table>
-	<h1> All Teams</h1>
-
-		 <body align=center>Team up?</body>
 
 
-    <ul>
-	    @for(team <- teamRecords){
-	    <li>@team.tid</li>
-	    <li>@team.teamName</li>
-	    }
-    </ul>
-    		
-    	<div><button onclick="window.location='@routes.Team.swipeRight()';" value="right">Yes</button></div>
-    	<div><button onclick="window.location='@routes.Team.swipeLeft()';" value="left">No</button></div>
+		 <h1 align=center>Team up?</h1>
+    <table align="center">
+        @for(team <- teamRecords){
+       <tr>
+           <th>Team ID:</th>
+           <td>@team.tid</td>
+        </tr>
+        <tr>
+           <th>Team Name:</th>
+            <td>@team.teamName</td>
+       </tr>
+        }
+    </table>
+
+    	<div align="center"><button onclick="window.location='@routes.Team.swipeRight()';" value="right">Yes</button></div>
+    	<div align="center"><button onclick="window.location='@routes.Team.swipeLeft()';" value="left">No</button></div>
+
 
 }
