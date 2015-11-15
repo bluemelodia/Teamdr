@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.ClassRecord;
 import models.TeamRecord;
 import models.UserAccount;
+import models.UserProfile;
 import models.TeamRecord;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -17,7 +18,7 @@ import play.libs.Json.*;
 import javax.persistence.*;
 
 import static play.libs.Json.toJson;
-
+// TODO: if the user does not have a team anymore, redirect them to the create Team page
 /**
  * Created by anfalboussayoud on 11/11/15.
  */
@@ -99,31 +100,21 @@ public class Team extends Controller {
         } else {
             thisTeam = currentTeam.tid;
             System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
-            currentTeamJSON = toJson(currentTeam);
-            return ok(team.render(currentTeamJSON));
-        }
-    /*
-        currentTeam =  showCurrentTeam(user); // Try again now that the field was reset
-        if (currentTeam == null) {
+            String teamDetails = "";
 
+            // Get the team info
+            TeamRecord teamToDisplay = TeamRecord.getTeam(thisTeam);
+            String[] members = (teamToDisplay.teamMembers).split(" ");
+            for (int i = 0; i < members.length; i++) { // Get all member descriptions
+                UserAccount currentUser = UserAccount.getUser(members[i]);
+                teamDetails += "    " + currentUser.username.toString() + "<br>";
+                UserProfile currentProfile = UserProfile.getUser(currentUser.username);
+                teamDetails += "        " + currentProfile.description + "<br><br>";
+            }
+            JsonNode teamMembers = toJson(teamDetails);
+            currentTeamJSON = toJson(currentTeam);
+            return ok(team.render(currentTeamJSON, teamMembers));
         }
-        currentTeamJSON = toJson(currentTeam);
-        try {
-            System.out.println("No teams!!!!");
-            assert(!currentTeamJSON.toString().equals("{}"));
-        } catch (Exception e) {
-            System.out.println("No teams");
-            return redirect(routes.Account.signIn());
-        }
-        System.out.println("I HAVE SEEN: " + seenTeams);
-        if (seenTeams.contains(currentTeam.tid)) {
-            System.out.println("REDIRECT");
-            return redirect(routes.Account.signIn());
-        }
-        thisTeam = currentTeam.tid;
-        System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
-        return ok(team.render(currentTeamJSON));
-        */
     }
 
     public Result swipeRight() {
