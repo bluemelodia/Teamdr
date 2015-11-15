@@ -74,6 +74,15 @@ public class Team extends Controller {
         seenTeams.clear();
     }*/
 
+    public Result showError() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        JsonNode errorJson = toJson("I think you are lost...");
+        return ok(errorPage.render(errorJson));
+    }
+
     public Result showTeams() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
@@ -84,7 +93,9 @@ public class Team extends Controller {
         JsonNode currentTeamJSON;
         if (currentTeam == null) {
             System.out.println("There are no teams...leave!");
-            return redirect(routes.Account.signIn()); // There are no other teams available
+            String noTeams = "There are no other teams in this class, or you have swiped on all of them";
+            JsonNode errorJson = toJson(noTeams);
+            return ok(errorPage.render(errorJson)); // There are no other teams available
         } else {
             thisTeam = currentTeam.tid;
             System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
