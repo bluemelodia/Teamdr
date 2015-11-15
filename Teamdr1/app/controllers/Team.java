@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.ClassRecord;
 import models.TeamRecord;
 import models.UserAccount;
+import models.TeamRecord;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -28,13 +29,17 @@ public class Team extends Controller {
     }
 
     public Result showTeams() {
-        /*String user = session("connected");
+        String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
 
-        return ok(team.render());*/
-        return TODO;
+        TeamRecord td = new TeamRecord(); 
+        // System.out.println(td.findAll());
+
+        JsonNode json = toJson(td.findAll());
+
+        return ok(team.render(json));
     }
 
     public Result swipeLeft() {
