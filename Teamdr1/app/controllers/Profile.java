@@ -75,6 +75,9 @@ public class Profile extends Controller {
         }
 
 		JsonNode user_json = toJson(getUser);
+        // TODO: implement add user to class
+
+
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
         JsonNode profile_json = toJson(p.description);
         JsonNode notifs_json = toJson(notifs);

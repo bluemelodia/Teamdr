@@ -26,6 +26,7 @@ GET     /class                     controllers.Classes.retrieveClass()
 POST    /class                     controllers.Classes.putClass()
 GET     /createTeam                controllers.Team.showCreateTeamPage()
 POST    /createTeam                controllers.Team.createTeam()
+POST    /setCurrentClass           controllers.Team.setCurrentClass()
 
 GET     /notifs                    controllers.Profile.viewNotifications()
 GET     /error                     controllers.Team.showError()

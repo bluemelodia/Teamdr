@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.ClassRecord;
 import models.TeamRecord;
 import models.UserAccount;
+import models.UserProfile;
 import models.TeamRecord;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -17,12 +18,12 @@ import play.libs.Json.*;
 import javax.persistence.*;
 
 import static play.libs.Json.toJson;
-
+// TODO: if the user does not have a team anymore, redirect them to the create Team page
 /**
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
-    public static final String currentClass = "COMS4111";
+    public static String currentClass = "";
 
     public Result list() {
         return TODO;
@@ -85,6 +86,30 @@ public class Team extends Controller {
         return ok(errorPage.render(errorJson));
     }
 
+    // This method helps pick the correct class, based on form submission, for the team search
+    public Result setCurrentClass() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        System.out.println("HERE");
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        System.out.println("VALUES: " + values);
+        String newClass = values.get("myClass")[0];
+        System.out.println("currentClass changed to: " + newClass);
+        currentClass = newClass;
+
+        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+
+        // If the user does not have a team for this class, have them make a new team
+        if (!hasTeam(currentClass, thisUser)) {
+            JsonNode className = toJson(currentClass);
+            JsonNode error = toJson("");
+            return ok(createteam.render(className, error, error));
+        }
+        return redirect(routes.Team.showTeams());
+    }
+
     public Result showTeams() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
@@ -101,31 +126,22 @@ public class Team extends Controller {
         } else {
             thisTeam = currentTeam.tid;
             System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
-            currentTeamJSON = toJson(currentTeam);
-            return ok(team.render(currentTeamJSON));
-        }
-    /*
-        currentTeam =  showCurrentTeam(user); // Try again now that the field was reset
-        if (currentTeam == null) {
+            String teamDetails = "";
 
+            // Get the team info
+            TeamRecord teamToDisplay = TeamRecord.getTeam(thisTeam);
+            String[] members = (teamToDisplay.teamMembers).split(" ");
+            for (int i = 0; i < members.length; i++) { // Get all member descriptions
+                UserAccount currentUser = UserAccount.getUser(members[i]);
+                teamDetails += "    " + currentUser.username.toString() + "</br>";
+                UserProfile currentProfile = UserProfile.getUser(currentUser.username);
+                teamDetails += "        " + currentProfile.description + "</br></br>";
+            }
+            JsonNode teamMembers = toJson(teamDetails);
+            currentTeamJSON = toJson(currentTeam);
+            JsonNode className = toJson(currentClass);
+            return ok(team.render(currentTeamJSON, teamMembers, className));
         }
-        currentTeamJSON = toJson(currentTeam);
-        try {
-            System.out.println("No teams!!!!");
-            assert(!currentTeamJSON.toString().equals("{}"));
-        } catch (Exception e) {
-            System.out.println("No teams");
-            return redirect(routes.Account.signIn());
-        }
-        System.out.println("I HAVE SEEN: " + seenTeams);
-        if (seenTeams.contains(currentTeam.tid)) {
-            System.out.println("REDIRECT");
-            return redirect(routes.Account.signIn());
-        }
-        thisTeam = currentTeam.tid;
-        System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
-        return ok(team.render(currentTeamJSON));
-        */
     }
 
     public Result swipeRight() {
@@ -156,6 +172,10 @@ public class Team extends Controller {
 
     // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        };
         seenTeams.add(thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
@@ -174,6 +194,10 @@ public class Team extends Controller {
 
     // Create a team, validate params before adding the new team to the database
     public Result createTeam() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        };
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String teamName = values.get("teamName")[0];
         String tid = values.get("teamID")[0];
