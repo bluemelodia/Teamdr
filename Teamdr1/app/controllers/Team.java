@@ -92,6 +92,15 @@ public class Team extends Controller {
         String newClass = values.get("myClass")[0];
         System.out.println("currentClass changed to: " + newClass);
         currentClass = newClass;
+
+        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+
+        // If the user does not have a team for this class, have them make a new team
+        if (!hasTeam(currentClass, thisUser)) {
+            JsonNode className = toJson(currentClass);
+            JsonNode error = toJson("");
+            return ok(createteam.render(className, error, error));
+        }
         return redirect(routes.Team.showTeams());
     }
 
