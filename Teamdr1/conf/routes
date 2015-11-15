@@ -27,5 +27,7 @@ POST    /class                     controllers.Classes.putClass()
 GET     /createTeam                controllers.Team.showCreateTeamPage()
 POST    /createTeam                controllers.Team.createTeam()
 
+GET     /notifs                    controllers.Profile.viewNotifications()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

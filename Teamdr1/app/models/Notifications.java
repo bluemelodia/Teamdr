@@ -23,6 +23,10 @@ public class Notifications {
     public int type;
     @Constraints.Required
     public String classID;
+    @Constraints.Required
+    public String message;
+    @Constraints.Required
+    public String teamID;
 
     private static int lastNotifID = 0;
 
