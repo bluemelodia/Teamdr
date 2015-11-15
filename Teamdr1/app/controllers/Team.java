@@ -52,11 +52,24 @@ public class Team extends Controller {
         return ok(team.render(allTeams));
     }
 
-    public Result swipeLeft() {
+    public Result swipeRight() {
+
+        // Get relevant team ID
+        //TeamRecord team = .getParameter("right");
+
+        // Show team profile (name, id, members and "Send Request" button)
+      //  return ok(team_profile.render(team));
         return TODO;
     }
 
-    public Result swipeRight() {
+    public Result sendRequest() {
+        return TODO;
+    }
+
+    public Result mergeTeams(String team1, String team2) {
+        return TODO;
+    }
+    public Result swipeLeft() {
         return TODO;
     }
 

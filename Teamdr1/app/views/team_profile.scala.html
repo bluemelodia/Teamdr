@@ -1,0 +1,19 @@
+@(team: TeamRecord)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<table align="center">
+    <th>Team ID:</th> <td>@team.tid</td>
+    <th>Team Name:</th> <td>@team.teamName</td>
+    <th>Team Members:</th> <td>@team.teamMembers</td>
+
+    <th align="center"><button onclick="window.location='@routes.Team.sendRequest()';" name="sendRequest">SendRequest</button></th>
+</table>
+
+</body>
+</html>
