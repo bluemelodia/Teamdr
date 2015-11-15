@@ -28,11 +28,13 @@ public class Team extends Controller {
         return TODO;
     }
 
-    public static ArrayList<TeamRecord> seenTeams = new ArrayList<TeamRecord>();
+    public static ArrayList<String> seenTeams = new ArrayList<String>();
+    public static String thisTeam = null;
 
     // Retrieve a team that you have not yet seen
     public TeamRecord showCurrentTeam(String username) {
         UserAccount thisUser = UserAccount.getUser(username);
+        System.out.println("me: " + thisUser.username);
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (TeamRecord team: allTeams) {
             System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
@@ -48,8 +50,17 @@ public class Team extends Controller {
                 }
             }
             if (myTeam) continue; // don't return your own team!
-            if (!seenTeams.contains(team)) {
-                seenTeams.add(team); // add this team to the ones you have already seen
+            Boolean contains = false;
+            for (int i = 0; i < seenTeams.size(); i++) {
+                System.out.println("Seen ids: " + seenTeams.get(i));
+                if (seenTeams.get(i).equals(team.tid)) {
+                    contains = true;
+                }
+            }
+            if (contains) {
+                continue;
+            } else {
+                //seenTeams.add(team); // add this team to the ones you have already seen
                 System.out.println("Returning team: " + team.teamName);
                 return team;
             }
@@ -75,6 +86,8 @@ public class Team extends Controller {
             resetTeams();
             System.out.println("reset");
         } else {
+            thisTeam = currentTeam.tid;
+            System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
             currentTeamJSON = toJson(currentTeam);
             return ok(team.render(currentTeamJSON));
         }
@@ -92,6 +105,8 @@ public class Team extends Controller {
             System.out.println("No teams");
             return redirect(routes.Account.signIn());
         }
+        thisTeam = currentTeam.tid;
+        System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
         return ok(team.render(currentTeamJSON));
     }
 
@@ -112,8 +127,12 @@ public class Team extends Controller {
     public Result mergeTeams(String team1, String team2) {
         return TODO;
     }
+
+    // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
-        return TODO;
+        seenTeams.add(thisTeam);
+        System.out.println("SEEN TEAMS: " + seenTeams);
+        return redirect(routes.Team.showTeams());
     }
 
     public Result showCreateTeamPage() {
