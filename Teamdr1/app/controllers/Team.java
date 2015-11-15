@@ -86,6 +86,10 @@ public class Team extends Controller {
 
     // This method helps pick the correct class, based on form submission, for the team search
     public Result setCurrentClass() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
         System.out.println("HERE");
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         System.out.println("VALUES: " + values);
@@ -157,6 +161,10 @@ public class Team extends Controller {
 
     // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        };
         seenTeams.add(thisTeam);
         System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
@@ -175,6 +183,10 @@ public class Team extends Controller {
 
     // Create a team, validate params before adding the new team to the database
     public Result createTeam() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        };
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String teamName = values.get("teamName")[0];
         String tid = values.get("teamID")[0];
