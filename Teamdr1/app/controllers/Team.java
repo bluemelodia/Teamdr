@@ -107,9 +107,9 @@ public class Team extends Controller {
             String[] members = (teamToDisplay.teamMembers).split(" ");
             for (int i = 0; i < members.length; i++) { // Get all member descriptions
                 UserAccount currentUser = UserAccount.getUser(members[i]);
-                teamDetails += "    " + currentUser.username.toString() + "<br>";
+                teamDetails += "    " + currentUser.username.toString() + "</br>";
                 UserProfile currentProfile = UserProfile.getUser(currentUser.username);
-                teamDetails += "        " + currentProfile.description + "<br><br>";
+                teamDetails += "        " + currentProfile.description + "</br></br>";
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
