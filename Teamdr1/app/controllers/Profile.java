@@ -83,6 +83,17 @@ public class Profile extends Controller {
         System.out.println("RENDERING");
 		return ok(profile.render(user_json, class_json, profile_json, notifs_json));
     }
+
+    public Result viewNotifications() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        UserAccount thisUser = UserAccount.getUser(user);
+
+        List<Notifications> allNotifs = Notifications.getNotifs(thisUser.username);
+        return ok(notifs.render(allNotifs));
+    }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
 		UserProfile profile = profileForm.get();

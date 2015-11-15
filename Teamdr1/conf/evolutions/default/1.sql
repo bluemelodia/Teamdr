@@ -14,6 +14,8 @@ create table notifications (
   username                  varchar(255),
   type                      integer,
   class_id                  varchar(255),
+  message                   varchar(255),
+  team_id                   varchar(255),
   constraint pk_notifications primary key (notif_id))
 ;
 
