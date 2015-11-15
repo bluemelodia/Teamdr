@@ -33,6 +33,10 @@ public class Profile extends Controller {
         //return ok(update_profile.render());
     }
 
+    public Result showUpdateProfilePage() {
+        return ok(update_profile.render(ProfileForm));
+    }
+
     public Result updateProfile() {
         String user = session("connected");
 		System.out.println("Got here");
@@ -41,25 +45,21 @@ public class Profile extends Controller {
         }
 		
 		UserProfile p = UserProfile.getUser(user);
-		Form<UserProfile> form = ProfileForm.bindFromRequest();
-        if (form.hasErrors()) { // Redirect with error
-            return badRequest(update_profile.render(form));
-        }
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String email = values.get("email")[0];
+        String pictureURL = values.get("pictureURL")[0];
+        String description = values.get("description")[0];
 
-		// convert HTML form to an Account model object, containing the params
-        UserProfile prof = form.get();
-		String e = form.data().get("email");
-		String url = form.data().get("pic_url");
-		String desc = form.data().get("description");
-		p.email = e;
-		p.pic_url = url;
-		p.description = desc;
-		System.out.println("Got here");
-		prof.save();
+		p.email = email;
+		p.pic_url = pictureURL;
+		p.description = description;
+		System.out.println("Also here");
+		p.save();
 		UserAccount getUser = UserAccount.getUser(user);
 		JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
         //return redirect(routes.Profile.viewProfile());
+        System.out.println("RENDERING");
 		return ok(profile.render(user_json, class_json));
     }
 	

@@ -28,17 +28,24 @@ public class Team extends Controller {
         return TODO;
     }
 
+    public static ArrayList<String> seenTeams = new ArrayList<String>();
+    public static ArrayList<String> unseenTeams = new ArrayList<String>();
+
+    public Result showCurrentTeam() {
+        return TODO;
+    }
+
     public Result showTeams() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
 
-        TeamRecord td = new TeamRecord(); 
+        //TeamRecord td = new TeamRecord();
         // System.out.println(td.findAll());
 
-        JsonNode json = toJson(td.findAll());
-
+        //JsonNode json = toJson(td.findAll());
+        JsonNode json = toJson("Hi");
         return ok(team.render(json));
     }
 
@@ -113,8 +120,8 @@ public class Team extends Controller {
                 System.out.println("Class: " + team.thisClass);
                 System.out.println();
             }
-            // This needs to redirect to the team search page
-            return redirect(routes.Account.signIn());
+            // Redirect to the profile page
+            return redirect(routes.Profile.viewProfile());
         }
     }
 

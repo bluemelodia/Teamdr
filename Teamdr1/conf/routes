@@ -14,8 +14,8 @@ GET     /logout                    controllers.Account.logoutUser()
 #POST    /forgot                   controllers.Account.forgotPassword()
 
 GET     /profile                   controllers.Profile.viewProfile()
-GET     /update                    controllers.Profile.updateProfile()
-
+GET     /update                    controllers.Profile.showUpdateProfilePage()
+POST    /update                    controllers.Profile.updateProfile()
 
 GET     /team                      controllers.Team.showTeams()
 GET     /left                      controllers.Team.swipeLeft()

@@ -1,5 +1,6 @@
-@(serviceForm : Form[UserProfile]) <!-- Form uses Account model -->
+@(serviceForm : Form[UserProfile])
 @import helper._
+@import com.fasterxml.jackson.databind.JsonNode
 @main("Update Profile") {
     <table align = center width=275 bgcolor=#000000>
         <td><button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
@@ -18,16 +19,19 @@
             line-height:1.8;}
     </style>
     <!--Passed into main.scala.html as the content-->
-    <fieldset>
-    <legend>Update Profile</legend>
 		@helper.form(action = routes.Profile.updateProfile(), 'id -> "ChangeUsername") {
-            @helper.inputText(serviceForm.field("email"), '_label -> "Email:", '_class -> "email-field")
-            @helper.inputText(serviceForm.field("pic_url"), '_label -> "Picture URL:", '_class -> "pic_url-field")
-            @helper.inputText(serviceForm.field("description"), '_label -> "Other Information:", '_class -> "description-field")
-		}
-		
-        <input type="submit" value="Change"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
-    </fieldset>
+            <fieldset>
+                <legend>Update Profile</legend>
+                E-mail:<br>
+                <input type=""text" name="email"><br>
+                <br>
+                Picture URL::<br>
+                <input type=""text" name="pictureURL"><br><br>
+                    Description:<br>
+                    <input type=""text" name="description"><br><br>
+                <input type="submit" value="Change"/>
+            </fieldset>
+        }
 	
 	<BR>
 	

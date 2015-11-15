@@ -20,7 +20,17 @@ create table team_record (
 create table user_account (
   username                  varchar(255) not null,
   password                  varchar(255),
+  profile_username          varchar(255),
+  constraint uq_user_account_profile_username unique (profile_username),
   constraint pk_user_account primary key (username))
+;
+
+create table user_profile (
+  username                  varchar(255) not null,
+  email                     varchar(255),
+  pic_url                   varchar(255),
+  description               varchar(255),
+  constraint pk_user_profile primary key (username))
 ;
 
 create sequence class_record_seq;
@@ -29,6 +39,10 @@ create sequence team_record_seq;
 
 create sequence user_account_seq;
 
+create sequence user_profile_seq;
+
+alter table user_account add constraint fk_user_account_profile_1 foreign key (profile_username) references user_profile (username) on delete restrict on update restrict;
+create index ix_user_account_profile_1 on user_account (profile_username);
 
 
 
@@ -42,6 +56,8 @@ drop table if exists team_record;
 
 drop table if exists user_account;
 
+drop table if exists user_profile;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists class_record_seq;
@@ -49,4 +65,6 @@ drop sequence if exists class_record_seq;
 drop sequence if exists team_record_seq;
 
 drop sequence if exists user_account_seq;
+
+drop sequence if exists user_profile_seq;
 
