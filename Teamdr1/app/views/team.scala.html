@@ -1,4 +1,5 @@
-@(teamRecords: List[TeamRecord])
+@import com.fasterxml.jackson.databind.JsonNode
+@(teamRecords: JsonNode)
 @main("Teams") {
 
     <table align="center" width=743 bgcolor=#000000>
@@ -14,20 +15,18 @@
 
 		 <h1 align=center>Team up?</h1>
     <table align="center">
-        @for(team <- teamRecords){
        <tr>
            <th>Team ID:</th>
-           <td>@team.tid</td>
+           <td>@teamRecords.findValue("tid").asText()</td>
         </tr>
         <tr>
            <th>Team Name:</th>
-            <td>@team.teamName</td>
+            <td>@teamRecords.findValue("teamName").asText()</td>
        </tr>
         <tr>
-            <th align="center"><button onclick="window.location='@routes.Team.swipeRight()';" name="right" value=@team>Yes</button></th>
-            <th align="center"><button onclick="window.location='@routes.Team.swipeLeft()';" name="left" value=@team>No</button></th>
+            <th align="center"><button onclick="window.location='@routes.Team.swipeRight()';" name="right">Yes</button></th>
+            <th align="center"><button onclick="window.location='@routes.Team.swipeLeft()';" name="left">No</button></th>
         </tr>
-        }
     </table>
 
 

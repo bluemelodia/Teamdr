@@ -28,11 +28,35 @@ public class Team extends Controller {
         return TODO;
     }
 
-    public static ArrayList<String> seenTeams = new ArrayList<String>();
-    public static ArrayList<String> unseenTeams = new ArrayList<String>();
+    public static ArrayList<TeamRecord> seenTeams = new ArrayList<TeamRecord>();
 
-    public Result showCurrentTeam() {
-        return TODO;
+    // Retrieve a team that you have not yet seen
+    public TeamRecord showCurrentTeam(String username) {
+        UserAccount thisUser = UserAccount.getUser(username);
+        List<TeamRecord> allTeams = TeamRecord.findAll();
+        for (TeamRecord team: allTeams) {
+            System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
+            if (!team.thisClass.equals(currentClass)) {
+                continue;
+            }
+            String[] teamMembers = (team.teamMembers).split(" ");
+            for (int i = 0; i < teamMembers.length; i++) {
+                if (teamMembers[i].equals(thisUser.username)) {
+                    continue; // don't return your own team!
+                }
+            }
+            if (!seenTeams.contains(team)) {
+                seenTeams.add(team); // add this team to the ones you have already seen
+                System.out.println("Returning team: " + team.teamName);
+                return team;
+            }
+        }
+        return null;
+    }
+
+    // User has already gone through all teams, reset
+    private void resetTeams() {
+        seenTeams.clear();
     }
 
     public Result showTeams() {
@@ -41,15 +65,27 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         }
 
-        //TeamRecord td = new TeamRecord();
-        // System.out.println(td.findAll());
+        TeamRecord currentTeam = showCurrentTeam(user);
+        JsonNode currentTeamJSON;
+        if (currentTeam == null) {
+            resetTeams();
+            System.out.println("reset");
+        } else {
+            currentTeamJSON = toJson(currentTeam);
+            return ok(team.render(currentTeamJSON));
+        }
 
-        //JsonNode json = toJson(td.findAll());
-    //    JsonNode json = toJson("Hi");
-    //    return ok(team.render(json));
-
-        List<TeamRecord> allTeams = TeamRecord.findAll();
-        return ok(team.render(allTeams));
+        currentTeam =  showCurrentTeam(user); // Try again now that the field was reset
+        if (currentTeam == null) {
+            redirect(routes.Account.signIn()); // There are no other teams available
+        }
+        currentTeamJSON = toJson(currentTeam);
+        try {
+            assert(!currentTeamJSON.toString().equals("{}"));
+        } catch (Exception e) {
+            return redirect(routes.Account.signIn());
+        }
+        return ok(team.render(currentTeamJSON));
     }
 
     public Result swipeRight() {
