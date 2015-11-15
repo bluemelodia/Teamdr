@@ -94,7 +94,7 @@ public class Team extends Controller {
         // User cannot have more than one team for this class
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
         if (hasTeam(currentClass, thisUser)) {
-            error = toJson("You already created a team for this class.");
+            error = toJson("You are already in a team for this class.");
             error2 = toJson("");
             return badRequest(createteam.render(className, error, error2));
         } else {
@@ -113,13 +113,12 @@ public class Team extends Controller {
                 System.out.println("Class: " + team.thisClass);
                 System.out.println();
             }
-
-            // Todo: we have to make sure there are acutally people in the team...
-
+            // This needs to redirect to the team search page
             return redirect(routes.Account.signIn());
         }
     }
 
+    // Each student can only be in one team for each class
     private Boolean hasTeam(String currentClass, UserAccount thisUser) {
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (int i = 0; i < allTeams.size(); i++) {
@@ -128,33 +127,14 @@ public class Team extends Controller {
                 continue;
             }
             String team = thisTeam.teamMembers;
-            if (team == null) {
-                System.out.println("Team: " + thisTeam.teamMembers + " is empty");
-                continue;
-            } /*if (team.contains(thisUser)) {
-                return true;
-            }*/
-        }
-        return false;
-    }
-
-    /*
-     // Check if user already has a team for this class
-    public static boolean hasTeam(String thisClass, UserAccount user) {
-        List<TeamRecord> classTeams = TeamRecord.find.where().eq("thisClass", thisClass).findList();
-        for (int i = 0; i < classTeams.size(); i++) {
-            TeamRecord thisTeam = classTeams.get(i);
-            ArrayList<UserAccount> teamMembers = thisTeam.teamMembers;
-            if (teamMembers == null) {
-                System.out.println("Team: " + thisTeam.teamMembers + " is empty");
-                continue;
-            }
-            if (teamMembers.contains(user)) {
-                return true;
+            if (team == null || team.length() < 1) continue;
+            String[] teamMates = team.split(" ");
+            for (int j = 0; j < teamMates.length; j++) {
+                if (teamMates[j].equals(thisUser.username)) {
+                    return true;
+                }
             }
         }
         return false;
     }
-
-     */
 }
