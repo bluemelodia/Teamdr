@@ -49,7 +49,8 @@ public class Account extends Controller {
 
         // save the data sent through HTTP POST
 		UserProfile newProfile = new UserProfile();
-		newProfile.updateProfile(username, email);
+        String startingDescription = "I love CS!";
+		newProfile.updateProfile(username, email, startingDescription);
         Random randomGenerator = new Random();
 		String cid = "COMS " + randomGenerator.nextInt(100000);
 		String cname = "Introduction to Databases";

@@ -29,7 +29,8 @@ public class Profile extends Controller {
 		//ClassRecord c = UserProfile.getClass(user);
         JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
-        return ok(profile.render(user_json, class_json));
+        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
+        return ok(profile.render(user_json, class_json, profile_json));
         //return ok(update_profile.render());
     }
 
@@ -58,9 +59,10 @@ public class Profile extends Controller {
 		UserAccount getUser = UserAccount.getUser(user);
 		JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
+        JsonNode profile_json = toJson(p.description);
         //return redirect(routes.Profile.viewProfile());
         System.out.println("RENDERING");
-		return ok(profile.render(user_json, class_json));
+		return ok(profile.render(user_json, class_json, profile_json));
     }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 

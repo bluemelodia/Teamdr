@@ -66,9 +66,10 @@ public class UserProfile extends Model{
 		return true;
 	}
 	
-	public UserProfile updateProfile(String uname, String e){ 
+	public UserProfile updateProfile(String uname, String e, String d){
 		this.username = uname;
 		this.email = e;
+		this.description = d;
 		ClassRecord course = new ClassRecord("4111", "DB");
 		//course.classID = "COMS 4111";
 		//course.className = "Introduction to Databases";
