@@ -2,10 +2,12 @@ package models;
 import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 import controllers.Classes;
 import models.UserAccount;
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,8 +18,7 @@ import java.util.ArrayList;
 public class TeamRecord extends Model {
     @Id
     public String tid;
-    @Constraints.Required
-    public ArrayList<UserAccount> teamMembers;
+    public String teamMembers = "";
     @Constraints.Required
     public String teamName;
     @Constraints.Required
@@ -26,11 +27,20 @@ public class TeamRecord extends Model {
     // Create a new team with one person
     public TeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
         this.tid = tid;
-        this.teamMembers = new ArrayList<UserAccount>();
-        this.teamMembers.add(user);
+        if (this.teamMembers == null) {
+            this.teamMembers = user.username + " ";
+        } else {
+            this.teamMembers = user.username + " ";
+        }
         System.out.println("Adding: " + user.username + " to new team");
+        System.out.println(this.teamName);
         this.teamName = teamName;
         this.thisClass = thisClass;
+    }
+
+    public static void createTeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
+        TeamRecord newTeam = new TeamRecord(tid, user, teamName, thisClass);
+        Ebean.save(newTeam); // Save this team into the database
     }
 
     private static Model.Finder<String, TeamRecord> find = new Model.Finder<>(TeamRecord.class);
@@ -45,19 +55,5 @@ public class TeamRecord extends Model {
 
     public static TeamRecord getTeam(String tid) {
         return find.ref(tid);
-    }
-
-    // Check if user already has a team for this class
-    public static boolean hasTeam(String thisClass, UserAccount user) {
-        List<TeamRecord> classTeams = TeamRecord.find.where().eq("thisClass", thisClass).findList();
-        for (int i = 0; i < classTeams.size(); i++) {
-            TeamRecord thisTeam = classTeams.get(i);
-            ArrayList<UserAccount> teamMembers = thisTeam.teamMembers;
-            if (teamMembers == null) continue;
-            if (teamMembers.contains(user)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -38,6 +38,14 @@ public class Account extends Controller {
             form.reject("username", "Must provide username.");
             return badRequest(account.render(form));
         }
+
+        for (int i = 0; i < username.length(); i++) {
+            if (!Character.isLetterOrDigit(username.charAt(i))) {
+                form.reject("username", "Alphanumeric characters only.");
+                return badRequest(account.render(form));
+            }
+        }
+
         // save the data sent through HTTP POST
 		Form<UserProfile> profileForm = ProfileForm.bindFromRequest();
 		UserProfile newProfile = profileForm.get();

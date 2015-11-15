@@ -11,6 +11,7 @@ create table class_record (
 
 create table team_record (
   tid                       varchar(255) not null,
+  team_members              varchar(255),
   team_name                 varchar(255),
   this_class                varchar(255),
   constraint pk_team_record primary key (tid))

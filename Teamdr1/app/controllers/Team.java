@@ -13,6 +13,7 @@ import play.data.Form;
 import java.util.*;
 import static play.libs.Json.*;
 import play.libs.Json.*;
+import javax.persistence.*;
 
 import static play.libs.Json.toJson;
 
@@ -87,15 +88,13 @@ public class Team extends Controller {
 
         // User cannot have more than one team for this class
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
-        if (TeamRecord.hasTeam(currentClass, thisUser)) {
+        if (hasTeam(currentClass, thisUser)) {
             error = toJson("You already created a team for this class.");
             error2 = toJson("");
             return badRequest(createteam.render(className, error, error2));
         } else {
             // Create a new team
-            TeamRecord newTeam = new TeamRecord(tid, thisUser, teamName, currentClass);
-            newTeam.save(); // Save this new team into the database
-
+            TeamRecord.createTeamRecord(tid, thisUser, teamName, currentClass);
             JsonNode json = toJson(currentClass);
             error = toJson("");
             error2 = toJson("");
@@ -105,7 +104,7 @@ public class Team extends Controller {
             for (int i = 0; i < allTeams.size(); i++) {
                 TeamRecord team = allTeams.get(i);
                 System.out.println("Name: " + team.teamName);
-                System.out.println(team.teamMembers);
+                System.out.println("Team: " + team.teamMembers);
                 System.out.println("Class: " + team.thisClass);
                 System.out.println();
             }
@@ -116,4 +115,41 @@ public class Team extends Controller {
         }
     }
 
+    private Boolean hasTeam(String currentClass, UserAccount thisUser) {
+        List<TeamRecord> allTeams = TeamRecord.findAll();
+        for (int i = 0; i < allTeams.size(); i++) {
+            TeamRecord thisTeam = allTeams.get(i);
+            if (!thisTeam.thisClass.equals(currentClass)) {
+                continue;
+            }
+            String team = thisTeam.teamMembers;
+            if (team == null) {
+                System.out.println("Team: " + thisTeam.teamMembers + " is empty");
+                continue;
+            } /*if (team.contains(thisUser)) {
+                return true;
+            }*/
+        }
+        return false;
+    }
+
+    /*
+     // Check if user already has a team for this class
+    public static boolean hasTeam(String thisClass, UserAccount user) {
+        List<TeamRecord> classTeams = TeamRecord.find.where().eq("thisClass", thisClass).findList();
+        for (int i = 0; i < classTeams.size(); i++) {
+            TeamRecord thisTeam = classTeams.get(i);
+            ArrayList<UserAccount> teamMembers = thisTeam.teamMembers;
+            if (teamMembers == null) {
+                System.out.println("Team: " + thisTeam.teamMembers + " is empty");
+                continue;
+            }
+            if (teamMembers.contains(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     */
 }
