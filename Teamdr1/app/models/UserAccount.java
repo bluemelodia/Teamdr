@@ -3,6 +3,10 @@ import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 import javax.persistence.*;
 import com.avaje.ebean.Ebean;
+
+import java.util.*;
+import javax.persistence.*;
+import play.db.ebean.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import models.TeamRecord;
@@ -19,6 +23,7 @@ public class UserAccount extends Model {
     @Constraints.Required
     public String password; // System will not allow invalid data save
 	@Constraints.Required
+	@OneToOne(cascade = CascadeType.REMOVE)
 	public UserProfile profile = new UserProfile();
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -40,5 +45,13 @@ public class UserAccount extends Model {
     public static UserAccount getUser(String username) {
         return find.ref(username);
     }
+	
+	public boolean addProfile(String uname, String e){
+		this.profile.username = uname;
+		this.profile.email = e;
+		ClassRecord course = new ClassRecord("4111", "DB");
+		this.profile.classes.add(course);
+		return true;
+	}
 	
 }

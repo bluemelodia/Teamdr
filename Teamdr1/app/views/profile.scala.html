@@ -1,5 +1,5 @@
 @import com.fasterxml.jackson.databind.JsonNode
-@(userAccount: JsonNode))
+@(userAccount: JsonNode)(classRecord: JsonNode)
 @main("Profile") {
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -64,12 +64,12 @@
 					<p color=#000000>
 					<b>Email:</b>
 					<BR>
-                    @userAccount.findValue("email")
+                    @userAccount.findValue("email").asText()
 					<BR><BR>
 					
 					<b>Classes:</b>
-					@userAccount.findValue("profile").findValue("classes")
-					@for(classdata<-userAccount.findValue("profile").findValue("classes").fieldNames()) {
+					@classRecord.findValue("classID").asText()
+					<!--@for(classdata<-userAccount.findValue("profile").findValue("classes").fieldNames()) {
 							<BR><a href="www.google.com"><b>@classdata</a></b>
 							<BR><span style=padding-left:6em> 2b|!2b
 							<button type="submit" name="Team_drop_btn" onclick="location.href='http://google.com';"/>X</button>
@@ -77,7 +77,7 @@
 					@userAccount.findValue("profile").findValue("classes").asText()
 					@if(!userAccount.findValue("profile").findValue("classes").hasNonNull(0)){
 						<BR>No classes</b>
-					}
+					}-->
 					<BR><BR>
 					
 					<b>Classes:</b>

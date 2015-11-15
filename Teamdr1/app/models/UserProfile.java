@@ -3,20 +3,26 @@ import com.avaje.ebean.Model;
 import controllers.Classes;
 import play.data.validation.Constraints;
 
+import java.util.*;
+import javax.persistence.*;
+import play.db.ebean.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Bailey on 11/13/15.
  */
-public class UserProfile {
+@Entity
+public class UserProfile extends Model{
     @Id
     @Constraints.Required
 	public String username;
 	public String email;
 	public String pic_url;
-    public ClassRecord[] classes;
+	@OneToMany(cascade = CascadeType.REMOVE)
+    public ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
     public String description;
 	
 	// Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -35,18 +41,39 @@ public class UserProfile {
     }
 
     // Return the record with this matching username
-    public static UserProfile getUser(String email) {
-        return find.ref(email);
+    public static UserProfile getUser(String username) {
+        return find.ref(username);
     }
 	
-	public UserProfile updateProfile(String username){ 
-		this.username = username;
-		ClassRecord course = new ClassRecord();
-		course.classID = "COMS 4111";
-		course.className = "Introduction to Databases";
-		this.classes = new ClassRecord[5];
-		this.classes[0] = course;
-		System.out.println(this.classes[0].classID);
+	public ClassRecord getClass(String username) {
+        UserProfile profile =find.ref(username);
+		ClassRecord c = new ClassRecord("4111", "DB");
+		profile.classes.add(c);
+		ClassRecord course = profile.classes.get(0);
+		
+		return course;	
+    }
+	
+	public boolean addClass(String cid, String cname){ 
+		ClassRecord course = new ClassRecord(cid, cname);
+		//course.classID = cid;
+		//course.className = cname;
+		course.save();
+		this.classes.add(course);
+		int size = classes.size();
+		this.classes.get(size-1).save();
+		System.out.println(this.classes.get(0).classID);
+		return true;
+	}
+	
+	public UserProfile updateProfile(String uname, String e){ 
+		this.username = uname;
+		this.email = e;
+		ClassRecord course = new ClassRecord("4111", "DB");
+		//course.classID = "COMS 4111";
+		//course.className = "Introduction to Databases";
+		this.classes.add(course);
+		System.out.println(this.classes.get(0).classID);
 		return this;
 	}
 }

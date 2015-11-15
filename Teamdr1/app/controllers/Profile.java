@@ -26,37 +26,51 @@ public class Profile extends Controller {
             return redirect(routes.Account.signIn());
         }
         UserAccount getUser = UserAccount.getUser(user);
-
-        JsonNode json = toJson(getUser);
-        return ok(profile.render(json));
+		//ClassRecord c = UserProfile.getClass(user);
+        JsonNode user_json = toJson(getUser);
+		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
+        return ok(profile.render(user_json, class_json));
         //return ok(update_profile.render());
     }
 
     public Result updateProfile() {
         String user = session("connected");
+		System.out.println("Got here");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
 		
+		UserProfile p = UserProfile.getUser(user);
 		Form<UserProfile> form = ProfileForm.bindFromRequest();
         if (form.hasErrors()) { // Redirect with error
             return badRequest(update_profile.render(form));
         }
 
-        return redirect(routes.Profile.viewProfile());
-		//return ok(update_profile.render());
+		// convert HTML form to an Account model object, containing the params
+        UserProfile prof = form.get();
+		String e = form.data().get("email");
+		String url = form.data().get("pic_url");
+		String desc = form.data().get("description");
+		p.email = e;
+		p.pic_url = url;
+		p.description = desc;
+		System.out.println("Got here");
+		prof.save();
+		UserAccount getUser = UserAccount.getUser(user);
+		JsonNode user_json = toJson(getUser);
+		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
+        //return redirect(routes.Profile.viewProfile());
+		return ok(profile.render(user_json, class_json));
     }
 	
-	public UserProfile updateProfile(Form<UserProfile> profileForm){ 
+	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
 		UserProfile profile = profileForm.get();
 		String username = "Bailey";
 		profile.username = username;
-		ClassRecord course = new ClassRecord();
-		course.classID = "COMS 4111";
-		course.className = "Introduction to Databases";
-		profile.classes = new ClassRecord[5];
-		profile.classes[0] = course;
-		System.out.println(profile.classes[0].classID);
+		
+		ClassRecord course = new ClassRecord("41111", "DB");
+		profile.classes.add(course);
+		System.out.println(profile.classes.get(0).classID);
 		return profile;
-	}
+	}*/
 }

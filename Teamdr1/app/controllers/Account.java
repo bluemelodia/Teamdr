@@ -28,6 +28,7 @@ public class Account extends Controller {
         // convert HTML form to an Account model object, containing the params
         UserAccount newAccount = form.get();
 		String username = form.data().get("username");
+		String email = form.data().get("email");
 		
         if (UserAccount.exists(newAccount.username)) {
             form.reject("username", "User already exists.");
@@ -47,11 +48,14 @@ public class Account extends Controller {
         }
 
         // save the data sent through HTTP POST
-		Form<UserProfile> profileForm = ProfileForm.bindFromRequest();
-		UserProfile newProfile = profileForm.get();
-		UserProfile p = new UserProfile();
-		p.updateProfile(username);
-		newAccount.profile = p;
+		UserProfile newProfile = new UserProfile();
+		newProfile.updateProfile(username, email);
+		String cid = "COMS 415";
+		String cname = "Introduction to Databases";
+		newProfile.addClass(cid, cname);
+		newProfile.save();
+		newAccount.profile = newProfile;
+		newAccount.addProfile(username, email);
 		System.out.println(newProfile.email);
 		//newAccount.updateProfile(username);
 		newAccount.save();

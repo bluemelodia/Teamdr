@@ -20,6 +20,16 @@ public class ClassRecord extends Model {
 	public TeamRecord team;
 
 	
+	public ClassRecord(){
+		
+	}
+	
+	
+	public ClassRecord(String c, String i){
+		classID = c;
+		className = i;
+	}
+	
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     private static Model.Finder<String, ClassRecord> find = new Model.Finder<>(ClassRecord.class);
 

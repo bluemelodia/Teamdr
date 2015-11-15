@@ -21,14 +21,8 @@
     <fieldset>
     <legend>Update Profile</legend>
 		@helper.form(action = routes.Profile.updateProfile(), 'id -> "ChangeUsername") {
-            @helper.inputText(serviceForm.field("username"), '_label -> "Username:", '_class -> "username-field")
-		}
-			
-		@helper.form(action = routes.Profile.updateProfile(), 'id -> "ChangePic") {
+            @helper.inputText(serviceForm.field("email"), '_label -> "Email:", '_class -> "email-field")
             @helper.inputText(serviceForm.field("pic_url"), '_label -> "Picture URL:", '_class -> "pic_url-field")
-		}
-		
-		@helper.form(action = routes.Profile.updateProfile(), 'id -> "ChangePic") {
             @helper.inputText(serviceForm.field("description"), '_label -> "Other Information:", '_class -> "description-field")
 		}
 		
