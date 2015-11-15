@@ -35,12 +35,14 @@ public class Team extends Controller {
     public TeamRecord showCurrentTeam(String username) {
         UserAccount thisUser = UserAccount.getUser(username);
         System.out.println("me: " + thisUser.username);
+
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (TeamRecord team: allTeams) {
-            System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
+            //System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
             if (!team.thisClass.equals(currentClass)) {
                 continue;
             }
+            System.out.println(team.teamMembers);
             String[] teamMembers = (team.teamMembers).split(" ");
             Boolean myTeam = false;
             for (int i = 0; i < teamMembers.length; i++) {
@@ -60,7 +62,7 @@ public class Team extends Controller {
             if (contains) {
                 continue;
             } else {
-                //seenTeams.add(team); // add this team to the ones you have already seen
+                // seenTeams.add(team); // add this team to the ones you have already seen
                 System.out.println("Returning team: " + team.teamName);
                 return team;
             }
@@ -127,13 +129,21 @@ public class Team extends Controller {
     }
 
     public Result swipeRight() {
+        seenTeams.add(thisTeam);
 
-        // Get relevant team ID
-        //TeamRecord team = .getParameter("right");
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
 
-        // Show team profile (name, id, members and "Send Request" button)
-      //  return ok(team_profile.render(team));
-        return TODO;
+        // TeamRecord currentTeam = showCurrentTeam(user);
+        TeamRecord td = TeamRecord.getTeam(thisTeam);
+        
+        //update team with currently shown team and user
+        td = td.updateTeam(thisTeam, user);
+        //System.out.println("new team " + td.teamMembers);
+        td.save();
+        return redirect(routes.Team.showTeams());
     }
 
     public Result sendRequest() {
@@ -147,7 +157,7 @@ public class Team extends Controller {
     // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
         seenTeams.add(thisTeam);
-        System.out.println("SEEN TEAMS: " + seenTeams);
+        //System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
     }
 

@@ -56,4 +56,50 @@ public class TeamRecord extends Model {
     public static TeamRecord getTeam(String tid) {
         return find.ref(tid);
     }
+
+        // Retrieve a team that you have not yet seen
+    public static TeamRecord userTeam(String username) {
+        UserAccount thisUser = UserAccount.getUser(username);
+        System.out.println("me: " + thisUser.username);
+        List<TeamRecord> allTeams = TeamRecord.findAll();
+        for (TeamRecord team: allTeams) {
+
+            System.out.println(team.teamMembers);
+            String[] teamMembers = (team.teamMembers).split(" ");
+            
+            for (int i = 0; i < teamMembers.length; i++) {
+                if (teamMembers[i].equals(thisUser.username)) {
+                    System.out.println("This is my team...");
+                    return team;
+                }
+            }
+
+        }
+        return null;
+    }
+
+    public TeamRecord updateTeam(String tid, String uname){
+        this.tid = tid;
+        this.teamName = getTeam(tid).teamName;
+        TeamRecord curTeam = TeamRecord.userTeam(uname);
+        
+        //if they already add a team add all those teammembers
+        if (curTeam != null) {
+            String[] teamMembers = (curTeam.teamMembers).split(" ");
+            String newMembers = "";
+
+            for (int i = 0; i < teamMembers.length; i++) {
+                this.teamMembers = this.teamMembers + " " + teamMembers[i];
+            }
+
+            curTeam.delete();
+        
+        //if they don't already have a team just add their name
+        } else {
+
+            this.teamMembers = getTeam(tid).teamMembers + " " + uname;
+        }
+
+        return this;
+    }
 }
