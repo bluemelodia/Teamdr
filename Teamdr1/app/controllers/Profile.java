@@ -102,6 +102,14 @@ public class Profile extends Controller {
         return ok(toJson(allNotifs));
     }
 
+    public Result showNotifications() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        return TODO;
+    }
+
     // This one only called in type 1 call
     public Result acceptNotification() {
         JsonNode json = request().body().asJson();
@@ -151,8 +159,9 @@ public class Profile extends Controller {
         // Delete the notification
         Notifications.deleteNotif(notificationID);
 
+        // TODO: if the recipient swipes right through the team search page, also merge and delete the notif
         // TODO: send a notification to the entire new team, saying that the team was merged.
-
+        // TODO: make sure two people cannot swipe left on the same person (to oust them) - if they have been already ousted, the second person's swipe does nothing
         return ok(toJson("Accepted"));
     }
 

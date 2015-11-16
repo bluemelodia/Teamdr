@@ -158,6 +158,16 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         }
 
+        // If the user already received an invite to join this team, send them to the notifs page
+        List<Notifications> notifs = Notifications.getNotifs(user);
+        for (int j = 0; j < notifs.size(); j++) {
+            Notifications currentNotif = notifs.get(j);
+            // This user was already invited to join this team
+            if (currentNotif.classID.equals(currentClass) && currentNotif.teamID.equals(thisTeam)) {
+                return redirect("http://localhost:9000/assets/notifications.html");
+            }
+        }
+
         // TeamRecord currentTeam = showCurrentTeam(user);
         //TeamRecord td = TeamRecord.getTeam(thisTeam);
 
