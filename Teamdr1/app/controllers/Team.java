@@ -51,7 +51,10 @@ public class Team extends Controller {
             }
             if (myTeam) continue; // don't return your own team!
             Boolean contains = false;
-            if (seenTeams == null) continue;
+            if (seenTeams == null) {
+                System.out.println("NULL");
+                continue;
+            }
             for (int i = 0; i < seenTeams.size(); i++) {
                 System.out.println("Seen ids: " + seenTeams.get(i));
                 if (seenTeams.get(i).length() < 1) continue;
@@ -142,6 +145,9 @@ public class Team extends Controller {
             }
             if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
                 teamDetails = teamDetails.substring(0, teamDetails.length()-1);
+            } if (teamDetails.length() >= 255) { // Varchar can only have 255 chars
+                teamDetails = teamDetails.substring(0, 251);
+                teamDetails += "...";
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
@@ -185,6 +191,9 @@ public class Team extends Controller {
         // Remove the comma at the end
         if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
             teamDetails = teamDetails.substring(0, teamDetails.length()-1);
+        } if (teamDetails.length() >= 255) { // Varchar can only have 255 chars
+            teamDetails = teamDetails.substring(0, 251);
+            teamDetails += "...";
         }
 
         TeamRecord td = TeamRecord.getTeam(thisTeam);
