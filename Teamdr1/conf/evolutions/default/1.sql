@@ -12,7 +12,7 @@ create table class_record (
 create table notifications (
   notif_id                  integer not null,
   username                  varchar(255),
-  type                      integer,
+  message_type              integer,
   class_id                  varchar(255),
   message                   varchar(255),
   team_id                   varchar(255),

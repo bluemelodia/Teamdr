@@ -21,7 +21,7 @@ public class Notifications {
     // COLLAB - received collab request -> send int 1
     // FORMTEAM - successfully formed team -> send int 2
     // BREAKTEAM - broke team of 2 people -> send int 3
-    public int type;
+    public int messageType;
     @Constraints.Required
     public String classID; // this class ID
     @Constraints.Required
@@ -32,7 +32,8 @@ public class Notifications {
     public Notifications(String username, String classID, int type, String teamID, String message) {
         this.username = username;
         this.classID = classID;
-        this.type = type;
+        this.messageType = type;
+        this.teamID = teamID;
         Random randomGenerator = new Random(); // keep trying to generate a unique notifID
         this.notifID = randomGenerator.nextInt(Integer.MAX_VALUE);
         while (notifExists(this.notifID)) this.notifID = randomGenerator.nextInt(Integer.MAX_VALUE);
@@ -56,5 +57,9 @@ public class Notifications {
 
     public static boolean hasNotifs(String username) {
         return (find.where().eq("username", username).findRowCount() > 0) ? true : false;
+    }
+
+    public static int countNotifs(String username) {
+        return (find.where().eq("username", username).findRowCount());
     }
 }
