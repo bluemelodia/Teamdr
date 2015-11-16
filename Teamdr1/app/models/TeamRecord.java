@@ -57,6 +57,22 @@ public class TeamRecord extends Model {
         return find.ref(tid);
     }
 
+    // Get the user's specific team
+    public static TeamRecord getTeamForClass(String username, String thisClass) {
+        List<TeamRecord> records = find.where().eq("thisClass", thisClass).findList();
+        for (int i = 0; i < records.size(); i++) {
+            TeamRecord currentRecord = records.get(i);
+            String[] teamMembers = (currentRecord.teamMembers).split(" ");
+            for (int j = 0; j < teamMembers.length; j++) {
+                String currentMember = teamMembers[j].trim();
+                if (currentMember.equals(username)) {
+                    return currentRecord;
+                }
+            }
+        }
+        return null;
+    }
+
         // Retrieve a team that you have not yet seen
     public static TeamRecord userTeam(String username) {
         UserAccount thisUser = UserAccount.getUser(username);

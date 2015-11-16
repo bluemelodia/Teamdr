@@ -1,10 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.ClassRecord;
-import models.TeamRecord;
-import models.UserAccount;
-import models.UserProfile;
+import models.*;
 import models.TeamRecord;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -57,6 +54,7 @@ public class Team extends Controller {
             if (seenTeams == null) continue;
             for (int i = 0; i < seenTeams.size(); i++) {
                 System.out.println("Seen ids: " + seenTeams.get(i));
+                if (seenTeams.get(i).length() < 1) continue;
                 if (seenTeams.get(i).equals(team.tid)) {
                     contains = true;
                 }
@@ -158,14 +156,25 @@ public class Team extends Controller {
         }
 
         // TeamRecord currentTeam = showCurrentTeam(user);
-        TeamRecord td = TeamRecord.getTeam(thisTeam);
-        String teamDetails = "";
-        String[] members = (td.teamMembers).split(" ");
+        //TeamRecord td = TeamRecord.getTeam(thisTeam);
+
+        // Get the user's team
+        TeamRecord myTeam = TeamRecord.getTeamForClass(user, currentClass);
+
+        String teamDetails = "Invited to team: " + myTeam.tid + "/n Team Members:";
+        String[] members = (myTeam.teamMembers).split(" ");
         for (int i = 0; i < members.length; i++) { // Get all member descriptions
             UserAccount currentUser = UserAccount.getUser(members[i]);
             teamDetails += "    " + currentUser.username.toString() + "/n";
             UserProfile currentProfile = UserProfile.getUser(currentUser.username);
             teamDetails += "        " + currentProfile.description + "/n/n";
+        }
+
+        TeamRecord td = TeamRecord.getTeam(thisTeam);
+        String[] people = (td.teamMembers).split(" ");
+        for (int i = 0; i < members.length; i++) {
+            UserAccount currentUser = UserAccount.getUser(people[i]);
+            Notifications.createNewNotification(currentUser.username, currentClass, 1, myTeam.tid, teamDetails);
         }
 
         //update team with currently shown team and user

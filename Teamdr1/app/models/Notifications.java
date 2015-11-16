@@ -1,7 +1,7 @@
 package models;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
-
+import com.avaje.ebean.Ebean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
@@ -37,6 +37,11 @@ public class Notifications {
         this.notifID = randomGenerator.nextInt(Integer.MAX_VALUE);
         while (notifExists(this.notifID)) this.notifID = randomGenerator.nextInt(Integer.MAX_VALUE);
         this.message = message;
+    }
+
+    public static void createNewNotification(String username, String classID, int type, String teamID, String message) {
+        Notifications newNotif = new Notifications(username, classID, type, teamID, message);
+        Ebean.save(newNotif);
     }
 
     private static Model.Finder<String, Notifications> find = new Model.Finder<>(Notifications.class);
