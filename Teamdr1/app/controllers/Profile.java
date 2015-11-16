@@ -1,18 +1,23 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import jdk.nashorn.internal.ir.ObjectNode;
+import models.ClassRecord;
 import models.Notifications;
 import models.UserAccount;
 import models.UserProfile;
-import models.ClassRecord;
+import play.api.libs.json.JsPath;
+import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.*;
+import views.html.profile;
 import views.html.update_profile;
-import play.data.Form;
-import java.util.*;
-import static play.libs.Json.*;
+
+import java.util.List;
+import java.util.Map;
+
+import static play.libs.Json.toJson;
 
 /**
  * Created by bluemelodia on 11/11/15.
@@ -96,6 +101,19 @@ public class Profile extends Controller {
 
         List<Notifications> allNotifs = Notifications.getNotifs(thisUser.username);
         return ok(toJson(allNotifs));
+    }
+
+    // This one only called in type 1 call
+    public Result acceptNotification() {
+        JsonNode json = request().body().asJson();
+        int notificationID = json.asInt();
+        System.out.println(notificationID);
+        return ok(toJson("Accepted"));
+    }
+
+    // Just delete the record
+    public Result rejectNotification() {
+        return ok(toJson("Rejected"));
     }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 

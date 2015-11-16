@@ -19,7 +19,7 @@ function accept(notif) {
         data: JSON.stringify(notif),
         contentType: 'application/json',
         success: function(data, textStatus, jqXHR) {
-            webix.message(data.message);
+            location.href = '/profile';
         }
     });
 }
@@ -32,7 +32,7 @@ function reject(notif) {
         data: JSON.stringify(notif),
         contentType: 'application/json',
         success: function(data, textStatus, jqXHR) {
-            webix.message(data.message);
+            location.href = '/profile';
         }
     });
 }
