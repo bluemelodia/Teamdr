@@ -4,6 +4,7 @@ import play.data.validation.Constraints;
 import com.avaje.ebean.Ebean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Random;
 
@@ -57,6 +58,11 @@ public class Notifications {
 
     public static boolean hasNotifs(String username) {
         return (find.where().eq("username", username).findRowCount() > 0) ? true : false;
+    }
+
+    public static void deleteNotif(int notifID) {
+        Notifications notif = find.ref(Integer.toString(notifID));
+        Ebean.delete(notif);
     }
 
     public static int countNotifs(String username) {

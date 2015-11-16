@@ -108,11 +108,20 @@ public class Profile extends Controller {
         JsonNode json = request().body().asJson();
         int notificationID = json.asInt();
         System.out.println(notificationID);
+
+        // Delete the notifications sent to the other teammates about joining this team
+
+
         return ok(toJson("Accepted"));
     }
 
     // Just delete the record
     public Result rejectNotification() {
+        JsonNode json = request().body().asJson();
+        int notificationID = json.asInt();
+        // Delete this notification
+        Notifications.deleteNotif(notificationID);
+
         return ok(toJson("Rejected"));
     }
 	
