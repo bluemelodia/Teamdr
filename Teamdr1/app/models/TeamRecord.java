@@ -94,7 +94,20 @@ public class TeamRecord extends Model {
         return null;
     }
 
-    public TeamRecord updateTeam(String tid, String uname){
+    // Merge two teams
+    public TeamRecord updateTeam(String tid, String tid2){
+        TeamRecord requesterTeam = getTeam(tid);
+        TeamRecord receiverTeam = getTeam(tid2);
+        String[] teamMembers = (receiverTeam.teamMembers).split(" ");
+        for (int i = 0; i < teamMembers.length; i++) { // add the receiver team members to requester team
+            requesterTeam.teamMembers += requesterTeam.teamMembers + teamMembers[i].trim() + " ";
+        }
+        System.out.println("New team: " + requesterTeam.teamMembers);
+        // remove the receiver team
+        Ebean.delete(receiverTeam);
+
+        return requesterTeam; // this team now an aggregate
+        /*
         this.tid = tid;
         this.teamName = getTeam(tid).teamName;
         TeamRecord curTeam = TeamRecord.userTeam(uname);
@@ -116,6 +129,6 @@ public class TeamRecord extends Model {
             this.teamMembers = getTeam(tid).teamMembers + " " + uname;
         }
 
-        return this;
+        return this;*/
     }
 }

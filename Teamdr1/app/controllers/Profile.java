@@ -137,6 +137,11 @@ public class Profile extends Controller {
 
         if (!sameTeam) { // can do the merge
             System.out.println("gonna merge");
+            requesterTeam = requesterTeam.updateTeam(requesterTeam.tid, myTeam.tid);
+            requesterTeam.save();
+            //td = td.updateTeam(thisTeam, user);
+            //System.out.println("new team " + td.teamMembers);
+            //td.save();
         }
 
         // Delete the notification
