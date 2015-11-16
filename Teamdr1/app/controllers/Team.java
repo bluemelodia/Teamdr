@@ -54,6 +54,7 @@ public class Team extends Controller {
             }
             if (myTeam) continue; // don't return your own team!
             Boolean contains = false;
+            if (seenTeams == null) continue;
             for (int i = 0; i < seenTeams.size(); i++) {
                 System.out.println("Seen ids: " + seenTeams.get(i));
                 if (seenTeams.get(i).equals(team.tid)) {
@@ -130,12 +131,16 @@ public class Team extends Controller {
 
             // Get the team info
             TeamRecord teamToDisplay = TeamRecord.getTeam(thisTeam);
+            // First, eliminate all double spaces
             String[] members = (teamToDisplay.teamMembers).split(" ");
             for (int i = 0; i < members.length; i++) { // Get all member descriptions
+                System.out.println("CURRENT MEMBER: [" + members[i] + "]");
                 UserAccount currentUser = UserAccount.getUser(members[i]);
-                teamDetails += "    " + currentUser.username.toString() + "</br>";
+                System.out.println(members[i] + " username: " + currentUser.username);
+                if (currentUser == null || currentUser.username.length() < 1) continue;
+                teamDetails += "    " + currentUser.username.toString() + "/n";
                 UserProfile currentProfile = UserProfile.getUser(currentUser.username);
-                teamDetails += "        " + currentProfile.description + "</br></br>";
+                teamDetails += "        " + currentProfile.description + "/n/n";
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
@@ -154,11 +159,19 @@ public class Team extends Controller {
 
         // TeamRecord currentTeam = showCurrentTeam(user);
         TeamRecord td = TeamRecord.getTeam(thisTeam);
-        
+        String teamDetails = "";
+        String[] members = (td.teamMembers).split(" ");
+        for (int i = 0; i < members.length; i++) { // Get all member descriptions
+            UserAccount currentUser = UserAccount.getUser(members[i]);
+            teamDetails += "    " + currentUser.username.toString() + "/n";
+            UserProfile currentProfile = UserProfile.getUser(currentUser.username);
+            teamDetails += "        " + currentProfile.description + "/n/n";
+        }
+
         //update team with currently shown team and user
-        td = td.updateTeam(thisTeam, user);
+        //td = td.updateTeam(thisTeam, user);
         //System.out.println("new team " + td.teamMembers);
-        td.save();
+        //td.save();
         return redirect(routes.Team.showTeams());
     }
 
