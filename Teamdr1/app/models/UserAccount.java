@@ -71,7 +71,26 @@ public class UserAccount extends Model {
 
     // If a team got deleted, make each user delete this team from the seen team list so the ID can be reused
     public void removeDeletedTeam(String teamID) {
+        List<UserAccount> allUsers = findAll();
+        for (int i = 0; i < allUsers.size(); i++) {
+            UserAccount me = allUsers.get(i);
+            String[] iSaw = (me.seenTeams).split(" ");
+            ArrayList<String> alreadySeen = new ArrayList<>();
+            for (int j = 0; j < alreadySeen.size(); j++) {
+                String currentTeam = alreadySeen.get(j).trim();
+                alreadySeen.add(currentTeam);
+            }
+            if (!alreadySeen.contains(teamID)) {
+                alreadySeen.remove(teamID);
 
+                // Rewrite the string with the remaining seen teams
+                me.seenTeams = "";
+                for (int k = 0; k < alreadySeen.size(); k++) {
+                    me.seenTeams += alreadySeen.get(k) + " ";
+                }
+                Ebean.save(me);
+            }
+        }
     }
 
     public String getSeenTeams(String username) {
