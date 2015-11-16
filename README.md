@@ -1,4 +1,23 @@
 # Teamdr
+Test scenarios:
+Users: 1, 2, 3, 4
+
+Case 1: Join team 1 by 1
+1 adds 2, 3, 4
+2, 3 swipe right, 4 swipes left
+Result: 1, 2, 3 are now in a team
+
+Case 2: Join group
+1 and 2 form a team, 3 and 4 form a team
+1 swipes right on Team 3/4, but 2 swipes left
+3, 4 receive the request
+3 swipes left, 4 swipes right
+Result: 1, 2, 3, 4 now in a team
+
+Case 3: Add the same people in different classes,
+such that 1, 2, 3, 4 form a team in COMS4118 and COMS4111
+Result: 1, 2, 3, 4 form one team in COMS4118 and one team in COMS4111
+
 Tasks to do:
 
 Melanie: 
