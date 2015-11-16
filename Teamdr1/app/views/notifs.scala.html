@@ -1,5 +1,6 @@
 @(services: List[Notifications])
 @main("Notifications") {
+    <body>
     <table>
         <thead>
             <tr>
@@ -13,13 +14,21 @@
         <tbody>
             @for(service <- services) {
                 <tr>
-                    <td>@service.notifID</td>
-                    <td>@service.classID</td>
-                    <td>@service.teamID</td>
-                    <td>@service.message</td>
-                    <td>Action</td>
+                    <script>
+                    if (@service.messageType == 1) {
+                        document.write("Hi");
+                    } else if (@service.messageType == 2) {
+                        document.write("Bye");
+                    } else if (@service.messageType == 3) {
+                        document.write("Sai");
+                    }
+
+                    </script>
+                    <div id="node-id"></div>
+
                 </tr>
             }
         </tbody>
     </table>
+    </body>
 }

@@ -32,7 +32,7 @@ public class Profile extends Controller {
         // If the user has notifications, show them
         String notifs = "Hi";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: https://www.google.com";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
         }
 
         JsonNode user_json = toJson(getUser);
@@ -71,7 +71,7 @@ public class Profile extends Controller {
         // If the user has notifications, show them
         String notifs = "Hi";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: https://www.google.com";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
         }
 
 		JsonNode user_json = toJson(getUser);
@@ -95,7 +95,7 @@ public class Profile extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
 
         List<Notifications> allNotifs = Notifications.getNotifs(thisUser.username);
-        return ok(notifs.render(allNotifs));
+        return ok(toJson(allNotifs));
     }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
