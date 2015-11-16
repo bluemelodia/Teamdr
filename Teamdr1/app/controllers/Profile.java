@@ -147,6 +147,8 @@ public class Profile extends Controller {
         // Delete the notification
         Notifications.deleteNotif(notificationID);
 
+        // TODO: send a notification to the entire new team, saying that the team was merged.
+
         return ok(toJson("Accepted"));
     }
 

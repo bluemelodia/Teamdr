@@ -136,9 +136,12 @@ public class Team extends Controller {
                 UserAccount currentUser = UserAccount.getUser(members[i]);
                 System.out.println(members[i] + " username: " + currentUser.username);
                 if (currentUser == null || currentUser.username.length() < 1) continue;
-                teamDetails += "    " + currentUser.username.toString() + "/n";
+                teamDetails += "    " + currentUser.username.toString() + " (";
                 UserProfile currentProfile = UserProfile.getUser(currentUser.username);
-                teamDetails += "        " + currentProfile.description + "/n/n";
+                teamDetails += "        " + currentProfile.description + "),";
+            }
+            if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
+                teamDetails = teamDetails.substring(0, teamDetails.length()-1);
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
@@ -165,9 +168,13 @@ public class Team extends Controller {
         String[] members = (myTeam.teamMembers).split(" ");
         for (int i = 0; i < members.length; i++) { // Get all member descriptions
             UserAccount currentUser = UserAccount.getUser(members[i]);
-            teamDetails += "    " + currentUser.username.toString() + "/n";
+            teamDetails += "    " + currentUser.username.toString() + " (";
             UserProfile currentProfile = UserProfile.getUser(currentUser.username);
-            teamDetails += "        " + currentProfile.description + "/n/n";
+            teamDetails += "        " + currentProfile.description + "),";
+        }
+        // Remove the comma at the end
+        if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
+            teamDetails = teamDetails.substring(0, teamDetails.length()-1);
         }
 
         TeamRecord td = TeamRecord.getTeam(thisTeam);
@@ -192,6 +199,7 @@ public class Team extends Controller {
         return TODO;
     }
 
+    // TODO: why is the team getting added to seenTeams on refresh, yet reappears on team button click
     // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
         String user = session("connected");
