@@ -147,8 +147,8 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         }
         UserAccount thisUser = UserAccount.getUser(user);
-        String thisTeam = request.getParameter("right");
-        System.out.println("This team: " + thisTeam);
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String thisTeam = values.get("accepted")[0];
         UserAccount.addSeenTeam(user, thisTeam);
         // If the user already received an invite to join this team, send them to the notifs page
         List<Notifications> notifs = Notifications.getNotifs(user);
@@ -211,9 +211,11 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
-        String thisTeam = request.getParameter("left");
-        System.out.println("This team: " + thisTeam);
+        UserAccount thisUser = UserAccount.getUser(user);
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String thisTeam = values.get("rejected")[0];
         UserAccount.addSeenTeam(user, thisTeam);
+        System.out.println("This team: " + thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
     }
