@@ -34,7 +34,7 @@ public class Profile extends Controller {
 		//ClassRecord c = UserProfile.getClass(user);
 
         // If the user has notifications, show them
-        String notifs = "Hi";
+        String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
             notifs = "You have " + Notifications.countNotifs(getUser.username) + " notification(s)";
         }
@@ -73,7 +73,7 @@ public class Profile extends Controller {
         UserAccount getUser = UserAccount.getUser(user);
 
         // If the user has notifications, show them
-        String notifs = "Hi";
+        String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
             notifs = "You have " + Notifications.countNotifs(getUser.username) + " notification(s)";
         }

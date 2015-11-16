@@ -8,6 +8,7 @@ import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.*;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -99,8 +100,16 @@ public class TeamRecord extends Model {
         TeamRecord requesterTeam = getTeam(tid);
         TeamRecord receiverTeam = getTeam(tid2);
         String[] teamMembers = (receiverTeam.teamMembers).split(" ");
+        String[] requesterTeamMembers = (requesterTeam.teamMembers).split(" ");
+        ArrayList<String> originalTeam = new ArrayList<String>();
+        for (int j = 0; j < requesterTeamMembers.length; j++) {
+            originalTeam.add(requesterTeamMembers[j].trim());
+        }
+
         for (int i = 0; i < teamMembers.length; i++) { // add the receiver team members to requester team
-            requesterTeam.teamMembers += requesterTeam.teamMembers + teamMembers[i].trim() + " ";
+            if (!originalTeam.contains(teamMembers[i].trim())) {
+                requesterTeam.teamMembers += teamMembers[i].trim() + " ";
+            }
         }
         System.out.println("New team: " + requesterTeam.teamMembers);
         // remove the receiver team
