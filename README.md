@@ -14,6 +14,12 @@ Case 2: Join group
 3 swipes left, 4 swipes right
 Result: 1, 2, 3, 4 now in a team
 
+Case 2a: 3 and 4 both swipe right. 
+Result: Nothing should happen when 4 swipes right (except the notif deleted). 
+
+Case 2b: Same as Case 1 except 4 swipes left after the team is merged.
+Result: 4 leaves the team and is now on their own. Team has only 1, 2, 3.
+
 Case 3: Add the same people in different classes,
 such that 1, 2, 3, 4 form a team in COMS4118 and COMS4111
 Result: 1, 2, 3, 4 form one team in COMS4118 and one team in COMS4111
