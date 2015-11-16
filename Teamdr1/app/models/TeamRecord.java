@@ -2,6 +2,7 @@ package models;
 import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 import controllers.Classes;
 import models.UserAccount;
+import models.Notifications;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
@@ -96,7 +97,7 @@ public class TeamRecord extends Model {
     }
 
     // Merge two teams
-    public TeamRecord updateTeam(String tid, String tid2){
+    public TeamRecord updateTeam(String tid, String tid2, String classID){
         TeamRecord requesterTeam = getTeam(tid);
         TeamRecord receiverTeam = getTeam(tid2);
         String[] teamMembers = (receiverTeam.teamMembers).split(" ");
@@ -111,6 +112,20 @@ public class TeamRecord extends Model {
                 requesterTeam.teamMembers += teamMembers[i].trim() + " ";
             }
         }
+
+        // remove all notifs for the merged team that is related to the original team
+        for (int k = 0; k < teamMembers.length; k++) {
+            String thisMember = teamMembers[k].trim();
+            List<Notifications> listNotifs = Notifications.getNotifs(thisMember);
+            if (listNotifs.size() < 1) continue;
+            for (int l = 0; l < listNotifs.size(); l++) {
+                Notifications thisNotif = listNotifs.get(l);
+                if (thisNotif.classID.equals(classID)) {
+                    Ebean.delete(thisNotif);
+                }
+            }
+        }
+
         System.out.println("New team: " + requesterTeam.teamMembers);
         // remove the receiver team
         Ebean.delete(receiverTeam);

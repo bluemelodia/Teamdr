@@ -108,6 +108,10 @@ public class Profile extends Controller {
         int notificationID = json.asInt();
         System.out.println(notificationID);
 
+        if (!Notifications.notifExists(notificationID)) {
+            return ok(toJson("Accepted"));
+        }
+
         // Find that notification, getting the classID and teamID of the requester
         Notifications thisNotif = Notifications.getThisNotif(notificationID);
         String classID = thisNotif.classID;
@@ -137,7 +141,7 @@ public class Profile extends Controller {
 
         if (!sameTeam) { // can do the merge
             System.out.println("gonna merge");
-            requesterTeam = requesterTeam.updateTeam(requesterTeam.tid, myTeam.tid);
+            requesterTeam = requesterTeam.updateTeam(requesterTeam.tid, myTeam.tid, classID);
             requesterTeam.save();
             //td = td.updateTeam(thisTeam, user);
             //System.out.println("new team " + td.teamMembers);
