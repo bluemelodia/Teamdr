@@ -20,14 +20,14 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
-    public static String currentClass = "";
+    //public static String currentClass = "";
 
     public Result list() {
         return TODO;
     }
 
-    public static ArrayList<String> seenTeams = new ArrayList<String>();
-    public static String thisTeam = null;
+    //public static ArrayList<String> seenTeams = new ArrayList<String>();
+    //public static String currentTeam = null;
 
     // Retrieve a team that you have not yet seen
     public TeamRecord showCurrentTeam(String username) {
@@ -37,7 +37,7 @@ public class Team extends Controller {
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (TeamRecord team: allTeams) {
             //System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
-            if (!team.thisClass.equals(currentClass)) {
+            if (!team.thisClass.equals(thisUser.currentClass)) {
                 continue;
             }
             System.out.println(team.teamMembers);
@@ -50,23 +50,9 @@ public class Team extends Controller {
                 }
             }
             if (myTeam) continue; // don't return your own team!
-            Boolean contains = false;
-            if (seenTeams == null) {
-                System.out.println("NULL");
-                continue;
-            }
-            for (int i = 0; i < seenTeams.size(); i++) {
-                System.out.println("Seen ids: " + seenTeams.get(i));
-                if (seenTeams.get(i).length() < 1) continue;
-                if (seenTeams.get(i).equals(team.tid)) {
-                    contains = true;
-                }
-            }
-            if (contains) {
+            if (UserAccount.haveSeenTeam(thisUser.username, team.tid)) {
                 continue;
             } else {
-                // seenTeams.add(team); // add this team to the ones you have already seen
-                System.out.println("Returning team: " + team.teamName);
                 return team;
             }
         }
@@ -99,9 +85,10 @@ public class Team extends Controller {
         System.out.println("VALUES: " + values);
         String newClass = values.get("myClass")[0];
         System.out.println("currentClass changed to: " + newClass);
-        currentClass = newClass;
 
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+        UserAccount.changeCurrentClass(user, newClass); // set the current class
+        String currentClass = thisUser.currentClass;
 
         // If the user does not have a team for this class, have them make a new team
         if (!hasTeam(currentClass, thisUser)) {
@@ -117,7 +104,7 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-
+        UserAccount thisUser = UserAccount.getUser(user);
         TeamRecord currentTeam = showCurrentTeam(user);
         JsonNode currentTeamJSON;
         if (currentTeam == null) {
@@ -126,12 +113,10 @@ public class Team extends Controller {
             JsonNode errorJson = toJson(noTeams);
             return ok(errorPage.render(errorJson)); // There are no other teams available
         } else {
-            thisTeam = currentTeam.tid;
-            System.out.println("CURRENT TEAM: " + currentTeam.tid + " THIS TEAM: " + thisTeam);
             String teamDetails = "";
 
             // Get the team info
-            TeamRecord teamToDisplay = TeamRecord.getTeam(thisTeam);
+            TeamRecord teamToDisplay = TeamRecord.getTeam(currentTeam.tid);
             // First, eliminate all double spaces
             String[] members = (teamToDisplay.teamMembers).split(" ");
             for (int i = 0; i < members.length; i++) { // Get all member descriptions
@@ -151,25 +136,26 @@ public class Team extends Controller {
             }
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
-            JsonNode className = toJson(currentClass);
+            JsonNode className = toJson(thisUser.currentClass);
             return ok(team.render(currentTeamJSON, teamMembers, className));
         }
     }
 
     public Result swipeRight() {
-        seenTeams.add(thisTeam);
-
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-
+        UserAccount thisUser = UserAccount.getUser(user);
+        String thisTeam = request.getParameter("right");
+        System.out.println("This team: " + thisTeam);
+        UserAccount.addSeenTeam(user, thisTeam);
         // If the user already received an invite to join this team, send them to the notifs page
         List<Notifications> notifs = Notifications.getNotifs(user);
         for (int j = 0; j < notifs.size(); j++) {
             Notifications currentNotif = notifs.get(j);
             // This user was already invited to join this team
-            if (currentNotif.classID.equals(currentClass) && currentNotif.teamID.equals(thisTeam)) {
+            if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
                 return redirect("http://localhost:9000/assets/notifications.html");
             }
         }
@@ -178,7 +164,7 @@ public class Team extends Controller {
         //TeamRecord td = TeamRecord.getTeam(thisTeam);
 
         // Get the user's team
-        TeamRecord myTeam = TeamRecord.getTeamForClass(user, currentClass);
+        TeamRecord myTeam = TeamRecord.getTeamForClass(user, thisUser.currentClass);
 
         String teamDetails = "Invited to team: " + myTeam.tid + "/n Team Members:";
         String[] members = (myTeam.teamMembers).split(" ");
@@ -200,7 +186,7 @@ public class Team extends Controller {
         String[] people = (td.teamMembers).split(" ");
         for (int i = 0; i < members.length; i++) {
             UserAccount currentUser = UserAccount.getUser(people[i]);
-            Notifications.createNewNotification(currentUser.username, currentClass, 1, myTeam.tid, teamDetails);
+            Notifications.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
         }
 
         //update team with currently shown team and user
@@ -225,7 +211,9 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
-        seenTeams.add(thisTeam);
+        String thisTeam = request.getParameter("left");
+        System.out.println("This team: " + thisTeam);
+        UserAccount.addSeenTeam(user, thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
     }
@@ -235,8 +223,8 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
-
-        JsonNode className = toJson(currentClass);
+        UserAccount thisUser = UserAccount.getUser(user);
+        JsonNode className = toJson(thisUser.currentClass);
         JsonNode error = toJson("");
         return ok(createteam.render(className, error, error));
     }
@@ -247,12 +235,13 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
+        UserAccount thisUser = UserAccount.getUser(user);
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String teamName = values.get("teamName")[0];
         String tid = values.get("teamID")[0];
         JsonNode error;
         JsonNode error2;
-        JsonNode className = toJson(currentClass);
+        JsonNode className = toJson(thisUser.currentClass);
 
         if (teamName.length() < 1 && tid.length() < 1) {
             error = toJson("TeamName is required.");
@@ -276,15 +265,14 @@ public class Team extends Controller {
         }
 
         // User cannot have more than one team for this class
-        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
-        if (hasTeam(currentClass, thisUser)) {
+        if (hasTeam(thisUser.currentClass, thisUser)) {
             error = toJson("You are already in a team for this class.");
             error2 = toJson("");
             return badRequest(createteam.render(className, error, error2));
         } else {
             // Create a new team
-            TeamRecord.createTeamRecord(tid, thisUser, teamName, currentClass);
-            JsonNode json = toJson(currentClass);
+            TeamRecord.createTeamRecord(tid, thisUser, teamName, thisUser.currentClass);
+            JsonNode json = toJson(thisUser.currentClass);
             error = toJson("");
             error2 = toJson("");
 
@@ -307,7 +295,7 @@ public class Team extends Controller {
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (int i = 0; i < allTeams.size(); i++) {
             TeamRecord thisTeam = allTeams.get(i);
-            if (!thisTeam.thisClass.equals(currentClass)) {
+            if (!thisTeam.thisClass.equals(thisUser.currentClass)) {
                 continue;
             }
             String team = thisTeam.teamMembers;

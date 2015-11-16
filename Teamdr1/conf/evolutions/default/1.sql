@@ -32,6 +32,7 @@ create table user_account (
   password                  varchar(255),
   profile_username          varchar(255),
   seen_teams                varchar(255),
+  current_class             varchar(255),
   constraint uq_user_account_profile_username unique (profile_username),
   constraint pk_user_account primary key (username))
 ;

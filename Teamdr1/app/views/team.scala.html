@@ -27,8 +27,8 @@
             @teamDetails.asText()</td>
         </tr>
         <tr>
-            <td><button onclick="window.location='@routes.Team.swipeRight()';" name="right">Yes</button></td>
-            <td><button onclick="window.location='@routes.Team.swipeLeft()';" name="left">No</button></td>
+            <td><button onclick="window.location='@routes.Team.swipeRight()';" name="right" value=@teamRecords.findValue("tid").asText()>Yes</button></td>
+            <td><button onclick="window.location='@routes.Team.swipeLeft()';" name="left" value=@teamRecords.findValue("tid").asText()>No</button></td>
         </tr>
     </table>
 
