@@ -25,7 +25,7 @@ public class UserAccount extends Model {
 	@Constraints.Required
 	@OneToOne(cascade = CascadeType.REMOVE)
 	public UserProfile profile = new UserProfile();
-    public String seenTeams = "";
+    //public String seenTeams = "";
     public String currentClass = "";
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -55,7 +55,7 @@ public class UserAccount extends Model {
 		this.profile.classes.add(course);
 		return true;
 	}
-
+    /*
     public static void addSeenTeam(String username, String teamID) {
         UserAccount me = getUser(username);
         String[] haveSeen = (me.seenTeams).split(" ");
@@ -106,16 +106,16 @@ public class UserAccount extends Model {
                 Ebean.save(me);
             }
         }
-    }
+    }*/
 
     public static void changeCurrentClass(String username, String newClass) {
         UserAccount me = getUser(username);
         me.currentClass = newClass;
         Ebean.save(me);
     }
-
+    /*
     public static String getSeenTeams(String username) {
         UserAccount me = getUser(username);
         return me.seenTeams;
-    }
+    }*/
 }

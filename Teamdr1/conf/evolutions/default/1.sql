@@ -24,6 +24,7 @@ create table team_record (
   team_members              varchar(255),
   team_name                 varchar(255),
   this_class                varchar(255),
+  seen_teams                varchar(255),
   constraint pk_team_record primary key (tid))
 ;
 
@@ -31,7 +32,6 @@ create table user_account (
   username                  varchar(255) not null,
   password                  varchar(255),
   profile_username          varchar(255),
-  seen_teams                varchar(255),
   current_class             varchar(255),
   constraint uq_user_account_profile_username unique (profile_username),
   constraint pk_user_account primary key (username))

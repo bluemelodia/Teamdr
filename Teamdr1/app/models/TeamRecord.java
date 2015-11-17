@@ -1,6 +1,8 @@
 package models;
 import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 import controllers.Classes;
+import controllers.Team;
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 import models.UserAccount;
 import models.Notifications;
 import com.avaje.ebean.Ebean;
@@ -25,6 +27,7 @@ public class TeamRecord extends Model {
     public String teamName;
     @Constraints.Required
     public String thisClass; // This is the class ID
+    String seenTeams = "";
 
     // Create a new team with one person
     public TeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
@@ -131,31 +134,63 @@ public class TeamRecord extends Model {
         Ebean.delete(receiverTeam);
 
         return requesterTeam; // this team now an aggregate
-        /*
-        this.tid = tid;
-        this.teamName = getTeam(tid).teamName;
-        TeamRecord curTeam = TeamRecord.userTeam(uname);
-        
-        //if they already add a team add all those teammembers
-        if (curTeam != null) {
-            String[] teamMembers = (curTeam.teamMembers).split(" ");
-            String newMembers = "";
-
-            for (int i = 0; i < teamMembers.length; i++) {
-                this.teamMembers = this.teamMembers + " " + teamMembers[i];
-            }
-
-            curTeam.delete();
-        
-        //if they don't already have a team just add their name
-        } else {
-
-            this.teamMembers = getTeam(tid).teamMembers + " " + uname;
-        }
-
-        return this;*/
     }
 
+    // Add the team to this team's list of seen teams
+    public static void addSeenTeam(String username, String classID, String teamID) {
+        // Get the user's team for this class
+        TeamRecord myTeam = TeamRecord.getTeamForClass(username, classID);
+        //TeamRecord thisTeam = getTeam(teamID); // the team to add
+        String[] seen = myTeam.seenTeams.split(" ");
+        ArrayList<String> seenTeamsArr = new ArrayList<String>();
+        for (int i = 0; i < seen.length; i++) {
+            seenTeamsArr.add(seen[i].trim());
+        }
+        if (!seenTeamsArr.contains(teamID)) {
+            myTeam.seenTeams += teamID + " ";
+        }
+        Ebean.save(myTeam);
+    }
+
+    public static boolean haveSeenTeam(String username, String classID, String teamID) {
+        TeamRecord myTeam = TeamRecord.getTeamForClass(username, classID);
+        //TeamRecord thisTeam = getTeam(teamID); // the team to add
+        String[] seen = myTeam.seenTeams.split(" ");
+        ArrayList<String> seenTeamsArr = new ArrayList<String>();
+        for (int i = 0; i < seen.length; i++) {
+            seenTeamsArr.add(seen[i].trim());
+        }
+        if (seenTeamsArr.contains(teamID)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static String getSeenTeams(String username, String classID) {
+        TeamRecord myTeam = TeamRecord.getTeamForClass(username, classID);
+        return myTeam.seenTeams;
+    }
+
+    // If a team got deleted, make each team delete this team from the seen team list so the team ID can be reused
+    public static void removeDeletedTeam(String teamID) {
+        List<TeamRecord> allTeams = TeamRecord.findAll();
+        TeamRecord thisTeam = getTeam(teamID);
+        for (int i = 0; i < allTeams.size(); i++) {
+            String[] seen = allTeams.get(i).seenTeams.split(" ");
+            ArrayList<String> seenTeamsArr = new ArrayList<String>();
+            for (int j = 0; i < seen.length; j++) {
+                seenTeamsArr.add(seen[j].trim());
+            }
+            if (seenTeamsArr.contains(thisTeam)) {
+                seenTeamsArr.remove(thisTeam);
+            }
+            allTeams.get(i).seenTeams = "";
+            for (int k = 0; k < seenTeamsArr.size(); k++) {
+                allTeams.get(i).seenTeams += seenTeamsArr.get(k) + " ";
+            }
+            Ebean.save(allTeams.get(i));
+        }
+    }
 
     // updates the database by removing the team member uname from the team tid
     public static TeamRecord removeUser(String tid, String uname){
@@ -171,9 +206,6 @@ public class TeamRecord extends Model {
         team.teamMembers = newMembers; 
         team.save();
 
-        return team; 
-
-
-
+        return team;
     }
 }

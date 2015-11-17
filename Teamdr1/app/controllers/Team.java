@@ -50,7 +50,7 @@ public class Team extends Controller {
                 }
             }
             if (myTeam) continue; // don't return your own team!
-            if (UserAccount.haveSeenTeam(thisUser.username, team.tid)) {
+            if (TeamRecord.haveSeenTeam(thisUser.username, thisUser.currentClass, team.tid)) {
                 continue;
             } else {
                 return team;
@@ -67,7 +67,7 @@ public class Team extends Controller {
 
     // removes teammate (whose name is entered through a form) from the current team of the user
     public Result removeTeammate() {
-        String user = session("connected");
+        /*String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
@@ -78,7 +78,7 @@ public class Team extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
         TeamRecord currentTeam = showCurrentTeam(user);
 
-        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, remUser.username;
+        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, remUser.username;*/
 
         return redirect(routes.Team.showTeams());
 
@@ -86,7 +86,7 @@ public class Team extends Controller {
 
     // removes current user from their current team
     public Result removeMe() {
-        String user = session("connected");
+        /*String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
@@ -95,7 +95,7 @@ public class Team extends Controller {
         TeamRecord currentTeam = showCurrentTeam(user);
 
         TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, user.username;
-
+        */
         return redirect(routes.Team.showTeams());
 
 
@@ -190,7 +190,11 @@ public class Team extends Controller {
         System.out.println("REQUEST: " + values);
         String thisTeam = values.get("acceptedTeam")[0];
         System.out.println("RIGHT: " + thisTeam);
-        UserAccount.addSeenTeam(user, thisTeam);
+        TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
+
+        String seenTeams = TeamRecord.getSeenTeams(thisUser.username, thisUser.currentClass);
+        System.out.println("Seen teams: " + seenTeams);
+
         // If the user already received an invite to join this team, send them to the notifs page
         List<Notifications> notifs = Notifications.getNotifs(user);
         for (int j = 0; j < notifs.size(); j++) {
@@ -256,7 +260,11 @@ public class Team extends Controller {
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String thisTeam = values.get("rejectedTeam")[0];
         System.out.println("LEFT: " + thisTeam);
-        UserAccount.addSeenTeam(user, thisTeam);
+        TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
+
+        String seenTeams = TeamRecord.getSeenTeams(thisUser.username, thisUser.currentClass);
+        System.out.println("Seen teams: " + seenTeams);
+
         System.out.println("This team: " + thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);
         return redirect(routes.Team.showTeams());
