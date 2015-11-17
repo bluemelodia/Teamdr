@@ -36,7 +36,8 @@ public class Profile extends Controller {
         // If the user has notifications, show them
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notification(s)";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
+
         }
 
         JsonNode user_json = toJson(getUser);
@@ -75,7 +76,8 @@ public class Profile extends Controller {
         // If the user has notifications, show them
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notification(s)";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
+
         }
 
 		JsonNode user_json = toJson(getUser);
