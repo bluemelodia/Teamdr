@@ -27,7 +27,7 @@ public class TeamRecord extends Model {
     public String teamName;
     @Constraints.Required
     public String thisClass; // This is the class ID
-    String seenTeams = "";
+    public String seenTeams = "";
 
     // Create a new team with one person
     public TeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
@@ -149,6 +149,7 @@ public class TeamRecord extends Model {
         if (!seenTeamsArr.contains(teamID)) {
             myTeam.seenTeams += teamID + " ";
         }
+        System.out.println("CHANGED SEEN TEAMS: " + myTeam.seenTeams);
         Ebean.save(myTeam);
     }
 
