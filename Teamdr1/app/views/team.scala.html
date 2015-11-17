@@ -29,13 +29,13 @@
         <tr>
             @helper.form(action = routes.Team.swipeRight()) {
                 <fieldset>
-                    <input type="text" name="acceptedTeam"/>
+                    <input type="text" name="acceptedTeam" value="@teamRecords.findValue("tid").asText()" readonly/>
                     <input type="submit" value="Accept"/>
                 </fieldset>
             }
             @helper.form(action = routes.Team.swipeLeft()) {
                 <fieldset>
-                    <input type="text" name="rejectedTeam"/>
+                    <input type="text" name="rejectedTeam" value="@teamRecords.findValue("tid").asText()" readonly/>
                     <input type="submit" value="Reject"/>
                 </fieldset>
             }

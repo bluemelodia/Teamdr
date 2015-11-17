@@ -186,7 +186,7 @@ public class Team extends Controller {
 
         TeamRecord td = TeamRecord.getTeam(thisTeam);
         String[] people = (td.teamMembers).split(" ");
-        for (int i = 0; i < members.length; i++) {
+        for (int i = 0; i < people.length; i++) {
             UserAccount currentUser = UserAccount.getUser(people[i]);
             Notifications.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
         }
