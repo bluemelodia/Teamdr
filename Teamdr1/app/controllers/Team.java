@@ -65,6 +65,41 @@ public class Team extends Controller {
         seenTeams.clear();
     }*/
 
+    public Result removeTeammate() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+
+        final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String remUser = values.get("remove")[0];
+
+        UserAccount thisUser = UserAccount.getUser(user);
+        TeamRecord currentTeam = showCurrentTeam(user);
+
+        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, remUser.username;
+
+        return redirect(routes.Team.showTeams());
+
+    }
+
+    public Result removeMe() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+
+        UserAccount thisUser = UserAccount.getUser(user);
+        TeamRecord currentTeam = showCurrentTeam(user);
+
+        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, user.username;
+
+        return redirect(routes.Team.showTeams());
+
+
+    }
+
+    
     public Result showError() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
@@ -98,6 +133,8 @@ public class Team extends Controller {
         }
         return redirect(routes.Team.showTeams());
     }
+
+
 
     public Result showTeams() {
         String user = session("connected");

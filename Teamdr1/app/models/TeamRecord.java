@@ -155,4 +155,25 @@ public class TeamRecord extends Model {
 
         return this;*/
     }
+
+
+
+    public static TeamRecord removeUser(String tid, String uname){
+        TeamRecord team = getTeam(tid);
+        String[] teamMembers = (team.teamMembers).split(" ");
+        String newMembers = "";
+        for (int j = 0; j < teamMembers.length; j++) {
+            if (!teamMembers[j].equals(uname)){
+                newMembers = newMembers + " " + teamMembers[j];
+            } 
+        }
+
+        team.teamMembers = newMembers; 
+        team.save();
+
+        return team; 
+
+
+
+    }
 }
