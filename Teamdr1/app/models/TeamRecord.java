@@ -2,12 +2,14 @@ package models;
 import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 import controllers.Classes;
 import models.UserAccount;
+import models.Notifications;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.*;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -94,7 +96,42 @@ public class TeamRecord extends Model {
         return null;
     }
 
-    public TeamRecord updateTeam(String tid, String uname){
+    // Merge two teams
+    public TeamRecord updateTeam(String tid, String tid2, String classID){
+        TeamRecord requesterTeam = getTeam(tid);
+        TeamRecord receiverTeam = getTeam(tid2);
+        String[] teamMembers = (receiverTeam.teamMembers).split(" ");
+        String[] requesterTeamMembers = (requesterTeam.teamMembers).split(" ");
+        ArrayList<String> originalTeam = new ArrayList<String>();
+        for (int j = 0; j < requesterTeamMembers.length; j++) {
+            originalTeam.add(requesterTeamMembers[j].trim());
+        }
+
+        for (int i = 0; i < teamMembers.length; i++) { // add the receiver team members to requester team
+            if (!originalTeam.contains(teamMembers[i].trim())) {
+                requesterTeam.teamMembers += teamMembers[i].trim() + " ";
+            }
+        }
+
+        // remove all notifs for the merged team that is related to the original team
+        for (int k = 0; k < teamMembers.length; k++) {
+            String thisMember = teamMembers[k].trim();
+            List<Notifications> listNotifs = Notifications.getNotifs(thisMember);
+            if (listNotifs.size() < 1) continue;
+            for (int l = 0; l < listNotifs.size(); l++) {
+                Notifications thisNotif = listNotifs.get(l);
+                if (thisNotif.classID.equals(classID)) {
+                    Ebean.delete(thisNotif);
+                }
+            }
+        }
+
+        System.out.println("New team: " + requesterTeam.teamMembers);
+        // remove the receiver team
+        Ebean.delete(receiverTeam);
+
+        return requesterTeam; // this team now an aggregate
+        /*
         this.tid = tid;
         this.teamName = getTeam(tid).teamName;
         TeamRecord curTeam = TeamRecord.userTeam(uname);
@@ -116,6 +153,6 @@ public class TeamRecord extends Model {
             this.teamMembers = getTeam(tid).teamMembers + " " + uname;
         }
 
-        return this;
+        return this;*/
     }
 }

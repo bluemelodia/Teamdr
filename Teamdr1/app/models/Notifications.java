@@ -4,6 +4,7 @@ import play.data.validation.Constraints;
 import com.avaje.ebean.Ebean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Random;
 
@@ -57,6 +58,27 @@ public class Notifications {
 
     public static boolean hasNotifs(String username) {
         return (find.where().eq("username", username).findRowCount() > 0) ? true : false;
+    }
+
+    public static void deleteNotif(int notifID) {
+        Notifications notif = find.ref(Integer.toString(notifID));
+        Ebean.delete(notif);
+    }
+
+    public static Notifications getThisNotif(int notifID) {
+        return find.ref(Integer.toString(notifID));
+    }
+
+    // Get the specific collab request that was sent to this user
+    public static Notifications findNotifID(String username, String classID, String teamID, int messageType) {
+        List<Notifications> notifList = find.where().eq("username", username).eq("classID", classID).eq("teamID", teamID).findList();
+        for (int i = 0; i < notifList.size(); i++) {
+            Notifications thisNotification = notifList.get(i);
+            if (thisNotification.messageType == 1) {
+                return thisNotification;
+            }
+        }
+        return null;
     }
 
     public static int countNotifs(String username) {
