@@ -189,6 +189,9 @@ public class Team extends Controller {
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         System.out.println("REQUEST: " + values);
         String thisTeam = values.get("acceptedTeam")[0];
+        if (!TeamRecord.exists(thisTeam)) {
+            return redirect(routes.Team.showTeams());
+        }
         System.out.println("RIGHT: " + thisTeam);
         TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
 
@@ -259,6 +262,9 @@ public class Team extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String thisTeam = values.get("rejectedTeam")[0];
+        if (!TeamRecord.exists(thisTeam)) {
+            return redirect(routes.Team.showTeams());
+        }
         System.out.println("LEFT: " + thisTeam);
         TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
 

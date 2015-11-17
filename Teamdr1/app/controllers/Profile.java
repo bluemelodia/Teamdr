@@ -126,6 +126,10 @@ public class Profile extends Controller {
         Notifications thisNotif = Notifications.getThisNotif(notificationID);
         String classID = thisNotif.classID;
         String teamID = thisNotif.teamID;
+        if (!TeamRecord.exists(teamID)) { // someone already swiped right, or team was otherwise purged
+            Notifications.deleteNotif(notificationID);
+            return ok(toJson("Accepted"));
+        }
 
         // Get the requester's team members
         TeamRecord requesterTeam = TeamRecord.getTeam(teamID);
