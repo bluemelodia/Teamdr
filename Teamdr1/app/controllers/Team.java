@@ -287,8 +287,8 @@ public class Team extends Controller {
                 System.out.println("Class: " + team.thisClass);
                 System.out.println();
             }
-            // Redirect to the profile page
-            return redirect(routes.Profile.viewProfile());
+            // Redirect to the show teams page
+            return redirect(routes.Team.showTeams());
         }
     }
 
