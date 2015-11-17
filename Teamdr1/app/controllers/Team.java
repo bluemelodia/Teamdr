@@ -148,7 +148,9 @@ public class Team extends Controller {
         }
         UserAccount thisUser = UserAccount.getUser(user);
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String thisTeam = values.get("accepted")[0];
+        System.out.println("REQUEST: " + values);
+        String thisTeam = values.get("acceptedTeam")[0];
+        System.out.println("RIGHT: " + thisTeam);
         UserAccount.addSeenTeam(user, thisTeam);
         // If the user already received an invite to join this team, send them to the notifs page
         List<Notifications> notifs = Notifications.getNotifs(user);
@@ -213,7 +215,8 @@ public class Team extends Controller {
         };
         UserAccount thisUser = UserAccount.getUser(user);
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String thisTeam = values.get("rejected")[0];
+        String thisTeam = values.get("rejectedTeam")[0];
+        System.out.println("LEFT: " + thisTeam);
         UserAccount.addSeenTeam(user, thisTeam);
         System.out.println("This team: " + thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);

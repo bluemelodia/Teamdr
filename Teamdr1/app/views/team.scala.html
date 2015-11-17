@@ -27,24 +27,18 @@
             @teamDetails.asText()</td>
         </tr>
         <tr>
-            @helper.form(action = routes.Team.swipeRight(), 'id -> "SwipeRight") {
+            @helper.form(action = routes.Team.swipeRight()) {
                 <fieldset>
-                    <input type="text" name="accepted" value=@teamRecords.findValue("tid").asText() readonly>
-                    <input type="submit" value="Accept"/><!-- Once user clicks submit button, goes to routes.Account.createUser() -->
+                    <input type="text" name="acceptedTeam"/>
+                    <input type="submit" value="Accept"/>
                 </fieldset>
             }
-            @helper.form(action = routes.Team.swipeLeft(), 'id -> "SwipeLeft") {
-            <fieldset>
-                <input type="text" name="rejected" value=@teamRecords.findValue("tid").asText() readonly>
-                <input type="submit" value="Reject"/><!-- Once user clicks submit button, goes to routes.Account.createUser() -->
-            </fieldset>
-        }
-           <!-- <td><button onclick="window.location='@routes.Team.swipeRight()';" name="right" value=@teamRecords.findValue("tid").asText()>Yes</button></td>
-            <td><button onclick="window.location='@routes.Team.swipeLeft()';" name="left" value=@teamRecords.findValue("tid").asText()>No</button></td>-->
+            @helper.form(action = routes.Team.swipeLeft()) {
+                <fieldset>
+                    <input type="text" name="rejectedTeam"/>
+                    <input type="submit" value="Reject"/>
+                </fieldset>
+            }
         </tr>
     </table>
-
-
-
-
 }
