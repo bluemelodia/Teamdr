@@ -157,7 +157,7 @@ public class TeamRecord extends Model {
     }
 
 
-
+    // updates the database by removing the team member uname from the team tid
     public static TeamRecord removeUser(String tid, String uname){
         TeamRecord team = getTeam(tid);
         String[] teamMembers = (team.teamMembers).split(" ");

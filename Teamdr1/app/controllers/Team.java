@@ -65,6 +65,7 @@ public class Team extends Controller {
         seenTeams.clear();
     }*/
 
+    // removes teammate (whose name is entered through a form) from the current team of the user
     public Result removeTeammate() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
@@ -83,6 +84,7 @@ public class Team extends Controller {
 
     }
 
+    // removes current user from their current team
     public Result removeMe() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
