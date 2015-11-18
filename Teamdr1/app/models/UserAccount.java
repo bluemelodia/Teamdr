@@ -56,8 +56,8 @@ public class UserAccount extends Model {
 	public boolean addProfile(String uname, String e){
 		this.profile.username = uname;
 		this.profile.email = e;
-		ClassRecord course = new ClassRecord("4111", "DB");
-		this.profile.classes.add(course);
+		//ClassRecord course = new ClassRecord("4111", "DB");
+		//this.profile.classes.add(course);
 		return true;
 	}
 

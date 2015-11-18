@@ -23,7 +23,7 @@ public class UserProfile extends Model{
 	public String email;
 	public String pic_url;
 	@OneToMany(cascade = CascadeType.REMOVE)
-    public String classes = "";
+    //public String classes = "";
     public String description;
 	
 	// Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -47,22 +47,23 @@ public class UserProfile extends Model{
     }
 
 	// Return the record with this matching username
-	public static int getSize(String username) {
+	/*public static int getSize(String username) {
 		UserProfile myProfile = UserProfile.getUser(username);
 		System.out.println("GET SIZE USERNAME: " + username);
 		System.out.println("GET PROFILE: " + myProfile.classes.size());
 		return myProfile.classes.size();
-	}
-	public static ClassRecord getClass(String username, int n) {
+	}*/
+
+	/*public static ClassRecord getClass(String username, int n) {
         UserProfile profile =find.ref(username);
 		ClassRecord c = new ClassRecord("4111", "DB");
 		profile.classes.add(c);
 		ClassRecord course = profile.classes.get(n);
 		
 		return course;	
-    }
+    }*/
 	
-	public boolean addClass(String cid, String cname, String username){
+	/*public boolean addClass(String cid, String cname, String username){
 		UserProfile profile =find.ref(username);
 		ClassRecord c = new ClassRecord("4111", "DB");
 		profile.classes.add(c);
@@ -73,17 +74,12 @@ public class UserProfile extends Model{
 		Ebean.save(myProfile);
 		System.out.println("Adding class: " + classToAdd.classID + " : "+ classToAdd.className);
 		return true;
-	}
+	}*/
 
 	public UserProfile updateProfile(String uname, String e, String d){
 		this.username = uname;
 		this.email = e;
 		this.description = d;
-		ClassRecord course = new ClassRecord("4111", "DB");
-		//course.classID = "COMS 4111";
-		//course.className = "Introduction to Databases";
-		this.classes.add(course);
-		System.out.println(this.classes.get(0).classID);
 		return this;
 	}
 }

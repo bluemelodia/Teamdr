@@ -12,6 +12,7 @@ import play.mvc.Result;
 import views.html.profile;
 import views.html.update_profile;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -31,16 +32,15 @@ public class Profile extends Controller {
             return redirect(routes.Account.signIn());
         }
         UserAccount getUser = UserAccount.getUser(user);
-		
-		ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
-		int n = 0;//UserProfile.getSize(user);
-		int i;
-		System.out.println(UserProfile.getClass(user, 0).classID);
-		for(i=0; i<=n; i++){
-			ClassRecord c = UserProfile.getClass(user, i);
-			classes.add(c);
-		}
-		System.out.println(classes.get(0).classID);
+
+        ArrayList<ClassRecord> classes2 = new ArrayList<ClassRecord>();
+        String userClasses = UserAccount.allClasses(user);
+        String[] userClassArray = userClasses.split(" ");
+        for (int i = 0; i < userClassArray.length; i++) {
+            ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
+            classes2.add(thisClass);
+        }
+
         // If the user has notifications, show them
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
@@ -48,7 +48,7 @@ public class Profile extends Controller {
         }
 
         JsonNode user_json = toJson(getUser);
-		JsonNode class_json = toJson(classes);
+		JsonNode class_json = toJson(classes2);
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
         JsonNode notifs_json = toJson(notifs);
         return ok(profile.render(user_json, class_json, profile_json, notifs_json));
@@ -255,19 +255,13 @@ public class Profile extends Controller {
 		//String className = values.get("className")[0];
 		if(foundClass) {
             UserAccount.addClass(user, classID);
-            System.out.println("USER SAVED CLASSES: " + UserAccount.allClasses(user));
-
-            p.addClass(classID, className, user);
             System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
-
-            int n = UserProfile.getSize(user);
-            System.out.println("size: " + n);
-            for (int j = 0; j <= n; j++) {
-                ClassRecord c2 = UserProfile.getClass(user, j);
-                classes.add(c2);
-                System.out.println("MY CLASS: " + c2.className + " " + c2.classID);
+            String userClasses = UserAccount.allClasses(user);
+            String[] userClassArray = userClasses.split(" ");
+            for (int j = 0; j < userClassArray.length; j++) {
+                ClassRecord thisClass = ClassRecord.getClass(userClassArray[j].trim());
+                classes.add(thisClass);
             }
-            System.out.println("CLASSES: " + classes);
         }
 
         String notifs = "You have no notifications.";
