@@ -42,9 +42,9 @@ public class Profile extends Controller {
 		}
 		System.out.println(classes.get(0).classID);
         // If the user has notifications, show them
-        String notifs = "Hi";
+        String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have notifications: ";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
         }
 
         JsonNode user_json = toJson(getUser);
@@ -83,7 +83,7 @@ public class Profile extends Controller {
         // If the user has notifications, show them
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
 
         }
 
@@ -213,10 +213,11 @@ public class Profile extends Controller {
 			ClassRecord c = UserProfile.getClass(user, i);
 			classes.add(c);
 		}
-		
-		String notifs=null;
-		if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have notifications: ";
+
+        String notifs = "You have no notifications.";
+        if (Notifications.hasNotifs(getUser.username)) {
+            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
+
         }
 
         JsonNode user_json = toJson(getUser);
