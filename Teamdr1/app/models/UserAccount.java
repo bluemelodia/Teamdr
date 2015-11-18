@@ -67,7 +67,7 @@ public class UserAccount extends Model {
         Ebean.save(me);
     }
 
-    public void addClass(String username, String classID) {
+    public static void addClass(String username, String classID) {
         UserAccount me = getUser(username);
         String[] myClasses = me.allClasses.split(" ");
         ArrayList<String> theseClasses = new ArrayList<String>();

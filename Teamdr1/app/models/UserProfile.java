@@ -8,6 +8,7 @@ import play.db.ebean.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.xml.transform.Result;
+import com.avaje.ebean.Ebean;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class UserProfile extends Model{
 	public String email;
 	public String pic_url;
 	@OneToMany(cascade = CascadeType.REMOVE)
-    public ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
+    public String classes = "";
     public String description;
 	
 	// Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -48,6 +49,8 @@ public class UserProfile extends Model{
 	// Return the record with this matching username
 	public static int getSize(String username) {
 		UserProfile myProfile = UserProfile.getUser(username);
+		System.out.println("GET SIZE USERNAME: " + username);
+		System.out.println("GET PROFILE: " + myProfile.classes.size());
 		return myProfile.classes.size();
 	}
 	public static ClassRecord getClass(String username, int n) {
@@ -59,18 +62,19 @@ public class UserProfile extends Model{
 		return course;	
     }
 	
-	public boolean addClass(String cid, String cname){ 
-		ClassRecord course = new ClassRecord(cid, cname);
-		//course.classID = cid;
-		//course.className = cname;
-		course.save();
-		this.classes.add(course);
-		int size = classes.size();
-		this.classes.get(size-1).save();
-		System.out.println(this.classes.get(0).classID);
+	public boolean addClass(String cid, String cname, String username){
+		UserProfile profile =find.ref(username);
+		ClassRecord c = new ClassRecord("4111", "DB");
+		profile.classes.add(c);
+		ClassRecord course = profile.classes.get(n);
+		UserProfile myProfile = UserProfile.getUser(username);
+		ClassRecord classToAdd = ClassRecord.getClass(cid);
+		myProfile.classes.add(classToAdd);
+		Ebean.save(myProfile);
+		System.out.println("Adding class: " + classToAdd.classID + " : "+ classToAdd.className);
 		return true;
 	}
-	
+
 	public UserProfile updateProfile(String uname, String e, String d){
 		this.username = uname;
 		this.email = e;

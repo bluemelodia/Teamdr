@@ -34,14 +34,12 @@
         }
 	
 	<BR>
-	
-	<fieldset>
-	<legend>Add Class</legend>
+
         @helper.form(action = routes.Profile.addClass(), 'id -> "AddClass") {
             <fieldset>
-                <input type="text" name="newClassID" value="" />
+                <legend>Add Class</legend>
+                <input type="text" name="classID" value="" />
                 <input type="submit" value="Add"/>
             </fieldset>
         }
-	</fieldset>
 }

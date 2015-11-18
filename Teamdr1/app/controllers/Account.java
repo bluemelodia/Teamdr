@@ -52,10 +52,6 @@ public class Account extends Controller {
 		UserProfile newProfile = new UserProfile();
         String startingDescription = "I love CS!";
 		newProfile.updateProfile(username, email, startingDescription);
-        Random randomGenerator = new Random();
-		String cid = "COMS " + randomGenerator.nextInt(100000);
-		String cname = "Introduction to Databases";
-		newProfile.addClass(cid, cname);
 		newProfile.save();
 		newAccount.profile = newProfile;
 		newAccount.addProfile(username, email);

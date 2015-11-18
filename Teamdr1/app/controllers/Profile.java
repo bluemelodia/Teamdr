@@ -223,7 +223,6 @@ public class Profile extends Controller {
 	
 	public Result addClass() {
 		String user = session("connected");
-        System.out.println("IN ADD CLASS");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
@@ -233,9 +232,14 @@ public class Profile extends Controller {
         boolean foundClass = false;
 		final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String classID = values.get("classID")[0];
+        System.out.println("ClassID to find: " + classID);
         String className = null;
 
         List<ClassRecord> cs = ClassRecord.findAll();
+        for (int i = 0; i < cs.size(); i++) {
+            System.out.println("DATABASE CLASS: " + cs.get(i).classID + " : " + cs.get(i).className);
+        }
+
         ClassRecord c = null;
         int i;
         for(i=0; i<cs.size(); i++){
@@ -250,15 +254,20 @@ public class Profile extends Controller {
         ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
 		//String className = values.get("className")[0];
 		if(foundClass) {
-            p.addClass(classID, className);
-            p.save();
+            UserAccount.addClass(user, classID);
+            System.out.println("USER SAVED CLASSES: " + UserAccount.allClasses(user));
+
+            p.addClass(classID, className, user);
+            System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
 
             int n = UserProfile.getSize(user);
-            System.out.println(UserProfile.getClass(user, 0).classID);
+            System.out.println("size: " + n);
             for (int j = 0; j <= n; j++) {
                 ClassRecord c2 = UserProfile.getClass(user, j);
                 classes.add(c2);
+                System.out.println("MY CLASS: " + c2.className + " " + c2.classID);
             }
+            System.out.println("CLASSES: " + classes);
         }
 
         String notifs = "You have no notifications.";
@@ -268,6 +277,7 @@ public class Profile extends Controller {
         }
 
         JsonNode user_json = toJson(getUser);
+        System.out.println("CLASSES: " + classes);
 		JsonNode class_json = toJson(classes);
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
         JsonNode notifs_json = toJson(notifs);
