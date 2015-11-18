@@ -45,11 +45,11 @@ public class UserProfile extends Model{
         return find.ref(username);
     }
 	
-	public ClassRecord getClass(String username) {
+	public static ClassRecord getClass(String username, int n) {
         UserProfile profile =find.ref(username);
 		ClassRecord c = new ClassRecord("4111", "DB");
 		profile.classes.add(c);
-		ClassRecord course = profile.classes.get(0);
+		ClassRecord course = profile.classes.get(n);
 		
 		return course;	
     }
