@@ -180,11 +180,12 @@ public class Profile extends Controller {
     // Just delete the record
     public Result rejectNotification() {
         JsonNode json = request().body().asJson();
+        System.out.println("REJECT");
         int notificationID = json.asInt();
         if (!Notifications.notifExists(notificationID)) {
             return ok(toJson("Rejected"));
         }
-
+        System.out.println("Deleting this notif: " + notificationID);
         // Delete this notification
         Notifications.deleteNotif(notificationID);
 
