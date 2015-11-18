@@ -1,7 +1,8 @@
 package models;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
-
+import javax.persistence.*;
+import com.avaje.ebean.Ebean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
@@ -16,18 +17,15 @@ public class ClassRecord extends Model {
     public String classID;
     @Constraints.Required
     public String className;
-	//public UserAccount[] enrolledStudents;
-	public TeamRecord team;
 
-	
-	public ClassRecord(){
-		
+	public ClassRecord(String classID, String className){
+        this.classID = classID;
+        this.className = className;
 	}
-	
-	
-	public ClassRecord(String c, String i){
-		classID = c;
-		className = i;
+
+	public void createNewClass(String classID, String className){
+		ClassRecord newRecord = new ClassRecord(classID, className);
+        Ebean.save(newRecord);
 	}
 	
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
@@ -45,7 +43,7 @@ public class ClassRecord extends Model {
         return(find.where().eq("classID", classID).findRowCount() == 1) ? true : false;
     }
 
-    // Return the record with this matching username
+    // Return the record with this matching class
     public static ClassRecord getClass(String classID) {
         return find.ref(classID);
     }

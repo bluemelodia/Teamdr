@@ -26,6 +26,7 @@ public class UserAccount extends Model {
 	@OneToOne(cascade = CascadeType.REMOVE)
 	public UserProfile profile = new UserProfile();
     public String currentClass = "";
+    public String allClasses = ""; // list of all classes user is in
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
     private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);
@@ -59,5 +60,18 @@ public class UserAccount extends Model {
         UserAccount me = getUser(username);
         me.currentClass = newClass;
         Ebean.save(me);
+    }
+
+    public void addClass(String username, String classID) {
+        UserAccount me = getUser(username);
+        String[] myClasses = me.allClasses.split(" ");
+        ArrayList<String> theseClasses = new ArrayList<String>();
+        for (int i = 0; i < myClasses.length; i++) {
+            theseClasses.add(myClasses[i].trim());
+        }
+        if (!theseClasses.contains(classID)) {
+            me.allClasses += classID + " ";
+            Ebean.save(me);
+        }
     }
 }
