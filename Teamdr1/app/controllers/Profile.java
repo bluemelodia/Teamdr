@@ -174,6 +174,10 @@ public class Profile extends Controller {
     public Result rejectNotification() {
         JsonNode json = request().body().asJson();
         int notificationID = json.asInt();
+        if (!Notifications.notifExists(notificationID)) {
+            return ok(toJson("Rejected"));
+        }
+
         // Delete this notification
         Notifications.deleteNotif(notificationID);
 
