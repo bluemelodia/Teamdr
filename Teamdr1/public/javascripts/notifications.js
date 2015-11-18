@@ -5,7 +5,8 @@ function createForm1(notif) {
             { view:"label", label:notif.message},
             { margin:5, cols:[
                 { id: "btnAccept" + notif.notifID, view:"button", value:"Accept", type:"form" },
-                { id: "btnReject" + notif.notifID, view:"button", value:"Reject" }
+                { id: "btnReject" + notif.notifID, view:"button", value:"Reject" },
+                { id: "btnOk" + notif.notifID, view:"button", value:"Ok" }
             ]}
         ]
     }
@@ -51,6 +52,11 @@ function getNotifs() {
                         accept(id.substring(9));
                     });
                     $$('btnReject' + notif.notifID).attachEvent("onItemClick", function(id) {
+                        reject(id.substring(9));
+                    });
+                } else {
+                    $$('notifForms').addView(createForm1(notif), -1);
+                    $$('btnOk' + notif.notifID).attachEvent("onItemClick", function(id) {
                         reject(id.substring(9));
                     });
                 }

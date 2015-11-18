@@ -207,7 +207,6 @@ public class Team extends Controller {
                 return redirect("http://localhost:9000/assets/notifications.html");
             }
         }
-
         // TeamRecord currentTeam = showCurrentTeam(user);
         //TeamRecord td = TeamRecord.getTeam(thisTeam);
 

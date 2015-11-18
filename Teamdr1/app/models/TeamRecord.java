@@ -133,6 +133,14 @@ public class TeamRecord extends Model {
         // huge swipe list of one of the members
         requesterTeam.seenTeams = "";
 
+        // Send a type 2 notification to the entire team
+        String[] newRequesterTeam = (requesterTeam.teamMembers).split(" ");
+        String message = "Team merge success. New team name: " + requesterTeam.teamName + ". Members: " + requesterTeam.teamMembers;
+        for (int p = 0; p < newRequesterTeam.length; p++) {
+            UserAccount moi = UserAccount.getUser(newRequesterTeam[p].trim());
+            Notifications.createNewNotification(moi.username, moi.currentClass, 2, requesterTeam.tid, message);
+        }
+
         // take the old and new teams off every single seen list
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (int m = 0; m < allTeams.size(); m++) {
