@@ -6,6 +6,17 @@ function createForm1(notif) {
             { margin:5, cols:[
                 { id: "btnAccept" + notif.notifID, view:"button", value:"Accept", type:"form" },
                 { id: "btnReject" + notif.notifID, view:"button", value:"Reject" },
+            ]}
+        ]
+    }
+}
+
+function createForm2(notif) {
+    return {
+        view:"form",
+        elements:[
+            { view:"label", label:notif.message},
+            { margin:5, cols:[
                 { id: "btnOk" + notif.notifID, view:"button", value:"Ok" }
             ]}
         ]
@@ -38,6 +49,19 @@ function reject(notif) {
     });
 }
 
+function ok(notif) {
+    $.ajax({
+        url: '/rejectNotification',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(notif),
+        contentType: 'application/json',
+        success: function(data, textStatus, jqXHR) {
+            location.href = '/profile';
+        }
+    });
+}
+
 function getNotifs() {
     $.ajax({
         url: '/notifs',
@@ -55,9 +79,9 @@ function getNotifs() {
                         reject(id.substring(9));
                     });
                 } else {
-                    $$('notifForms').addView(createForm1(notif), -1);
+                    $$('notifForms').addView(createForm2(notif), -1);
                     $$('btnOk' + notif.notifID).attachEvent("onItemClick", function(id) {
-                        reject(id.substring(9));
+                        ok(id.substring(9));
                     });
                 }
             }
