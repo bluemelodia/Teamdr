@@ -129,7 +129,11 @@ public class TeamRecord extends Model {
             }
         }
 
-        // take the old and new teams off the seen list
+        // purge the newly-formed team's seen list so they do not inherit the possibly
+        // huge swipe list of one of the members
+        requesterTeam.seenTeams = "";
+
+        // take the old and new teams off every single seen list
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (int m = 0; m < allTeams.size(); m++) {
             TeamRecord team = allTeams.get(m);
@@ -144,12 +148,13 @@ public class TeamRecord extends Model {
                 seenPeople.remove(receiverTeam.tid);
             }
             team.seenTeams = "";
-            for (int o = 0; o < seenList.length; o++) {
-                team.seenTeams += seenList[o] + " ";
+            for (int o = 0; o < seenPeople.size(); o++) {
+                team.seenTeams += seenPeople.get(o) + " ";
             }
+            System.out.println("TEAM: " + team.teamName + " SEEN TEAMS: " + team.seenTeams);
             Ebean.save(team);
          }
-        
+
         System.out.println("New team: " + requesterTeam.teamMembers);
         // remove the receiver team
         Ebean.delete(receiverTeam);
