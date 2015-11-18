@@ -23,21 +23,7 @@ public class ClassRecord extends Model {
         this.className = className;
 	}
 
-    // Pre-populate the database with these classes
-    public void addClassesToDatabase() {
-        createNewClass("COMS4111", "Intro to Databases");
-        createNewClass("COMS4118", "Operating Systems");
-        createNewClass("COMS4156", "Advanced Software Engineering");
-        createNewClass("COMS4115", "Programming Languages and Translators");
-        createNewClass("COMS3157", "Advanced Programming");
-        createNewClass("COMS6111", "Advanced Databases");
-        createNewClass("COMS4112", "Database Systems Implementation");
-        createNewClass("COMS4119", "Computer Networks");
-        createNewClass("COMS6998-7", "Micro-Service Apps and APIs");
-        createNewClass("COMS6156", "Topics in Software Engineering");
-    }
-
-	public void createNewClass(String classID, String className){
+	public static void createNewClass(String classID, String className){
 		ClassRecord newRecord = new ClassRecord(classID, className);
         Ebean.save(newRecord);
 	}

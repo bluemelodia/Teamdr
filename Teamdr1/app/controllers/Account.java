@@ -1,6 +1,7 @@
 package controllers;
 import models.UserAccount;
 import models.UserProfile;
+import models.ClassRecord;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.Form;
@@ -68,6 +69,21 @@ public class Account extends Controller {
 
     // Get the signup form
     public Result signUp() {
+        // Pre-populate the classes database if there are no classes available
+        int numberOfClasses = ClassRecord.getNumClasses();
+        if (numberOfClasses < 1) {
+            ClassRecord.createNewClass("COMS4111", "Intro to Databases");
+            ClassRecord.createNewClass("COMS4118", "Operating Systems");
+            ClassRecord.createNewClass("COMS4156", "Advanced Software Engineering");
+            ClassRecord.createNewClass("COMS4115", "Programming Languages and Translators");
+            ClassRecord.createNewClass("COMS3157", "Advanced Programming");
+            ClassRecord.createNewClass("COMS6111", "Advanced Databases");
+            ClassRecord.createNewClass("COMS4112", "Database Systems Implementation");
+            ClassRecord.createNewClass("COMS4119", "Computer Networks");
+            ClassRecord.createNewClass("COMS6998-7", "Micro-Service Apps and APIs");
+            ClassRecord.createNewClass("COMS6156", "Topics in Software Engineering");
+        }
+
         return ok(account.render(AccountForm));
     }
 
