@@ -37,7 +37,7 @@ public class Profile extends Controller {
         String userClasses = UserAccount.allClasses(user);
         if (userClasses.length() > 1) {
             System.out.println("here");
-            String[] userClassArray = userClasses.split(" ");
+            String[] userClassArray = userClasses.split("");
             System.out.println("here");
             for (int i = 0; i < userClassArray.length; i++) {
                 ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
@@ -45,7 +45,6 @@ public class Profile extends Controller {
             }
         } else {
             System.out.println("else");
-            classes2.add(ClassRecord.getClass("default"));
         }
         System.out.println(classes2.size());
         for (int i = 0; i < classes2.size(); i++) {
@@ -129,11 +128,9 @@ public class Profile extends Controller {
 
         }
 
+        //TODO
+
 		JsonNode user_json = toJson(getUser);
-        // TODO: implement add user to class
-
-
-        ClassRecord classRecord = new ClassRecord("411", "DB");
 		JsonNode class_json = toJson(classRecord);
         JsonNode profile_json = toJson(p.description);
         JsonNode notifs_json = toJson(notifs);
@@ -271,7 +268,7 @@ public class Profile extends Controller {
             UserAccount.addClass(user, classID);
             System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
             String userClasses = UserAccount.allClasses(user);
-            String[] userClassArray = userClasses.split(" ");
+            String[] userClassArray = userClasses.split("\\|");
             for (int j = 0; j < userClassArray.length; j++) {
                 ClassRecord thisClass = ClassRecord.getClass(userClassArray[j].trim());
                 classes.add(thisClass);

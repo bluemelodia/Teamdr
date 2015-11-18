@@ -22,8 +22,6 @@ public class UserProfile extends Model{
 	public String username;
 	public String email;
 	public String pic_url;
-	@OneToMany(cascade = CascadeType.REMOVE)
-    //public String classes = "";
     public String description;
 	
 	// Pass in type of primary key, type of model; pass in class so code can figure out its fields

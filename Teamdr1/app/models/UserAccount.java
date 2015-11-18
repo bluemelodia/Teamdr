@@ -69,14 +69,14 @@ public class UserAccount extends Model {
 
     public static void addClass(String username, String classID) {
         UserAccount me = getUser(username);
-        String[] myClasses = me.allClasses.split(" ");
-        ArrayList<String> theseClasses = new ArrayList<String>();
-        for (int i = 0; i < myClasses.length; i++) {
-            theseClasses.add(myClasses[i].trim());
+        String[] myClasses = me.allClasses.split("\\|");
+        for (String myClass: myClasses) {
+            if (classID.equals(myClass)) {
+                return;
+            }
         }
-        if (!theseClasses.contains(classID)) {
-            me.allClasses += classID + " ";
-            Ebean.save(me);
-        }
+        me.allClasses += classID + "|";
+        System.out.println("AllClasses: " + me.allClasses);
+        Ebean.save(me);
     }
 }
