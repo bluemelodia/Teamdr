@@ -78,6 +78,7 @@ public class Account extends Controller {
             ClassRecord.createNewClass("COMS4119", "Computer Networks");
             ClassRecord.createNewClass("COMS6998-7", "Micro-Service Apps and APIs");
             ClassRecord.createNewClass("COMS6156", "Topics in Software Engineering");
+            ClassRecord.createNewClass("default", "default");
         }
         return ok(account.render(AccountForm));
     }

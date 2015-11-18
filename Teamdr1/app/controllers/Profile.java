@@ -35,18 +35,32 @@ public class Profile extends Controller {
 
         ArrayList<ClassRecord> classes2 = new ArrayList<ClassRecord>();
         String userClasses = UserAccount.allClasses(user);
-        String[] userClassArray = userClasses.split(" ");
-        for (int i = 0; i < userClassArray.length; i++) {
-            ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
-            classes2.add(thisClass);
+        if (userClasses.length() > 1) {
+            System.out.println("here");
+            String[] userClassArray = userClasses.split(" ");
+            System.out.println("here");
+            for (int i = 0; i < userClassArray.length; i++) {
+                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
+                classes2.add(thisClass);
+            }
+        } else {
+            System.out.println("else");
+            classes2.add(ClassRecord.getClass("default"));
         }
-
+        System.out.println(classes2.size());
+        for (int i = 0; i < classes2.size(); i++) {
+            System.out.println("heretoo");
+            ClassRecord currentClass = classes2.get(i);
+            System.out.println(currentClass);
+            System.out.println("gotten");
+            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
+        }
         // If the user has notifications, show them
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
             notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
         }
-
+        System.out.println("HERE");
         JsonNode user_json = toJson(getUser);
 		JsonNode class_json = toJson(classes2);
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
