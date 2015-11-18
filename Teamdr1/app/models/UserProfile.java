@@ -44,7 +44,12 @@ public class UserProfile extends Model{
     public static UserProfile getUser(String username) {
         return find.ref(username);
     }
-	
+
+	// Return the record with this matching username
+	public static int getSize(String username) {
+		UserProfile myProfile = UserProfile.getUser(username);
+		return myProfile.classes.size();
+	}
 	public static ClassRecord getClass(String username, int n) {
         UserProfile profile =find.ref(username);
 		ClassRecord c = new ClassRecord("4111", "DB");

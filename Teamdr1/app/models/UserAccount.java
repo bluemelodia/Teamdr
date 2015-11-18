@@ -38,6 +38,11 @@ public class UserAccount extends Model {
         return UserAccount.find.orderBy("username").findList();
     }
 
+    public static String allClasses(String username) {
+        UserAccount me = getUser(username);
+        return me.allClasses;
+    }
+
     // Check if this user already exists
     public static boolean exists(String username) {
         return(find.where().eq("username", username).findRowCount() == 1) ? true : false;

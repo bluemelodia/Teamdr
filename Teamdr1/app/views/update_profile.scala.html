@@ -37,11 +37,11 @@
 	
 	<fieldset>
 	<legend>Add Class</legend>
-		@helper.form(action = routes.Profile.addClass(), 'id -> "AddClass") {
-            @helper.inputText(serviceForm.field("classID"), '_label -> "Class ID:", '_class -> "classID-field")
-			@helper.inputText(serviceForm.field("className"), '_label -> "Class Name:", '_class -> "className-field")
-		}
-		<input type="submit" value="Search"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
+        @helper.form(action = routes.Profile.addClass(), 'id -> "AddClass") {
+            <fieldset>
+                <input type="text" name="newClassID" value="" />
+                <input type="submit" value="Add"/>
+            </fieldset>
+        }
 	</fieldset>
-
 }

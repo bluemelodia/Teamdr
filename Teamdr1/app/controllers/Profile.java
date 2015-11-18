@@ -61,17 +61,45 @@ public class Profile extends Controller {
 
     public Result updateProfile() {
         String user = session("connected");
-		System.out.println("Got here");
+		System.out.println("IN UPDATE PROFILE");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
 		
 		UserProfile p = UserProfile.getUser(user);
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String email = values.get("email")[0];
-        String pictureURL = values.get("pictureURL")[0];
-        String description = values.get("description")[0];
+        String email = null;
+        String pictureURL = null;
+        String description = null;
+        System.out.println("Values: " + values);
+        if (values == null) {
+            System.out.println("values is null");
+            email = p.email;
+            pictureURL = p.pic_url;
+            description = p.description;
+        }
 
+        if (values.get("email") == null || (values.get("email")).length < 1) {
+            email = p.email;
+        }
+        else{
+            email = values.get("email")[0];
+        }
+
+        if (values.get("pictureURL") == null || (values.get("pictureURL")).length < 1) {
+            pictureURL = p.pic_url;
+        }
+        else{
+            pictureURL = values.get("pictureURL")[0];
+        }
+
+        if (values.get("description") == null || (values.get("description")).length < 1) {
+            description = p.email;
+        }
+        else{
+            description = values.get("description")[0];
+        }
+        System.out.println("Email: " + p.email + " url: " + p.pic_url + " description: " + p.description);
 		p.email = email;
 		p.pic_url = pictureURL;
 		p.description = description;
@@ -91,11 +119,12 @@ public class Profile extends Controller {
         // TODO: implement add user to class
 
 
-		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
+        ClassRecord classRecord = new ClassRecord("411", "DB");
+		JsonNode class_json = toJson(classRecord);
         JsonNode profile_json = toJson(p.description);
         JsonNode notifs_json = toJson(notifs);
         //return redirect(routes.Profile.viewProfile());
-
+        System.out.println("class: " + classRecord + " profile: " + p.description + " notifs: " + notifs);
         System.out.println("RENDERING");
 		return ok(profile.render(user_json, class_json, profile_json, notifs_json));
     }
@@ -194,26 +223,43 @@ public class Profile extends Controller {
 	
 	public Result addClass() {
 		String user = session("connected");
+        System.out.println("IN ADD CLASS");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
         UserAccount getUser = UserAccount.getUser(user);
 		UserProfile p = UserProfile.getUser(user);
-		
+
+        boolean foundClass = false;
 		final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String classID = values.get("classID")[0];
-		String className = values.get("className")[0];
-		p.addClass(classID, className);
-		p.save();
-		
-		ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
-		int n = 0;//UserProfile.getSize(user);
-		int i;
-		System.out.println(UserProfile.getClass(user, 0).classID);
-		for(i=0; i<=n; i++){
-			ClassRecord c = UserProfile.getClass(user, i);
-			classes.add(c);
-		}
+        String className = null;
+
+        List<ClassRecord> cs = ClassRecord.findAll();
+        ClassRecord c = null;
+        int i;
+        for(i=0; i<cs.size(); i++){
+            c =  cs.get(i);
+            if(c.classID.equals(classID)) {
+                className = c.className;
+                foundClass = true;
+                break;
+            }
+        }
+
+        ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
+		//String className = values.get("className")[0];
+		if(foundClass) {
+            p.addClass(classID, className);
+            p.save();
+
+            int n = UserProfile.getSize(user);
+            System.out.println(UserProfile.getClass(user, 0).classID);
+            for (int j = 0; j <= n; j++) {
+                ClassRecord c2 = UserProfile.getClass(user, j);
+                classes.add(c2);
+            }
+        }
 
         String notifs = "You have no notifications.";
         if (Notifications.hasNotifs(getUser.username)) {
