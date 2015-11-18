@@ -31,17 +31,24 @@ public class Profile extends Controller {
             return redirect(routes.Account.signIn());
         }
         UserAccount getUser = UserAccount.getUser(user);
-		//ClassRecord c = UserProfile.getClass(user);
-
+		
+		ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
+		int n = 0;//UserProfile.getSize(user);
+		int i;
+		System.out.println(UserProfile.getClass(user, 0).classID);
+		for(i=0; i<=n; i++){
+			ClassRecord c = UserProfile.getClass(user, i);
+			classes.add(c);
+		}
+		System.out.println(classes.get(0).classID);
         // If the user has notifications, show them
-        String notifs = "You have no notifications.";
+        String notifs = "Hi";
         if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications: http://localhost:9000/notifs";
-
+            notifs = "You have notifications: ";
         }
 
         JsonNode user_json = toJson(getUser);
-		JsonNode class_json = toJson(new ClassRecord("411", "DB"));
+		JsonNode class_json = toJson(classes);
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
         JsonNode notifs_json = toJson(notifs);
         return ok(profile.render(user_json, class_json, profile_json, notifs_json));
@@ -183,6 +190,41 @@ public class Profile extends Controller {
 
         return ok(toJson("Rejected"));
     }
+	
+	public Result addClass() {
+		String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        UserAccount getUser = UserAccount.getUser(user);
+		UserProfile p = UserProfile.getUser(user);
+		
+		final Map<String, String[]> values = request().body().asFormUrlEncoded();
+        String classID = values.get("classID")[0];
+		String className = values.get("className")[0];
+		p.addClass(classID, className);
+		p.save();
+		
+		ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
+		int n = 0;//UserProfile.getSize(user);
+		int i;
+		System.out.println(UserProfile.getClass(user, 0).classID);
+		for(i=0; i<=n; i++){
+			ClassRecord c = UserProfile.getClass(user, i);
+			classes.add(c);
+		}
+		
+		String notifs=null;
+		if (Notifications.hasNotifs(getUser.username)) {
+            notifs = "You have notifications: ";
+        }
+
+        JsonNode user_json = toJson(getUser);
+		JsonNode class_json = toJson(classes);
+        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
+        JsonNode notifs_json = toJson(notifs);
+        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
+	}
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
 		UserProfile profile = profileForm.get();

@@ -19,13 +19,13 @@
             line-height:1.8;}
     </style>
     <!--Passed into main.scala.html as the content-->
-		@helper.form(action = routes.Profile.updateProfile(), 'id -> "ChangeUsername") {
+		@helper.form(action = routes.Profile.updateProfile(), 'id -> "UpdateProfile") {
             <fieldset>
                 <legend>Update Profile</legend>
                 E-mail:<br>
-                <input type=""text" name="email"><br>
+                <input type="text" name="email"><br>
                 <br>
-                Picture URL::<br>
+                Picture URL:<br>
                 <input type=""text" name="pictureURL"><br><br>
                     Description:<br>
                     <input type=""text" name="description"><br><br>
@@ -37,8 +37,9 @@
 	
 	<fieldset>
 	<legend>Add Class</legend>
-		@helper.form(action = routes.Account.authenticateUser(), 'id -> "ChangeClass") {
-            @helper.inputText(serviceForm.field("classes"), '_label -> "Add Class:", '_class -> "classes-field")
+		@helper.form(action = routes.Profile.addClass(), 'id -> "AddClass") {
+            @helper.inputText(serviceForm.field("classID"), '_label -> "Class ID:", '_class -> "classID-field")
+			@helper.inputText(serviceForm.field("className"), '_label -> "Class Name:", '_class -> "className-field")
 		}
 		<input type="submit" value="Search"/> <!-- Once user clicks submit button, goes to routes.Account.createUser() -->
 	</fieldset>
