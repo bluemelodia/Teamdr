@@ -6,3 +6,5 @@ target
 /.project
 /.settings
 /RUNNING_PID
+/h2
+/.DS_Store

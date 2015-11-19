@@ -13,20 +13,26 @@ import java.util.Random;
  */
 @Entity
 public class Notifications {
+
     @Id
     @Constraints.Required
     public int notifID;
+
     @Constraints.Required
     public String username; // recipient's username
-    @Constraints.Required
+
     // COLLAB - received collab request -> send int 1
     // FORMTEAM - successfully formed team -> send int 2
     // BREAKTEAM - broke team of 2 people -> send int 3
+    @Constraints.Required
     public int messageType;
+
     @Constraints.Required
     public String classID; // this class ID
+
     @Constraints.Required
     public String message; // message varies by type
+
     @Constraints.Required
     public String teamID;  // team ID of the requester team
 
@@ -45,8 +51,6 @@ public class Notifications {
         Notifications newNotif = new Notifications(username, classID, type, teamID, message);
         Ebean.save(newNotif);
     }
-
-    private static Model.Finder<String, Notifications> find = new Model.Finder<>(Notifications.class);
 
     public static List<Notifications> getNotifs(String username) {
         return Notifications.find.where().eq("username", username).orderBy("classID").findList();
@@ -84,4 +88,6 @@ public class Notifications {
     public static int countNotifs(String username) {
         return (find.where().eq("username", username).findRowCount());
     }
+
+    private static Model.Finder<String, Notifications> find = new Model.Finder<>(Notifications.class);
 }

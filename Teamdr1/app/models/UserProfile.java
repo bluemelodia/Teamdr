@@ -16,68 +16,40 @@ import java.util.ArrayList;
  * Created by Bailey on 11/13/15.
  */
 @Entity
-public class UserProfile extends Model{
-    @Id
-    @Constraints.Required
+public class UserProfile extends Model {
+
+	@Id
+	@Constraints.Required
 	public String username;
+
 	public String email;
 	public String pic_url;
-    public String description;
-	
-	// Pass in type of primary key, type of model; pass in class so code can figure out its fields
-    private static Model.Finder<String, UserProfile> find = new Model.Finder<>(UserProfile.class);
+	public String description;
 
-    // Finds all the UserProfile records on file, sorts them by usernames
-    // Return as list of UserProfile records; elsewhere can iterate through the list
-    // of records and process them by calling this method
-    public static List<UserProfile> findAll() {
-        return UserProfile.find.orderBy("email").findList();
-    }
+	// Finds all the UserProfile records on file, sorts them by usernames
+	// Return as list of UserProfile records; elsewhere can iterate through the list
+	// of records and process them by calling this method
+	public static List<UserProfile> findAll() {
+		return UserProfile.find.orderBy("email").findList();
+	}
 
-    // Check if this user already exists
-    public static boolean exists(String email) {
-        return(find.where().eq("email", email).findRowCount() == 1) ? true : false;
-    }
-
-    // Return the record with this matching username
-    public static UserProfile getUser(String username) {
-        return find.ref(username);
-    }
+	// Check if this user already exists
+	public static boolean exists(String email) {
+		return (find.where().eq("email", email).findRowCount() == 1) ? true : false;
+	}
 
 	// Return the record with this matching username
-	/*public static int getSize(String username) {
-		UserProfile myProfile = UserProfile.getUser(username);
-		System.out.println("GET SIZE USERNAME: " + username);
-		System.out.println("GET PROFILE: " + myProfile.classes.size());
-		return myProfile.classes.size();
-	}*/
+	public static UserProfile getUser(String username) {
+		return find.ref(username);
+	}
 
-	/*public static ClassRecord getClass(String username, int n) {
-        UserProfile profile =find.ref(username);
-		ClassRecord c = new ClassRecord("4111", "DB");
-		profile.classes.add(c);
-		ClassRecord course = profile.classes.get(n);
-		
-		return course;	
-    }*/
-	
-	/*public boolean addClass(String cid, String cname, String username){
-		UserProfile profile =find.ref(username);
-		ClassRecord c = new ClassRecord("4111", "DB");
-		profile.classes.add(c);
-		ClassRecord course = profile.classes.get(n);
-		UserProfile myProfile = UserProfile.getUser(username);
-		ClassRecord classToAdd = ClassRecord.getClass(cid);
-		myProfile.classes.add(classToAdd);
-		Ebean.save(myProfile);
-		System.out.println("Adding class: " + classToAdd.classID + " : "+ classToAdd.className);
-		return true;
-	}*/
-
-	public UserProfile updateProfile(String uname, String e, String d){
+	public UserProfile updateProfile(String uname, String e, String d) {
 		this.username = uname;
 		this.email = e;
 		this.description = d;
 		return this;
 	}
+
+	// Pass in type of primary key, type of model; pass in class so code can figure out its fields
+	private static Model.Finder<String, UserProfile> find = new Model.Finder<>(UserProfile.class);
 }

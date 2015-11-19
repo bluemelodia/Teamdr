@@ -17,19 +17,20 @@ import java.util.List;
  */
 @Entity
 public class UserAccount extends Model {
+
     @Id
     @Constraints.Required
     public String username; // Primary key
+
     @Constraints.Required
     public String password; // System will not allow invalid data save
-	@Constraints.Required
+
+    @Constraints.Required
 	@OneToOne(cascade = CascadeType.REMOVE)
 	public UserProfile profile = new UserProfile();
+
     public String currentClass = "";
     public String allClasses = ""; // list of all classes user is in
-
-    // Pass in type of primary key, type of model; pass in class so code can figure out its fields
-    private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);
 
     // Finds all the UserAccount records on file, sorts them by usernames
     // Return as list of UserAccount records; elsewhere can iterate through the list
@@ -79,4 +80,7 @@ public class UserAccount extends Model {
         System.out.println("AllClasses: " + me.allClasses);
         Ebean.save(me);
     }
+
+    // Pass in type of primary key, type of model; pass in class so code can figure out its fields
+    private static Model.Finder<String, UserAccount> find = new Model.Finder<>(UserAccount.class);
 }

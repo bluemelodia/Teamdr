@@ -10,8 +10,6 @@ POST    /signup                    controllers.Account.createUser()
 GET     /login                     controllers.Account.signIn()
 POST    /login                     controllers.Account.authenticateUser()
 GET     /logout                    controllers.Account.logoutUser()
-#GET     /forgot                   controllers.Account.memoryLoss()
-#POST    /forgot                   controllers.Account.forgotPassword()
 
 GET     /profile                   controllers.Profile.viewProfile()
 GET     /update                    controllers.Profile.showUpdateProfilePage()
@@ -36,6 +34,5 @@ POST    /acceptNotification        controllers.Profile.acceptNotification()
 POST    /rejectNotification        controllers.Profile.rejectNotification()
 
 # Map static resources from the /public folder to the /assets URL path
-
 GET     /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
 

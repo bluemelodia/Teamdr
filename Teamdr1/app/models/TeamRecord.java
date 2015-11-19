@@ -20,13 +20,18 @@ import java.util.ArrayList;
  */
 @Entity
 public class TeamRecord extends Model {
+
     @Id
     public String tid;
+
     public String teamMembers = "";
+
     @Constraints.Required
     public String teamName;
+
     @Constraints.Required
     public String thisClass; // This is the class ID
+
     public String seenTeams = "";
 
     // Create a new team with one person
@@ -78,7 +83,7 @@ public class TeamRecord extends Model {
         return null;
     }
 
-        // Retrieve a team that you have not yet seen
+    // Retrieve a team that you have not yet seen
     public static TeamRecord userTeam(String username) {
         UserAccount thisUser = UserAccount.getUser(username);
         System.out.println("me: " + thisUser.username);
