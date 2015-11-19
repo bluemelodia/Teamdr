@@ -18,7 +18,14 @@ public class Team extends Controller {
     public Result teamDetails(String classId) {
         String user = session("connected");
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
-        return ok(teamdetails.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), myTeam));
+        ArrayList<UserAccount> members = new ArrayList<>();
+        if (myTeam != null) {
+            String[] theTeam = myTeam.teamMembers.split(" ");
+            for (String member: theTeam) {
+                members.add(UserAccount.getUser(member));
+            }
+        }
+        return ok(teamdetails.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), myTeam, members));
     }
 
     public Result leaveTeam(String classId) {

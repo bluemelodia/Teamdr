@@ -1,4 +1,4 @@
-@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], teamRecord: TeamRecord)
+@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], teamRecord: TeamRecord, teamList: List[UserAccount])
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -21,7 +21,7 @@ webix.ready(function () {
             {id:"2", value:"Back to Profile", href:"/profile"}
           ]},
           @if(teamRecord != null) {
-            { view:"template", template:"<h1>Team Name: @teamRecord.teamName</h1><br/>Team ID: @teamRecord.tid<br/>Class: @teamRecord.thisClass" },
+            { view:"template", template:"<h1>Team Name: @teamRecord.teamName</h1><br/>Team ID: @teamRecord.tid<br/>Class: @teamRecord.thisClass"},
           } else {
             {view:"template", template:"<h1>You are not in a team for this class.</h1><br/>"},
           }
