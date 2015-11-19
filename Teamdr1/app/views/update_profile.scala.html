@@ -1,4 +1,4 @@
-@(serviceForm : Form[UserProfile])
+@(userProfile: UserProfile)
 @import helper._
 @import com.fasterxml.jackson.databind.JsonNode
 @main("Update Profile") {
@@ -23,11 +23,11 @@
             <fieldset>
                 <legend>Update Profile</legend>
                 E-mail:<br>
-                <input type="text" name="email"><br><br>
+                <input type="text" name="email" value="@userProfile.email"><br><br>
                 Picture URL:<br>
-                <input type="text" name="pictureURL"><br><br>
+                <input type="text" name="pictureURL" value="@userProfile.pic_url"><br><br>
                 Description:<br>
-                <input type="text" name="description"><br><br>
+                <input type="text" name="description" value="@userProfile.description"><br><br>
                 <input type="submit" value="Change"/>
             </fieldset>
         }

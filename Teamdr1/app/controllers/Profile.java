@@ -27,7 +27,9 @@ public class Profile extends Controller {
     }
 
     public Result showUpdateProfilePage() {
-        return ok(update_profile.render(ProfileForm));
+        String user = session("connected");
+        UserProfile profile = UserProfile.getUser(user);
+        return ok(update_profile.render(profile));
     }
 
     public Result updateProfile() {
@@ -42,6 +44,7 @@ public class Profile extends Controller {
         String email = null;
         String pictureURL = null;
         String description = null;
+        System.out.println(p.email + " " + p.pic_url + " " + p.description);
         System.out.println("Values: " + values);
         if (values == null) {
             System.out.println("values is null");
@@ -49,22 +52,24 @@ public class Profile extends Controller {
             pictureURL = p.pic_url;
             description = p.description;
         }
-
-        if (values.get("email") == null || (values.get("email")).length < 1) {
+        System.out.println("OLD: " + values.get("email")[0] + (values.get("email")).toString().replace(" ", "").length());
+        if (values.get("email") == null || (values.get("email")).toString().trim().length() < 1) {
+            System.out.println("old email");
             email = p.email;
         }
         else{
+            System.out.println("new email");
             email = values.get("email")[0];
         }
 
-        if (values.get("pictureURL") == null || (values.get("pictureURL")).length < 1) {
+        if (values.get("pictureURL") == null || (values.get("pictureURL")).toString().trim().length() < 1) {
             pictureURL = p.pic_url;
         }
         else{
             pictureURL = values.get("pictureURL")[0];
         }
 
-        if (values.get("description") == null || (values.get("description")).length < 1) {
+        if (values.get("description") == null || (values.get("description")).toString().trim().length() < 1) {
             description = p.email;
         }
         else{
@@ -237,7 +242,6 @@ public class Profile extends Controller {
                 classes.add(thisClass);
             }
         }
-
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 }
