@@ -17,6 +17,11 @@ import static play.libs.Json.toJson;
 public class Team extends Controller {
     public Result leaveTeam(String classId) {
         String user = session("connected");
+        // Check if the user has a team for this class
+        if (TeamRecord.getTeamForClass(user, classId) == null) {
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        }
+
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
         String[] teamMembers = myTeam.teamMembers.split(" ");
         for (String member: teamMembers) {
@@ -25,6 +30,16 @@ public class Team extends Controller {
                 myTeam.teamMembers = myTeam.teamMembers.replace(user, ""); // purge user from team
             }
         }
+        if (myTeam.teamMembers.split(" ").length < 1) { // no people left, delete the newly emptied team
+            List<TeamRecord> allTeams = TeamRecord.findAll();
+            for (TeamRecord team: allTeams) { // remove this team from all seen lists
+                if (team.tid.equals(myTeam.tid)) continue;
+                team.seenTeams.replace(myTeam.tid, "");
+            }
+            myTeam.delete();
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        }
+
         System.out.println(myTeam.teamMembers);
         myTeam.save();
         System.out.println(user + " left");
@@ -34,7 +49,6 @@ public class Team extends Controller {
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
-
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
@@ -166,7 +180,7 @@ public class Team extends Controller {
             Notification currentNotif = notifs.get(j);
             // This user was already invited to join this team
             if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
-                return redirect("http://localhost:9000/assets/notifications.scala.html");
+                return redirect(routes.Profile.viewNotifications());
             }
         }
         // TeamRecord currentTeam = showCurrentTeam(user);
