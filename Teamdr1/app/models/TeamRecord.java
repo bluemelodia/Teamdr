@@ -120,7 +120,7 @@ public class TeamRecord extends Model {
             if (listNotifs.size() < 1) continue;
             for (int l = 0; l < listNotifs.size(); l++) {
                 Notification thisNotif = listNotifs.get(l);
-                if (thisNotif.classID.equals(classID)) {
+                if (thisNotif.classID.equals(classID) && thisNotif.teamID.equals(receiverTeam.tid)) {
                     Ebean.delete(thisNotif);
                 }
             }
