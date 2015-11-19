@@ -117,7 +117,7 @@ public class Team extends Controller {
         System.out.println("currentClass changed to: " + classId);
 
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
-        UserAccount.changeCurrentClass(user, classId); // set the current class
+        thisUser.changeCurrentClass(classId); // set the current class
         String currentClass = thisUser.currentClass;
 
         // If the user does not have a team for this class, have them make a new team

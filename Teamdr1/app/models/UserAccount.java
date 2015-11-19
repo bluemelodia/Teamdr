@@ -90,20 +90,22 @@ public class UserAccount extends Model {
     }
 
     public void saveClasses(List<String> myClasses) {
-        StringBuilder sb = new StringBuilder();
-        for (String myClass : myClasses) {
-            sb.append("|" + myClass);
+        if (myClasses.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (String myClass : myClasses) {
+                sb.append("|" + myClass);
+            }
+            allClasses = sb.substring(1);
+        } else {
+            allClasses = "";
         }
-        allClasses = sb.substring(1);
-
         System.out.println("AllClasses: " + allClasses);
         Ebean.save(this);
     }
 
-    public static void changeCurrentClass(String username, String newClass) {
-        UserAccount me = getUser(username);
-        me.currentClass = newClass;
-        Ebean.save(me);
+    public void changeCurrentClass(String newClass) {
+        this.currentClass = newClass;
+        Ebean.save(this);
     }
 
     // Pass in type of primary key, type of model; pass in class so code can figure out its fields
