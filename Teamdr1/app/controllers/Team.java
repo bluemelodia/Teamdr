@@ -21,6 +21,7 @@ public class Team extends Controller {
         ArrayList<UserAccount> members = new ArrayList<>();
         if (myTeam != null) {
             String[] theTeam = myTeam.teamMembers.split(" ");
+            System.out.println("TEAM: " + myTeam.teamMembers);
             for (String member: theTeam) {
                 members.add(UserAccount.getUser(member));
             }

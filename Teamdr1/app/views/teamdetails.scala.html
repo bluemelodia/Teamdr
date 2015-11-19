@@ -11,11 +11,25 @@
   </head>
   <body>
     <script type="text/javascript">
+
+function showUser() {
+
+  @for(member <- teamList) {
+    $$('users').addView({
+          id:"frm@member",
+          view:"form",
+          elements:[
+              { view:"template", template:"Name: @member.username<br/>Email: @UserProfile.getUser(member.username).email<br/>Description: @UserProfile.getUser(member.username).description"},
+          ]
+      }, -1);
+  }
+}
+
 webix.ready(function () {
     webix.ui({
       rows:[
           { view:"template",
-            type:"header", template:"Profile" },
+            type:"header", template:"Team Deatils" },
           { id:"menuBar", view:"menu", data:[
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Back to Profile", href:"/profile"}
@@ -26,10 +40,11 @@ webix.ready(function () {
             {view:"template", template:"<h1>You are not in a team for this class.</h1><br/>"},
           }
         {
-        id: "classForms", rows: []
+            id: "users", rows: []
         }
         ]
         });
+        showUser();
         });
     </script>
   </body>
