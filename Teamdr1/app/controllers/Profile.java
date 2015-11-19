@@ -128,14 +128,34 @@ public class Profile extends Controller {
 
         }
 
-        //TODO
+        ArrayList<ClassRecord> classsRecord = new ArrayList<ClassRecord>();
+        String userClasses = UserAccount.allClasses(user);
+        if (userClasses.length() > 1) {
+            System.out.println("here");
+            String[] userClassArray = userClasses.split("");
+            System.out.println("here");
+            for (int i = 0; i < userClassArray.length; i++) {
+                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
+                classsRecord.add(thisClass);
+            }
+        } else {
+            System.out.println("else");
+        }
+        System.out.println(classsRecord.size());
+        for (int i = 0; i < classsRecord.size(); i++) {
+            System.out.println("heretoo");
+            ClassRecord currentClass = classsRecord.get(i);
+            System.out.println(currentClass);
+            System.out.println("gotten");
+            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
+        }
 
 		JsonNode user_json = toJson(getUser);
-		JsonNode class_json = toJson(classRecord);
+		JsonNode class_json = toJson(classsRecord);
         JsonNode profile_json = toJson(p.description);
         JsonNode notifs_json = toJson(notifs);
         //return redirect(routes.Profile.viewProfile());
-        System.out.println("class: " + classRecord + " profile: " + p.description + " notifs: " + notifs);
+        System.out.println("class: " + classsRecord + " profile: " + p.description + " notifs: " + notifs);
         System.out.println("RENDERING");
 		return ok(profile.render(user_json, class_json, profile_json, notifs_json));
     }
