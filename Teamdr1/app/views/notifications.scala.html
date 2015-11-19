@@ -76,7 +76,7 @@ function ok(notif) {
 
 function getNotifs() {
 
-    var data = @notifsJson;
+    var data = @Html(notifsJson);
 
     for (i=0; i<data.length; i++) {
         var notif = data[i];
