@@ -20,7 +20,6 @@ POST    /addClass                  controllers.Profile.addClass()
 GET     /team                      controllers.Team.showTeams()
 POST 	/left     				   controllers.Team.swipeLeft()
 POST    /right                     controllers.Team.swipeRight()
-GET     /sendRequest               controllers.Team.sendRequest()
 
 GET     /class                     controllers.Classes.retrieveClass()
 POST    /class                     controllers.Classes.putClass()

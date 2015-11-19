@@ -15,19 +15,28 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
-    //public static String currentClass = "";
-
     public Result leaveTeam(String classId) {
         String user = session("connected");
+        TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
+        String[] teamMembers = myTeam.teamMembers.split(" ");
+        for (String member: teamMembers) {
+            if (member.equals(user)) {
+                System.out.println(user + " purged");
+                myTeam.teamMembers = myTeam.teamMembers.replace(user, ""); // purge user from team
+            }
+        }
+        System.out.println(myTeam.teamMembers);
+        myTeam.save();
+        System.out.println(user + " left");
+        // Notify the rest of the team that you have left the team
+        String message = user + " has left team " + myTeam.teamName + " for " + classId;
+        for (String member: teamMembers) {
+            UserAccount moi = UserAccount.getUser(member);
+            Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
+        }
+
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
-
-    public Result list() {
-        return TODO;
-    }
-
-    //public static ArrayList<String> seenTeams = new ArrayList<String>();
-    //public static String currentTeam = null;
 
     // Retrieve a team that you have not yet seen
     public TeamRecord showCurrentTeam(String username) {
@@ -59,48 +68,6 @@ public class Team extends Controller {
         System.out.println("There are no other teams");
         return null;
     }
-
-    // User has already gone through all teams, reset
-    /*private void resetTeams() {
-        seenTeams.clear();
-    }*/
-
-    // removes teammate (whose name is entered through a form) from the current team of the user
-    public Result removeTeammate() {
-        /*String user = session("connected");
-        if (user == null) { // unauthorized user login, kick them back to login screen
-            return redirect(routes.Account.signIn());
-        }
-
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String remUser = values.get("remove")[0];
-
-        UserAccount thisUser = UserAccount.getUser(user);
-        TeamRecord currentTeam = showCurrentTeam(user);
-
-        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, remUser.username;*/
-
-        return redirect(routes.Team.showTeams());
-
-    }
-
-    // removes current user from their current team
-    public Result removeMe() {
-        /*String user = session("connected");
-        if (user == null) { // unauthorized user login, kick them back to login screen
-            return redirect(routes.Account.signIn());
-        }
-
-        UserAccount thisUser = UserAccount.getUser(user);
-        TeamRecord currentTeam = showCurrentTeam(user);
-
-        TeamRecord removed = TeamRecord.removeUser(currentTeam.tid, user.username;
-        */
-        return redirect(routes.Team.showTeams());
-
-
-    }
-
     
     public Result showError() {
         String user = session("connected");
@@ -132,8 +99,6 @@ public class Team extends Controller {
         }
         return redirect(routes.Team.showTeams());
     }
-
-
 
     public Result showTeams() {
         String user = session("connected");
@@ -240,15 +205,6 @@ public class Team extends Controller {
         return redirect(routes.Team.showTeams());
     }
 
-    public Result sendRequest() {
-        return TODO;
-    }
-
-    public Result mergeTeams(String team1, String team2) {
-        return TODO;
-    }
-
-    // TODO: why is the team getting added to seenTeams on refresh, yet reappears on team button click
     // Swipe left: go to the next team, mark this one as seen
     public Result swipeLeft() {
         String user = session("connected");

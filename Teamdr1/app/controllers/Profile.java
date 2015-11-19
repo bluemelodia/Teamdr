@@ -177,8 +177,6 @@ public class Profile extends Controller {
         // Delete the notification
         Notification.deleteNotif(notificationID);
 
-        // TODO: send a notification to the entire new team, saying that the team was merged.
-        // TODO: make sure two people cannot swipe left on the same person (to oust them) - if they have been already ousted, the second person's swipe does nothing
         return ok(toJson("Accepted"));
     }
 

@@ -19,6 +19,7 @@ public class Classes extends Controller {
 
     public Result leaveClass(String classId) {
         String user = session("connected");
+        
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
