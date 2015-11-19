@@ -22,7 +22,7 @@ public class Classes extends Controller {
             purgeClass(classId);
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
-
+        System.out.println("User has a team for this class");
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
         String[] teamMembers = myTeam.teamMembers.split(" ");
         for (String member: teamMembers) {
@@ -31,6 +31,7 @@ public class Classes extends Controller {
                 myTeam.teamMembers = myTeam.teamMembers.replace(user, ""); // purge user from team
             }
         }
+        System.out.println("User purged");
         if (myTeam.teamMembers.split(" ").length < 1) { // no people left, delete the newly emptied team
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
@@ -49,6 +50,7 @@ public class Classes extends Controller {
         String message = user + " has left team " + myTeam.teamName + " for " + classId;
         for (String member: teamMembers) {
             if (member.equals(user)) continue;
+            System.out.println("I am here");
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
@@ -58,7 +60,7 @@ public class Classes extends Controller {
 
     public void purgeClass(String classId) {
         String user = session("connected");
-
+        System.out.println("Purging class");
         // delete the class from this user's schedule
         UserAccount me = UserAccount.getUser(user);
         String[] allClasses = me.allClasses.split("\\|");
@@ -67,6 +69,7 @@ public class Classes extends Controller {
                 me.allClasses = me.allClasses.replace(thisClass, "");
             }
         }
+        System.out.println("Purged class");
         me.save();
     }
 
