@@ -29,7 +29,7 @@ public class Classes extends Controller {
         for (String member: teamMembers) {
             if (member.equals(user)) {
                 System.out.println(user + " purged");
-                myTeam.teamMembers = myTeam.teamMembers.replace(user, ""); // purge user from team
+                myTeam.teamMembers = myTeam.teamMembers.replace(user + " ", ""); // purge user from team
             }
         }
         System.out.println("User purged");
@@ -37,7 +37,7 @@ public class Classes extends Controller {
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
                 if (team.tid.equals(myTeam.tid)) continue;
-                team.seenTeams.replace(myTeam.tid, "");
+                team.seenTeams.replace(myTeam.tid + " ", "");
             }
             myTeam.delete();
             userAccount.removeClass(classId);

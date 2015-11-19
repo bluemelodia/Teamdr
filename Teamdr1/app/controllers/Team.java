@@ -41,14 +41,14 @@ public class Team extends Controller {
         for (String member: teamMembers) {
             if (member.equals(user)) {
                 System.out.println(user + " purged");
-                myTeam.teamMembers = myTeam.teamMembers.replace(user, ""); // purge user from team
+                myTeam.teamMembers = myTeam.teamMembers.replace(user + " ", ""); // purge user from team
             }
         }
         if (myTeam.teamMembers.split(" ").length < 1) { // no people left, delete the newly emptied team
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
                 if (team.tid.equals(myTeam.tid)) continue;
-                team.seenTeams.replace(myTeam.tid, "");
+                team.seenTeams.replace(myTeam.tid + " ", "");
             }
             myTeam.delete();
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
