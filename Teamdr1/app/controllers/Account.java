@@ -113,27 +113,6 @@ public class Account extends Controller {
         return redirect(routes.Profile.viewProfile());
     }
 
-    // Send user an email with their password info
-    public Result forgotPassword() {
-        Form<UserAccount> form = ForgotForm.bindFromRequest();
-        if (form.hasErrors()) { // Redirect with error
-            return badRequest(forgot.render(form));
-        }
-        UserAccount getAccount = form.get();
-        if (!UserAccount.exists(getAccount.username)) {
-            form.reject("username", "User does not exist.");
-            return badRequest(forgot.render(form));
-        }
-
-        UserAccount thisUser = UserAccount.getUser(getAccount.username);
-
-        return redirect(routes.Account.signIn());
-    }
-
-    public Result memoryLoss() {
-        return ok(forgot.render(ForgotForm));
-    }
-
     public Result logoutUser() {
         session().remove("connected");
         return redirect(routes.Account.signIn());

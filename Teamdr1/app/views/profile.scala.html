@@ -73,7 +73,7 @@ webix.ready(function () {
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Update Profile", href:"/update"}
           ]},
-          { view:"template", template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Description: @userProfile.description" },
+          { view:"template", template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
           {
             id: "classForms", rows: []
           }
