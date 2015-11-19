@@ -16,10 +16,11 @@ public class Classes extends Controller {
 
     public Result leaveClass(String classId) {
         String user = session("connected");
+        UserAccount userAccount = UserAccount.getUser(user);
 
         // Check if the user has a team for this class
         if (TeamRecord.getTeamForClass(user, classId) == null) {
-            purgeClass(classId);
+            userAccount.removeClass(classId);
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
         System.out.println("User has a team for this class");
@@ -39,7 +40,7 @@ public class Classes extends Controller {
                 team.seenTeams.replace(myTeam.tid, "");
             }
             myTeam.delete();
-            purgeClass(classId);
+            userAccount.removeClass(classId);
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
 
@@ -54,23 +55,8 @@ public class Classes extends Controller {
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
-        purgeClass(classId);
+        userAccount.removeClass(classId);
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
-    }
-
-    public void purgeClass(String classId) {
-        String user = session("connected");
-        System.out.println("Purging class");
-        // delete the class from this user's schedule
-        UserAccount me = UserAccount.getUser(user);
-        String[] allClasses = me.allClasses.split("\\|");
-        for (String thisClass: allClasses) {
-            if (thisClass.equals(classId)) {
-                me.allClasses = me.allClasses.replace(thisClass, "");
-            }
-        }
-        System.out.println("Purged class");
-        me.save();
     }
 
     public Result retrieveClass() {

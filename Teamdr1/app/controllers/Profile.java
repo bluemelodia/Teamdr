@@ -182,7 +182,7 @@ public class Profile extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-        UserAccount getUser = UserAccount.getUser(user);
+        UserAccount userAccount = UserAccount.getUser(user);
 		UserProfile p = UserProfile.getUser(user);
 
         boolean foundClass = false;
@@ -210,12 +210,10 @@ public class Profile extends Controller {
         ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
 		//String className = values.get("className")[0];
 		if (foundClass) {
-            UserAccount.addClass(user, classID);
+            userAccount.addClass(classID);
             System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
-            String userClasses = UserAccount.allClasses(user);
-            String[] userClassArray = userClasses.split("\\|");
-            for (int j = 0; j < userClassArray.length; j++) {
-                ClassRecord thisClass = ClassRecord.getClass(userClassArray[j].trim());
+            for (String userClass: userAccount.getClassList()) {
+                ClassRecord thisClass = ClassRecord.getClass(userClass);
                 classes.add(thisClass);
             }
         }

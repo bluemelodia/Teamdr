@@ -5,11 +5,8 @@ import javax.persistence.*;
 import com.avaje.ebean.Ebean;
 
 import java.util.*;
-import javax.persistence.*;
-import play.db.ebean.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import models.TeamRecord;
 import java.util.List;
 
 /**
@@ -78,26 +75,34 @@ public class UserAccount extends Model {
         return classList;
     }
 
-    public static void changeCurrentClass(String username, String newClass) {
-        UserAccount me = getUser(username);
-        me.currentClass = newClass;
-        Ebean.save(me);
-    }
-
-    public static void addClass(String username, String classID) {
-        UserAccount me = getUser(username);
-        List<String> myClasses = me.getClassList();
+    public void addClass(String classID) {
+        List<String> myClasses = getClassList();
         if (!myClasses.contains(classID)) {
             myClasses.add(classID);
         }
+        this.saveClasses(myClasses);
+    }
 
+    public void removeClass(String classID) {
+        List<String> myClasses = getClassList();
+        myClasses.remove(classID);
+        this.saveClasses(myClasses);
+    }
+
+    public void saveClasses(List<String> myClasses) {
         StringBuilder sb = new StringBuilder();
         for (String myClass : myClasses) {
             sb.append("|" + myClass);
         }
-        me.allClasses = sb.substring(1);
+        allClasses = sb.substring(1);
 
-        System.out.println("AllClasses: " + me.allClasses);
+        System.out.println("AllClasses: " + allClasses);
+        Ebean.save(this);
+    }
+
+    public static void changeCurrentClass(String username, String newClass) {
+        UserAccount me = getUser(username);
+        me.currentClass = newClass;
         Ebean.save(me);
     }
 
