@@ -53,14 +53,30 @@ public class UserAccount extends Model {
     public static UserAccount getUser(String username) {
         return find.ref(username);
     }
-	
-	public boolean addProfile(String uname, String e){
+
+	public boolean addProfile(String uname, String e) {
 		this.profile.username = uname;
 		this.profile.email = e;
 		//ClassRecord course = new ClassRecord("4111", "DB");
 		//this.profile.classes.add(course);
 		return true;
 	}
+
+    public TeamRecord getTeamRecord(String classId) {
+        TeamRecord teamRecord = TeamRecord.getTeamForClass(username, classId);
+        return teamRecord;
+    }
+
+    public List<String> getClassList() {
+        List<String> classList = new ArrayList<>();
+        String[] myClasses = allClasses.split("\\|");
+        for (String myClass : myClasses) {
+            if (!myClass.isEmpty()) {
+                classList.add(myClass);
+            }
+        }
+        return classList;
+    }
 
     public static void changeCurrentClass(String username, String newClass) {
         UserAccount me = getUser(username);
@@ -70,22 +86,17 @@ public class UserAccount extends Model {
 
     public static void addClass(String username, String classID) {
         UserAccount me = getUser(username);
-        String[] myClasses = me.allClasses.split("\\|");
-        for (String myClass: myClasses) {
-            if (classID.equals(myClass)) {
-                return;
-            }
+        List<String> myClasses = me.getClassList();
+        if (!myClasses.contains(classID)) {
+            myClasses.add(classID);
         }
 
         StringBuilder sb = new StringBuilder();
         for (String myClass : myClasses) {
-            if (!myClass.isEmpty()) {
-                sb.append("|" + myClass);
-            }
+            sb.append("|" + myClass);
         }
-        sb.append("|" + classID);
-
         me.allClasses = sb.substring(1);
+
         System.out.println("AllClasses: " + me.allClasses);
         Ebean.save(me);
     }

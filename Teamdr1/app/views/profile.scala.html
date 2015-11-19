@@ -13,25 +13,32 @@
 <script type="text/javascript">
 
 function createClassForms() {
-  if ("@userAccount.allClasses".length == 0) return;
 
-  "@userAccount.allClasses".split('|').forEach(function (classId) {
+  @for(classId <- userAccount.getClassList()) {
     $$('classForms').addView({
+          id:"frm@classId",
           view:"form",
           elements:[
-              { view:"label", label:classId},
+              { view:"label", label:"@classId"},
+              @if(userAccount.getTeamRecord(classId) != null) {
+              { view:"label", label:"@userAccount.getTeamRecord(classId).teamMembers"},
+              }
               { margin:5, cols:[
-                  { id: "btnTeamSearch" + classId,
+                  { id: "btnTeamSearch@classId",
                     view:"button",
                     value:"Team Search", 
                     type:"form",
-                    click:"location.href='/setCurrentClass?classId=" + classId + "'"
+                    click:"location.href='/setCurrentClass?classId=@classId'"
                   }
               ]}
           ]
       }, -1);
-  });
+
+
+  }
 }
+
+
 
 function checkNotifs() {
   @if(notifList.isEmpty) {

@@ -23,6 +23,8 @@ public class Profile extends Controller {
 
     public Result viewProfile() {
         String user = session("connected");
+
+        TeamRecord teamRecord = TeamRecord.userTeam(user);
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
