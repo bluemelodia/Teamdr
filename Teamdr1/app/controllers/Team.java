@@ -3,16 +3,11 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.*;
 import models.TeamRecord;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.*;
-import views.html.update_profile;
-import play.data.Form;
+
 import java.util.*;
-import static play.libs.Json.*;
-import play.libs.Json.*;
-import javax.persistence.*;
 
 import static play.libs.Json.toJson;
 // TODO: if the user does not have a team anymore, redirect them to the create Team page
@@ -199,9 +194,9 @@ public class Team extends Controller {
         System.out.println("Seen teams: " + seenTeams);
 
         // If the user already received an invite to join this team, send them to the notifs page
-        List<Notifications> notifs = Notifications.getNotifs(user);
+        List<Notification> notifs = Notification.getNotifs(user);
         for (int j = 0; j < notifs.size(); j++) {
-            Notifications currentNotif = notifs.get(j);
+            Notification currentNotif = notifs.get(j);
             // This user was already invited to join this team
             if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
                 return redirect("http://localhost:9000/assets/notifications.html");
@@ -233,7 +228,7 @@ public class Team extends Controller {
         String[] people = (td.teamMembers).split(" ");
         for (int i = 0; i < people.length; i++) {
             UserAccount currentUser = UserAccount.getUser(people[i]);
-            Notifications.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
+            Notification.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
         }
 
         //update team with currently shown team and user

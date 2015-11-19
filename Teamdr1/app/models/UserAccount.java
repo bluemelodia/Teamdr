@@ -79,7 +79,9 @@ public class UserAccount extends Model {
 
         StringBuilder sb = new StringBuilder();
         for (String myClass : myClasses) {
-            sb.append("|" + myClass);
+            if (!myClass.isEmpty()) {
+                sb.append("|" + myClass);
+            }
         }
         sb.append("|" + classID);
 

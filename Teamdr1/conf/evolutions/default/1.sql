@@ -9,14 +9,14 @@ create table class_record (
   constraint pk_class_record primary key (class_id))
 ;
 
-create table notifications (
+create table notification (
   notif_id                  integer not null,
   username                  varchar(255),
   message_type              integer,
   class_id                  varchar(255),
   message                   varchar(255),
   team_id                   varchar(255),
-  constraint pk_notifications primary key (notif_id))
+  constraint pk_notification primary key (notif_id))
 ;
 
 create table team_record (
@@ -48,7 +48,7 @@ create table user_profile (
 
 create sequence class_record_seq;
 
-create sequence notifications_seq;
+create sequence notification_seq;
 
 create sequence team_record_seq;
 
@@ -67,7 +67,7 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists class_record;
 
-drop table if exists notifications;
+drop table if exists notification;
 
 drop table if exists team_record;
 
@@ -79,7 +79,7 @@ SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists class_record_seq;
 
-drop sequence if exists notifications_seq;
+drop sequence if exists notification_seq;
 
 drop sequence if exists team_record_seq;
 

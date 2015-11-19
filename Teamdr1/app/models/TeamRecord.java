@@ -1,17 +1,9 @@
 package models;
-import com.fasterxml.jackson.databind.ser.std.RawSerializer;
-import controllers.Classes;
-import controllers.Team;
-import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
-import models.UserAccount;
-import models.Notifications;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -124,10 +116,10 @@ public class TeamRecord extends Model {
         // remove all notifs for the merged team that is related to the original team
         for (int k = 0; k < teamMembers.length; k++) {
             String thisMember = teamMembers[k].trim();
-            List<Notifications> listNotifs = Notifications.getNotifs(thisMember);
+            List<Notification> listNotifs = Notification.getNotifs(thisMember);
             if (listNotifs.size() < 1) continue;
             for (int l = 0; l < listNotifs.size(); l++) {
-                Notifications thisNotif = listNotifs.get(l);
+                Notification thisNotif = listNotifs.get(l);
                 if (thisNotif.classID.equals(classID)) {
                     Ebean.delete(thisNotif);
                 }
@@ -143,7 +135,7 @@ public class TeamRecord extends Model {
         String message = "Team merge success. New team name: " + requesterTeam.teamName + ". Members: " + requesterTeam.teamMembers;
         for (int p = 0; p < newRequesterTeam.length; p++) {
             UserAccount moi = UserAccount.getUser(newRequesterTeam[p].trim());
-            Notifications.createNewNotification(moi.username, moi.currentClass, 2, requesterTeam.tid, message);
+            Notification.createNewNotification(moi.username, moi.currentClass, 2, requesterTeam.tid, message);
         }
 
         // take the old and new teams off every single seen list

@@ -4,7 +4,6 @@ import play.data.validation.Constraints;
 import com.avaje.ebean.Ebean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.*;
 import java.util.List;
 import java.util.Random;
 
@@ -12,7 +11,7 @@ import java.util.Random;
  * Created by bluemelodia on 11/12/15.
  */
 @Entity
-public class Notifications {
+public class Notification {
 
     @Id
     @Constraints.Required
@@ -36,7 +35,7 @@ public class Notifications {
     @Constraints.Required
     public String teamID;  // team ID of the requester team
 
-    public Notifications(String username, String classID, int type, String teamID, String message) {
+    public Notification(String username, String classID, int type, String teamID, String message) {
         this.username = username;
         this.classID = classID;
         this.messageType = type;
@@ -48,12 +47,12 @@ public class Notifications {
     }
 
     public static void createNewNotification(String username, String classID, int type, String teamID, String message) {
-        Notifications newNotif = new Notifications(username, classID, type, teamID, message);
+        Notification newNotif = new Notification(username, classID, type, teamID, message);
         Ebean.save(newNotif);
     }
 
-    public static List<Notifications> getNotifs(String username) {
-        return Notifications.find.where().eq("username", username).orderBy("classID").findList();
+    public static List<Notification> getNotifs(String username) {
+        return Notification.find.where().eq("username", username).orderBy("classID").findList();
     }
 
     public static boolean notifExists(int notifID) {
@@ -65,19 +64,19 @@ public class Notifications {
     }
 
     public static void deleteNotif(int notifID) {
-        Notifications notif = find.ref(Integer.toString(notifID));
+        Notification notif = find.ref(Integer.toString(notifID));
         Ebean.delete(notif);
     }
 
-    public static Notifications getThisNotif(int notifID) {
+    public static Notification getThisNotif(int notifID) {
         return find.ref(Integer.toString(notifID));
     }
 
     // Get the specific collab request that was sent to this user
-    public static Notifications findNotifID(String username, String classID, String teamID, int messageType) {
-        List<Notifications> notifList = find.where().eq("username", username).eq("classID", classID).eq("teamID", teamID).findList();
+    public static Notification findNotifID(String username, String classID, String teamID, int messageType) {
+        List<Notification> notifList = find.where().eq("username", username).eq("classID", classID).eq("teamID", teamID).findList();
         for (int i = 0; i < notifList.size(); i++) {
-            Notifications thisNotification = notifList.get(i);
+            Notification thisNotification = notifList.get(i);
             if (thisNotification.messageType == 1) {
                 return thisNotification;
             }
@@ -89,5 +88,5 @@ public class Notifications {
         return (find.where().eq("username", username).findRowCount());
     }
 
-    private static Model.Finder<String, Notifications> find = new Model.Finder<>(Notifications.class);
+    private static Model.Finder<String, Notification> find = new Model.Finder<>(Notification.class);
 }

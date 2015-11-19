@@ -1,18 +1,13 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import jdk.nashorn.internal.ir.ObjectNode;
 import models.*;
-import play.api.libs.json.JsPath;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.profile;
 import views.html.update_profile;
 
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -28,50 +23,8 @@ public class Profile extends Controller {
 
     public Result viewProfile() {
         String user = session("connected");
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
-
-//    public Result viewProfile() {
-//        String user = session("connected");
-//        if (user == null) { // unauthorized user login, kick them back to login screen
-//            return redirect(routes.Account.signIn());
-//        }
-//        UserAccount getUser = UserAccount.getUser(user);
-//
-//        ArrayList<ClassRecord> classes2 = new ArrayList<ClassRecord>();
-//        String userClasses = UserAccount.allClasses(user);
-//        if (userClasses.length() > 1) {
-//            System.out.println("here");
-//            String[] userClassArray = userClasses.split("");
-//            System.out.println("here");
-//            for (int i = 0; i < userClassArray.length; i++) {
-//                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
-//                classes2.add(thisClass);
-//            }
-//        } else {
-//            System.out.println("else");
-//        }
-//        System.out.println(classes2.size());
-//        for (int i = 0; i < classes2.size(); i++) {
-//            System.out.println("heretoo");
-//            ClassRecord currentClass = classes2.get(i);
-//            System.out.println(currentClass);
-//            System.out.println("gotten");
-//            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
-//        }
-//        // If the user has notifications, show them
-//        String notifs = "You have no notifications.";
-//        if (Notifications.hasNotifs(getUser.username)) {
-//            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
-//        }
-//        System.out.println("HERE");
-//        JsonNode user_json = toJson(getUser);
-//		JsonNode class_json = toJson(classes2);
-//        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
-//        JsonNode notifs_json = toJson(notifs);
-//        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
-//        //return ok(update_profile.render());
-//    }
 
     public Result showUpdateProfilePage() {
         return ok(update_profile.render(ProfileForm));
@@ -126,13 +79,6 @@ public class Profile extends Controller {
 
         UserAccount getUser = UserAccount.getUser(user);
 
-        // If the user has notifications, show them
-        String notifs = "You have no notifications.";
-        if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
-
-        }
-
         ArrayList<ClassRecord> classsRecord = new ArrayList<ClassRecord>();
         String userClasses = UserAccount.allClasses(user);
         if (userClasses.length() > 1) {
@@ -155,16 +101,7 @@ public class Profile extends Controller {
             System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
         }
 
-		JsonNode user_json = toJson(getUser);
-		JsonNode class_json = toJson(classsRecord);
-        JsonNode profile_json = toJson(p.description);
-        JsonNode notifs_json = toJson(notifs);
-        //return redirect(routes.Profile.viewProfile());
-        System.out.println("class: " + classsRecord + " profile: " + p.description + " notifs: " + notifs);
-        System.out.println("RENDERING");
-		//return ok(profile.render(user_json, class_json, profile_json, notifs_json));
-
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
     public Result viewNotifications() {
@@ -174,7 +111,7 @@ public class Profile extends Controller {
         }
         UserAccount thisUser = UserAccount.getUser(user);
 
-        List<Notifications> allNotifs = Notifications.getNotifs(thisUser.username);
+        List<Notification> allNotifs = Notification.getNotifs(thisUser.username);
         return ok(toJson(allNotifs));
     }
 
@@ -192,16 +129,16 @@ public class Profile extends Controller {
         int notificationID = json.asInt();
         System.out.println(notificationID);
 
-        if (!Notifications.notifExists(notificationID)) {
+        if (!Notification.notifExists(notificationID)) {
             return ok(toJson("Accepted"));
         }
 
         // Find that notification, getting the classID and teamID of the requester
-        Notifications thisNotif = Notifications.getThisNotif(notificationID);
+        Notification thisNotif = Notification.getThisNotif(notificationID);
         String classID = thisNotif.classID;
         String teamID = thisNotif.teamID;
         if (!TeamRecord.exists(teamID)) { // someone already swiped right, or team was otherwise purged
-            Notifications.deleteNotif(notificationID);
+            Notification.deleteNotif(notificationID);
             return ok(toJson("Accepted"));
         }
 
@@ -237,7 +174,7 @@ public class Profile extends Controller {
         }
 
         // Delete the notification
-        Notifications.deleteNotif(notificationID);
+        Notification.deleteNotif(notificationID);
 
         // TODO: send a notification to the entire new team, saying that the team was merged.
         // TODO: make sure two people cannot swipe left on the same person (to oust them) - if they have been already ousted, the second person's swipe does nothing
@@ -249,12 +186,12 @@ public class Profile extends Controller {
         JsonNode json = request().body().asJson();
         System.out.println("REJECT");
         int notificationID = json.asInt();
-        if (!Notifications.notifExists(notificationID)) {
+        if (!Notification.notifExists(notificationID)) {
             return ok(toJson("Rejected"));
         }
         System.out.println("Deleting this notif: " + notificationID);
         // Delete this notification
-        Notifications.deleteNotif(notificationID);
+        Notification.deleteNotif(notificationID);
 
         return ok(toJson("Rejected"));
     }
@@ -291,7 +228,7 @@ public class Profile extends Controller {
 
         ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
 		//String className = values.get("className")[0];
-		if(foundClass) {
+		if (foundClass) {
             UserAccount.addClass(user, classID);
             System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
             String userClasses = UserAccount.allClasses(user);
@@ -302,29 +239,6 @@ public class Profile extends Controller {
             }
         }
 
-        String notifs = "You have no notifications.";
-        if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
-
-        }
-
-        JsonNode user_json = toJson(getUser);
-        System.out.println("CLASSES: " + classes);
-		JsonNode class_json = toJson(classes);
-        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
-        JsonNode notifs_json = toJson(notifs);
-        //return ok(profile.render(user_json, class_json, profile_json, notifs_json));
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
-	
-	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
-		UserProfile profile = profileForm.get();
-		String username = "Bailey";
-		profile.username = username;
-		
-		ClassRecord course = new ClassRecord("41111", "DB");
-		profile.classes.add(course);
-		System.out.println(profile.classes.get(0).classID);
-		return profile;
-	}*/
 }
