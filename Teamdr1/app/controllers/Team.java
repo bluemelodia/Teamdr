@@ -107,19 +107,16 @@ public class Team extends Controller {
     }
 
     // This method helps pick the correct class, based on form submission, for the team search
-    public Result setCurrentClass() {
+    public Result setCurrentClass(String classId) {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-        System.out.println("HERE");
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        System.out.println("VALUES: " + values);
-        String newClass = values.get("myClass")[0];
-        System.out.println("currentClass changed to: " + newClass);
+
+        System.out.println("currentClass changed to: " + classId);
 
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
-        UserAccount.changeCurrentClass(user, newClass); // set the current class
+        UserAccount.changeCurrentClass(user, classId); // set the current class
         String currentClass = thisUser.currentClass;
 
         // If the user does not have a team for this class, have them make a new team

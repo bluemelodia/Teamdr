@@ -24,7 +24,12 @@ function createClassForms() {
           elements:[
               { view:"label", label:classId},
               { margin:5, cols:[
-                  { id: "btnTeamSearch" + classId, view:"button", value:"Team Search", type:"form" }
+                  { id: "btnTeamSearch" + classId,
+                    view:"button",
+                    value:"Team Search", 
+                    type:"form",
+                    click:"location.href='/setCurrentClass?classId=" + classId + "'"
+                  }
               ]}
           ]
       }, -1);
