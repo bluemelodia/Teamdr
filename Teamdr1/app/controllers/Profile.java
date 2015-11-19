@@ -83,29 +83,6 @@ public class Profile extends Controller {
 		p.save();
 
         UserAccount getUser = UserAccount.getUser(user);
-
-        ArrayList<ClassRecord> classsRecord = new ArrayList<ClassRecord>();
-        String userClasses = UserAccount.allClasses(user);
-        if (userClasses.length() > 1) {
-            System.out.println("here");
-            String[] userClassArray = userClasses.split("");
-            System.out.println("here");
-            for (int i = 0; i < userClassArray.length; i++) {
-                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
-                classsRecord.add(thisClass);
-            }
-        } else {
-            System.out.println("else");
-        }
-        System.out.println(classsRecord.size());
-        for (int i = 0; i < classsRecord.size(); i++) {
-            System.out.println("heretoo");
-            ClassRecord currentClass = classsRecord.get(i);
-            System.out.println(currentClass);
-            System.out.println("gotten");
-            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
-        }
-
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
