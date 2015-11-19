@@ -49,7 +49,7 @@ function reject(notif) {
     });
 }
 
-function ok(notif) {
+function reject(notif) {
     $.ajax({
         url: '/rejectNotification',
         type: 'POST',
