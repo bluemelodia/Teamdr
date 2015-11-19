@@ -196,7 +196,7 @@ public class Team extends Controller {
             Notification currentNotif = notifs.get(j);
             // This user was already invited to join this team
             if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
-                return redirect("http://localhost:9000/assets/notifications.html");
+                return redirect("http://localhost:9000/assets/notifications.scala.html");
             }
         }
         // TeamRecord currentTeam = showCurrentTeam(user);

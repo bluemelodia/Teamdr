@@ -12,12 +12,9 @@
 <body>
 <script type="text/javascript">
 
-
-function createForm(classId) {
-    return 
-}
-
 function createClassForms() {
+  if ("@userAccount.allClasses".length == 0) return;
+
   "@userAccount.allClasses".split('|').forEach(function (classId) {
     $$('classForms').addView({
           view:"form",
@@ -36,12 +33,20 @@ function createClassForms() {
   });
 }
 
+function checkNotifs() {
+  @if(notifList.isEmpty) {
+    
+  } else {
+    $$("menuBar").add({id:"3", value:"Notifications", href:"/notifs"});
+  }
+}
+
 webix.ready(function () {
     webix.ui({
       rows:[
           { view:"template",
             type:"header", template:"Profile" },
-          { view:"menu", data:[
+          { id:"menuBar", view:"menu", data:[
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Update Profile", href:"/update"}
           ]},
@@ -55,6 +60,7 @@ webix.ready(function () {
     });
 
     createClassForms();
+    checkNotifs();
 });
 
 </script>

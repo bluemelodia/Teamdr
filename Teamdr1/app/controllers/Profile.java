@@ -112,7 +112,8 @@ public class Profile extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
 
         List<Notification> allNotifs = Notification.getNotifs(thisUser.username);
-        return ok(toJson(allNotifs));
+        String notifsJson = toJson(allNotifs).toString();
+        return ok(views.html.notifications.render(notifsJson));
     }
 
     public Result showNotifications() {
