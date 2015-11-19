@@ -41,6 +41,12 @@ function createClassForms() {
                     value:"Leave Class", 
                     type:"form",
                     click:"location.href='/leaveClass?classId=@classId'"
+                  },
+                  { id: "bthShowTeam@classId",
+                    view:"button",
+                    value:"Show Team Details",
+                    type:"form",
+                    click:"location.href='/teamDetails?classId=@classId'"
                   }
               ]}
           ]

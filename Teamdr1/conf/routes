@@ -28,6 +28,7 @@ POST    /createTeam                controllers.Team.createTeam()
 GET     /setCurrentClass           controllers.Team.setCurrentClass(classId: String)
 GET     /leaveTeam                 controllers.Team.leaveTeam(classId: String)
 GET     /leaveClass                controllers.Classes.leaveClass(classId: String)
+GET     /teamDetails               controllers.Team.teamDetails(classId: String)
 
 GET     /notifs                    controllers.Profile.viewNotifications()
 GET     /error                     controllers.Team.showError()

@@ -15,6 +15,12 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
+    public Result teamDetails(String classId) {
+        String user = session("connected");
+        TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
+        return ok(teamdetails.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), myTeam));
+    }
+
     public Result leaveTeam(String classId) {
         String user = session("connected");
         // Check if the user has a team for this class

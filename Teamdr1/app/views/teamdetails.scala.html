@@ -1,0 +1,36 @@
+@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], teamRecord: TeamRecord)
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css">
+    <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <script type="text/javascript">
+webix.ready(function () {
+    webix.ui({
+      rows:[
+          { view:"template",
+            type:"header", template:"Profile" },
+          { id:"menuBar", view:"menu", data:[
+            {id:"1", value:"Logout", href:"/logout"},
+            {id:"2", value:"Back to Profile", href:"/profile"}
+          ]},
+          @if(teamRecord != null) {
+            { view:"template", template:"<h1>Team Name: @teamRecord.teamName</h1><br/>Team ID: @teamRecord.tid<br/>Class: @teamRecord.thisClass" },
+          } else {
+            {view:"template", template:"<h1>You are not in a team for this class.</h1><br/>"},
+          }
+        {
+        id: "classForms", rows: []
+        }
+        ]
+        });
+        });
+    </script>
+  </body>
+</html>
