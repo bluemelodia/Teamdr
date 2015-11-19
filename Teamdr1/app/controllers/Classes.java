@@ -1,5 +1,8 @@
 package controllers;
 
+import models.Notification;
+import models.UserAccount;
+import models.UserProfile;
 import play.mvc.Controller;
 import play.data.Form;
 import play.mvc.Result;
@@ -13,6 +16,11 @@ import java.util.List;
 
 public class Classes extends Controller {
     private static final Form<ClassRecord> ClassForm = Form.form(ClassRecord.class);
+
+    public Result leaveClass(String classId) {
+        String user = session("connected");
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+    }
 
     public Result retrieveClass() {
         return ok(classes.render(ClassForm));

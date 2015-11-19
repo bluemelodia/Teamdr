@@ -29,12 +29,22 @@ function createClassForms() {
                     value:"Team Search", 
                     type:"form",
                     click:"location.href='/setCurrentClass?classId=@classId'"
+                  },
+                  { id: "btnLeaveTeam@classId",
+                    view:"button",
+                    value:"Leave Team", 
+                    type:"form",
+                    click:"location.href='/leaveTeam?classId=@classId'"
+                  },
+                  { id: "btnLeaveClass@classId",
+                    view:"button",
+                    value:"Leave Class", 
+                    type:"form",
+                    click:"location.href='/leaveClass?classId=@classId'"
                   }
               ]}
           ]
       }, -1);
-
-
   }
 }
 

@@ -17,6 +17,11 @@ import static play.libs.Json.toJson;
 public class Team extends Controller {
     //public static String currentClass = "";
 
+    public Result leaveTeam(String classId) {
+        String user = session("connected");
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+    }
+
     public Result list() {
         return TODO;
     }
