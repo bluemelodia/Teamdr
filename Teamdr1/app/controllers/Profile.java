@@ -25,48 +25,53 @@ import static play.libs.Json.toJson;
 public class Profile extends Controller {
 	
 	private static final Form<UserProfile> ProfileForm = Form.form(UserProfile.class);
-		
+
     public Result viewProfile() {
         String user = session("connected");
-        if (user == null) { // unauthorized user login, kick them back to login screen
-            return redirect(routes.Account.signIn());
-        }
-        UserAccount getUser = UserAccount.getUser(user);
-
-        ArrayList<ClassRecord> classes2 = new ArrayList<ClassRecord>();
-        String userClasses = UserAccount.allClasses(user);
-        if (userClasses.length() > 1) {
-            System.out.println("here");
-            String[] userClassArray = userClasses.split("");
-            System.out.println("here");
-            for (int i = 0; i < userClassArray.length; i++) {
-                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
-                classes2.add(thisClass);
-            }
-        } else {
-            System.out.println("else");
-        }
-        System.out.println(classes2.size());
-        for (int i = 0; i < classes2.size(); i++) {
-            System.out.println("heretoo");
-            ClassRecord currentClass = classes2.get(i);
-            System.out.println(currentClass);
-            System.out.println("gotten");
-            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
-        }
-        // If the user has notifications, show them
-        String notifs = "You have no notifications.";
-        if (Notifications.hasNotifs(getUser.username)) {
-            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
-        }
-        System.out.println("HERE");
-        JsonNode user_json = toJson(getUser);
-		JsonNode class_json = toJson(classes2);
-        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
-        JsonNode notifs_json = toJson(notifs);
-        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
-        //return ok(update_profile.render());
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
     }
+
+//    public Result viewProfile() {
+//        String user = session("connected");
+//        if (user == null) { // unauthorized user login, kick them back to login screen
+//            return redirect(routes.Account.signIn());
+//        }
+//        UserAccount getUser = UserAccount.getUser(user);
+//
+//        ArrayList<ClassRecord> classes2 = new ArrayList<ClassRecord>();
+//        String userClasses = UserAccount.allClasses(user);
+//        if (userClasses.length() > 1) {
+//            System.out.println("here");
+//            String[] userClassArray = userClasses.split("");
+//            System.out.println("here");
+//            for (int i = 0; i < userClassArray.length; i++) {
+//                ClassRecord thisClass = ClassRecord.getClass(userClassArray[i].trim());
+//                classes2.add(thisClass);
+//            }
+//        } else {
+//            System.out.println("else");
+//        }
+//        System.out.println(classes2.size());
+//        for (int i = 0; i < classes2.size(); i++) {
+//            System.out.println("heretoo");
+//            ClassRecord currentClass = classes2.get(i);
+//            System.out.println(currentClass);
+//            System.out.println("gotten");
+//            System.out.println("Class array: " + currentClass.className + " " + currentClass.classID);
+//        }
+//        // If the user has notifications, show them
+//        String notifs = "You have no notifications.";
+//        if (Notifications.hasNotifs(getUser.username)) {
+//            notifs = "You have " + Notifications.countNotifs(getUser.username) + " notifications";
+//        }
+//        System.out.println("HERE");
+//        JsonNode user_json = toJson(getUser);
+//		JsonNode class_json = toJson(classes2);
+//        JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
+//        JsonNode notifs_json = toJson(notifs);
+//        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
+//        //return ok(update_profile.render());
+//    }
 
     public Result showUpdateProfilePage() {
         return ok(update_profile.render(ProfileForm));
@@ -157,7 +162,9 @@ public class Profile extends Controller {
         //return redirect(routes.Profile.viewProfile());
         System.out.println("class: " + classsRecord + " profile: " + p.description + " notifs: " + notifs);
         System.out.println("RENDERING");
-		return ok(profile.render(user_json, class_json, profile_json, notifs_json));
+		//return ok(profile.render(user_json, class_json, profile_json, notifs_json));
+
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
     }
 
     public Result viewNotifications() {
@@ -306,8 +313,9 @@ public class Profile extends Controller {
 		JsonNode class_json = toJson(classes);
         JsonNode profile_json = toJson(UserProfile.getUser(getUser.username).description);
         JsonNode notifs_json = toJson(notifs);
-        return ok(profile.render(user_json, class_json, profile_json, notifs_json));
-	}
+        //return ok(profile.render(user_json, class_json, profile_json, notifs_json));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user)));
+    }
 	
 	/*public UserProfile updateProfile(Form<UserProfile> profileForm){ 
 		UserProfile profile = profileForm.get();

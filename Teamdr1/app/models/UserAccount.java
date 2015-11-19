@@ -76,7 +76,14 @@ public class UserAccount extends Model {
                 return;
             }
         }
-        me.allClasses += classID + "|";
+
+        StringBuilder sb = new StringBuilder();
+        for (String myClass : myClasses) {
+            sb.append("|" + myClass);
+        }
+        sb.append("|" + classID);
+
+        me.allClasses = sb.substring(1);
         System.out.println("AllClasses: " + me.allClasses);
         Ebean.save(me);
     }
