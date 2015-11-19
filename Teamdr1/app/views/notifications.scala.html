@@ -91,7 +91,7 @@ function getNotifs() {
         } else {
             $$('notifForms').addView(createForm2(notif), -1);
             $$('btnOk' + notif.notifID).attachEvent("onItemClick", function(id) {
-                ok(id.substring(9));
+                ok(id.substring(5));
             });
         }
     }
