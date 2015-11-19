@@ -46,6 +46,7 @@ public class Team extends Controller {
         // Notify the rest of the team that you have left the team
         String message = user + " has left team " + myTeam.teamName + " for " + classId;
         for (String member: teamMembers) {
+            if (member.equals(user)) continue; // don't need to message yourself
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
