@@ -17,6 +17,7 @@ import play.libs.F.*;
 import play.twirl.api.Content;
 
 import controllers.Team;
+import models.TeamRecord;
 
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
@@ -28,6 +29,8 @@ import play.db.Databases;
 import play.db.evolutions.*;
 import java.sql.Connection;
 
+import play.libs.ws.*;
+import play.libs.F.*;
 
 
 /**
@@ -38,13 +41,22 @@ import java.sql.Connection;
 */
 public class TeamTest extends WithApplication {
 
+    // private final WSClient WS;
+
     @Test
     public void simplerCheck() {
+        // List<TeamRecord> b = TeamRecord.findAll();
+        // System.out.println(b.get(1).tid);
         int a = 1 * 1;
         assertEquals(1, a);
     }
 
-
+    // @Test
+    // public void testInServer() {
+    //     running(testServer(3333), () -> {
+    //         assertEquals(OK, WS.url("http://localhost:3333").get().get(1000).getStatus());
+    //     });
+    // }
 
     //Testing Team-related routes
     @Test
