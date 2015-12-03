@@ -16,8 +16,18 @@ import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
 
+import controllers.Team;
+
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
+
+import play.mvc.Http.RequestBuilder;
+
+import play.db.Database;
+import play.db.Databases;
+import play.db.evolutions.*;
+import java.sql.Connection;
+
 
 
 /**
@@ -26,12 +36,55 @@ import static org.junit.Assert.*;
 * If you are interested in mocking a whole application, see the wiki for more details.
 *
 */
-public class TeamTest {
+public class TeamTest extends WithApplication {
 
     @Test
     public void simplerCheck() {
         int a = 1 * 1;
         assertEquals(1, a);
+    }
+
+
+
+    //Testing Team-related routes
+    @Test
+    public void testTeamRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/team");
+
+        Result result = route(request);
+        assertEquals(303, result.status());
+    }
+
+    @Test
+    public void testLeaveTeamRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/leaveTeam");
+
+        Result result = route(request);
+        assertEquals(400, result.status());
+    }
+
+    @Test
+    public void testCreateTeamRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/createTeam");
+
+        Result result = route(request);
+        assertEquals(303, result.status());
+    }
+
+    @Test
+    public void testTeamDetailRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/teamDetails");
+
+        Result result = route(request);
+        assertEquals(400, result.status());
     }
 
 
