@@ -58,7 +58,27 @@ public class TeamTest extends WithApplication {
     //     });
     // }
 
+    @Test
+    public void testTeamPage() {
+        // Result result = new Application().index();
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/team");
 
+        Result result = route(request);
+
+
+        TeamRecord.createTeamRecord("4111", "ab", "baaaaa", "COMS4112");
+        //String tid, UserAccount user, String teamName, String thisClass
+        System.out.println(contentAsString(result));
+
+        // assertEquals(OK, result.status());
+        // assertEquals("text/html", result.contentType());
+        // assertEquals("utf-8", result.charset());
+        // assertTrue(contentAsString(result).contains("Username"));
+        // assertTrue(contentAsString(result).contains("Password"));
+
+    }
 
     //Testing Team-related routes
     @Test
