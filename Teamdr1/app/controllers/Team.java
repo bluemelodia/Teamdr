@@ -44,13 +44,15 @@ public class Team extends Controller {
                 myTeam.teamMembers = myTeam.teamMembers.replace(user + " ", ""); // purge user from team
             }
         }
-        if (myTeam.teamMembers.split(" ").length < 1) { // no people left, delete the newly emptied team
+        System.out.println("TEAM " + myTeam.tid + " has " + myTeam.teamMembers.trim().length());
+        if (myTeam.teamMembers.trim().length() < 1) { // no people left, delete the newly emptied team
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
                 if (team.tid.equals(myTeam.tid)) continue;
                 team.seenTeams.replace(myTeam.tid + " ", "");
             }
             myTeam.delete();
+            myTeam.save();
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
 
@@ -181,8 +183,12 @@ public class Team extends Controller {
         System.out.println("REQUEST: " + values);
         String thisTeam = values.get("acceptedTeam")[0];
         if (!TeamRecord.exists(thisTeam)) {
-            return redirect(routes.Team.showTeams());
+            System.out.println("The team does not exist anymore!!!!");
+            JsonNode errorJson = toJson("The team you swiped right on was already disbanded.");
+            return ok(errorPage.render(errorJson));
+            //return redirect(routes.Team.showTeams());
         }
+        System.out.println("This team exists!!!!!");
         System.out.println("RIGHT: " + thisTeam);
         TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
 
