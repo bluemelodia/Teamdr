@@ -61,40 +61,40 @@ public class TeamTest extends WithApplication {
     //     });
     // }
 
-    @Test
-    public void testTeamPage() {
+    // @Test
+    // public void testTeamPage() {
 
-        // Result result = new Application().index();
+    //     // Result result = new Application().index();
        
-        // UserAccount ab = new UserAccount();
-        // ab.username = "Anfal";
-        // ab.password = "b";
-        // ab.addProfile("ba", "baa");
+    //     // UserAccount ab = new UserAccount();
+    //     // ab.username = "Anfal";
+    //     // ab.password = "b";
+    //     // ab.addProfile("ba", "baa");
 
-        // TeamRecord.createTeamRecord("4111", ab, "baaaaa", "COMS4112");
+    //     // TeamRecord.createTeamRecord("4111", ab, "baaaaa", "COMS4112");
 
-        // Team bab = new Team();
-        // // String r = bab.showError();
-        // System.out.println(bab.showError());
+    //     // Team bab = new Team();
+    //     // // String r = bab.showError();
+    //     // System.out.println(bab.showError());
 
 
-        // RequestBuilder request = new RequestBuilder()
-        //     .method(GET)
-        //     .uri("/team");
+    //     // RequestBuilder request = new RequestBuilder()
+    //     //     .method(GET)
+    //     //     .uri("/team");
 
-        // Result result = route(request);
+    //     // Result result = route(request);
 
-        // System.out.println("RESULT:" + contentAsString(result));
+    //     // System.out.println("RESULT:" + contentAsString(result));
 
-        // Ebean.delete(TeamRecord.getTeam("4111"));
+    //     // Ebean.delete(TeamRecord.getTeam("4111"));
 
-        // assertEquals(OK, result.status());
-        // assertEquals("text/html", result.contentType());
-        // assertEquals("utf-8", result.charset());
-        // assertTrue(contentAsString(result).contains("Username"));
-        // assertTrue(contentAsString(result).contains("Password"));
+    //     // assertEquals(OK, result.status());
+    //     // assertEquals("text/html", result.contentType());
+    //     // assertEquals("utf-8", result.charset());
+    //     // assertTrue(contentAsString(result).contains("Username"));
+    //     // assertTrue(contentAsString(result).contains("Password"));
 
-    }
+    // }
 
     //Testing Team-related routes
     @Test
