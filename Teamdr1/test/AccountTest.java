@@ -33,6 +33,11 @@ import play.libs.ws.*;
 import play.libs.F.*;
 
 import controllers.Team;
+import models.UserAccount;
+
+
+import com.avaje.ebean.Ebean;
+
 
 // import com.google.common.collect.ImmutableMap;
 /**
@@ -50,6 +55,36 @@ public class AccountTest extends WithApplication{
         int a = 5 * 1;
         assertEquals(5, a);
     }
+
+    @Test
+    public void testExists() {
+
+    	UserAccount acc = new UserAccount();
+    	acc.username = "username";
+    	acc.password = "password";
+    	Ebean.save(acc);
+
+    	Boolean exists = UserAccount.exists("username");
+    	assertTrue(exists);
+
+    	Ebean.delete(acc);
+    }
+
+    @Test
+    public void testGetUser() {
+
+    	UserAccount acc = new UserAccount();
+    	acc.username = "username";
+    	acc.password = "password";
+    	Ebean.save(acc);
+
+    	UserAccount acc_2 = UserAccount.getUser("username");
+    	assertEquals(acc, acc_2);
+
+    	Ebean.delete(acc);
+
+    }
+
 
 	@Test
   	public void testLogin() {
