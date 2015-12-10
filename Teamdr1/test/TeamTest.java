@@ -18,6 +18,7 @@ import play.twirl.api.Content;
 
 import controllers.Team;
 import models.TeamRecord;
+import models.UserAccount;
 
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
@@ -32,6 +33,8 @@ import java.sql.Connection;
 import play.libs.ws.*;
 import play.libs.F.*;
 
+
+import com.avaje.ebean.Ebean;
 
 /**
 *
@@ -60,17 +63,30 @@ public class TeamTest extends WithApplication {
 
     @Test
     public void testTeamPage() {
+
         // Result result = new Application().index();
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/team");
+       
+        // UserAccount ab = new UserAccount();
+        // ab.username = "Anfal";
+        // ab.password = "b";
+        // ab.addProfile("ba", "baa");
 
-        Result result = route(request);
+        // TeamRecord.createTeamRecord("4111", ab, "baaaaa", "COMS4112");
+
+        // Team bab = new Team();
+        // // String r = bab.showError();
+        // System.out.println(bab.showError());
 
 
-        TeamRecord.createTeamRecord("4111", "ab", "baaaaa", "COMS4112");
-        //String tid, UserAccount user, String teamName, String thisClass
-        System.out.println(contentAsString(result));
+        // RequestBuilder request = new RequestBuilder()
+        //     .method(GET)
+        //     .uri("/team");
+
+        // Result result = route(request);
+
+        // System.out.println("RESULT:" + contentAsString(result));
+
+        // Ebean.delete(TeamRecord.getTeam("4111"));
 
         // assertEquals(OK, result.status());
         // assertEquals("text/html", result.contentType());
