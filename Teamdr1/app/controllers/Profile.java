@@ -5,6 +5,7 @@ import models.*;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.errorPage;
 import views.html.profile;
 import views.html.update_profile;
 
@@ -216,6 +217,9 @@ public class Profile extends Controller {
                 ClassRecord thisClass = ClassRecord.getClass(userClass);
                 classes.add(thisClass);
             }
+        } else {
+            JsonNode errorJson = toJson("The class you tried to add does not exist.");
+            return ok(errorPage.render(errorJson));
         }
         return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
