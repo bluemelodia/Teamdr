@@ -1,5 +1,5 @@
 @import com.fasterxml.jackson.databind.JsonNode
-@(teamRecords: JsonNode)(teamDetails: JsonNode)(className: JsonNode)
+@(teamRecords: JsonNode)(teamDetails: JsonNode)(className: JsonNode)(error: JsonNode)
 @main("Teams") {
 
     <table align="center" width=743 bgcolor=#000000>
@@ -40,5 +40,6 @@
                 </fieldset>
             }
         </tr>
+        @error.asText()
     </table>
 }

@@ -10,7 +10,6 @@ import views.html.*;
 import java.util.*;
 
 import static play.libs.Json.toJson;
-// TODO: if the user does not have a team anymore, redirect them to the create Team page
 /**
  * Created by anfalboussayoud on 11/11/15.
  */
@@ -169,7 +168,8 @@ public class Team extends Controller {
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
             JsonNode className = toJson(thisUser.currentClass);
-            return ok(team.render(currentTeamJSON, teamMembers, className));
+            JsonNode errorMessage = toJson("");
+            return ok(team.render(currentTeamJSON, teamMembers, className, errorMessage));
         }
     }
 
@@ -183,9 +183,15 @@ public class Team extends Controller {
         System.out.println("REQUEST: " + values);
         String thisTeam = values.get("acceptedTeam")[0];
         if (!TeamRecord.exists(thisTeam)) {
-            System.out.println("The team does not exist anymore!!!!");
-            JsonNode errorJson = toJson("The team you swiped right on was already disbanded.");
+            //System.out.println("The team does not exist anymore!!!!");
+            //return redirect(routes.Team.showTeams());
+            //return badRequest(routes.Team.showTeams());
+
+            JsonNode errorJson = toJson("This team was already disbanded");
             return ok(errorPage.render(errorJson));
+            //form.reject("password", "Incorrect password.");
+            //return badRequest(login.render(form))
+            //
             //return redirect(routes.Team.showTeams());
         }
         System.out.println("This team exists!!!!!");
