@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.*;
-import javaguide.tests.controllers.Application;
+// import javaGuide.tests.controllers.Application;
 import play.mvc.*;
 import play.test.*;
 import play.data.DynamicForm;
@@ -34,7 +34,7 @@ import play.libs.F.*;
 
 import controllers.Team;
 
-import com.google.common.collect.ImmutableMap;
+// import com.google.common.collect.ImmutableMap;
 /**
 *
 * Simple (JUnit) tests that can call all parts of a play app.
@@ -51,20 +51,55 @@ public class AccountTest extends WithApplication{
         assertEquals(5, a);
     }
 
-	@Override
-	  protected FakeApplication provideFakeApplication() {
-	    return new FakeApplication(new java.io.File("."), Helpers.class.getClassLoader(),
-	        ImmutableMap.of("play.http.router", "javaguide.tests.Routes"), new ArrayList<String>(), null);
-	  }
-
 	@Test
-  	public void testIndex() {
-    	Result result = new Application().index();
+  	public void testLogin() {
+    	// Result result = new Application().index();
+    	RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/login");
+
+        Result result = route(request);
+        // System.out.println(contentAsString(result));
+
     	assertEquals(OK, result.status());
     	assertEquals("text/html", result.contentType());
     	assertEquals("utf-8", result.charset());
-    	assertTrue(contentAsString(result).contains("Welcome"));
+    	assertTrue(contentAsString(result).contains("Username"));
+
   	}
+
+  	//test Account Routes
+
+  	// @Test
+   //  public void testSignupRoute() {
+   //      RequestBuilder request = new RequestBuilder()
+   //          .method(GET)
+   //          .uri("/signup");
+
+   //      Result result = route(request);
+   //      assertEquals(200, result.status());
+   //  }
+
+  	@Test
+    public void testLoginRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/login");
+
+        Result result = route(request);
+        assertEquals(200, result.status());
+    }
+
+  	@Test
+    public void testLogoutRoute() {
+        RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/logout");
+
+        Result result = route(request);
+        assertEquals(303, result.status());
+    }
+
 
 
 }
