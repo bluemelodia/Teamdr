@@ -34,9 +34,9 @@ public class Classes extends Controller {
         }
         System.out.println("Team members: " + myTeam.teamMembers);
         System.out.println("User purged"); // TODO: check this works*
-        System.out.println("Team " + myTeam.tid + " has " + myTeam.teamMembers.trim().length());
+        System.out.println("TEAM " + myTeam.tid + " has " + myTeam.teamMembers.trim().length());
         if (myTeam.teamMembers.trim().length() < 1) { // no people left, delete the newly emptied team
-            System.out.println("Purge team: " + myTeam.tid);
+            System.out.println("PURGE team: " + myTeam.tid);
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
                 if (team.tid.equals(myTeam.tid)) continue;
@@ -44,6 +44,7 @@ public class Classes extends Controller {
             }
             myTeam.delete();
             userAccount.removeClass(classId);
+            myTeam.save();
             return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
 
