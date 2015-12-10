@@ -32,8 +32,11 @@ public class Classes extends Controller {
                 myTeam.teamMembers = myTeam.teamMembers.replace(user + " ", ""); // purge user from team
             }
         }
-        System.out.println("User purged");
-        if (myTeam.teamMembers.split(" ").length < 1) { // no people left, delete the newly emptied team
+        System.out.println("Team members: " + myTeam.teamMembers);
+        System.out.println("User purged"); // TODO: check this works*
+        System.out.println("Team " + myTeam.tid + " has " + myTeam.teamMembers.trim().length());
+        if (myTeam.teamMembers.trim().length() < 1) { // no people left, delete the newly emptied team
+            System.out.println("Purge team: " + myTeam.tid);
             List<TeamRecord> allTeams = TeamRecord.findAll();
             for (TeamRecord team: allTeams) { // remove this team from all seen lists
                 if (team.tid.equals(myTeam.tid)) continue;
