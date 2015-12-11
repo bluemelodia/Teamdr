@@ -35,17 +35,28 @@
                             ]
                             }},
                             { margin:5, cols:[
-                                {id:"btnSignUp", view:"button", type:"form", value:"Update", click:"update()"},
-                                {id:"btnLogin", view:"button", value:"Cancel", click:"location.href='/profile'"}
+                                {id:"btnUpdateProfile", view:"button", type:"form", value:"Update", click:"update()"},
+                                {id:"btnCancelUpdate", view:"button", value:"Cancel", click:"location.href='/profile'"}
                                 ]
                             },
                         ]
                     },
-                    {view:"radio", label:"Add Class", value:1, options:[
-                        {id:1, value:"Class1"},
-                        {id:2, value:"Class2"}
-                    ]},
-                    {view:"template", id:"announcements", template:"Hi", autoheight:true}
+                    {view:"template", id:"announcements", template:"Hi", autoheight:true},
+                    {
+                        view:"form",
+                        id: "myform2",
+                        elements:[
+                            { view:"fieldset", label:"Add Class", body:{
+                            rows:[
+                                { name:"newClass", view:"text", label:"ClassID", labelWidth:250, attributes:{ maxlength :40 }}
+                            ]
+                            }},
+                            { margin:5, cols:[
+                                {id:"btnAddClass", view:"button", type:"form", value:"Add", click:"addClass()"}
+                                ]
+                            },
+                        ]
+                    }
                 ]
             });
         });
