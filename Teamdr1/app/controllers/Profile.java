@@ -190,13 +190,13 @@ public class Profile extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
+        JsonNode json = request().body().asJson();
+        String newClass = json.get("newClass").toString().replaceAll("[^A-Za-z0-9-]", "");
+
         UserAccount userAccount = UserAccount.getUser(user);
 		UserProfile p = UserProfile.getUser(user);
 
         boolean foundClass = false;
-		final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String classID = values.get("classID")[0];
-        System.out.println("ClassID to find: " + classID);
         String className = null;
 
         List<ClassRecord> cs = ClassRecord.findAll();
@@ -208,7 +208,7 @@ public class Profile extends Controller {
         int i;
         for(i=0; i<cs.size(); i++){
             c =  cs.get(i);
-            if(c.classID.equals(classID)) {
+            if(c.classID.equals(newClass)) {
                 className = c.className;
                 foundClass = true;
                 break;
@@ -218,17 +218,26 @@ public class Profile extends Controller {
         ArrayList<ClassRecord> classes = new ArrayList<ClassRecord>();
 		//String className = values.get("className")[0];
 		if (foundClass) {
-            userAccount.addClass(classID);
-            System.out.println("ADDED CLASS: " + classID + " CLASS NAME: " + className);
+            // Does the user already have this class?
+            List<String> userClasses = userAccount.getClassList();
+            System.out.println("MY CLASSES: " + userClasses);
+            if (userClasses.contains(newClass)) {
+                String errorMessage = newClass + " is already in your schedule.";
+                return badRequest(toJson(errorMessage));
+            }
+
+            userAccount.addClass(newClass);
+            System.out.println("ADDED CLASS: " + newClass + " CLASS NAME: " + className);
             for (String userClass: userAccount.getClassList()) {
                 ClassRecord thisClass = ClassRecord.getClass(userClass);
                 classes.add(thisClass);
             }
         } else {
-            JsonNode errorJson = toJson("The class you tried to add does not exist.");
-            return ok(errorPage.render(errorJson));
+            String errorMessage = newClass + " does not exist.";
+            return badRequest(toJson(errorMessage));
         }
-        String announcement = "You have added " + classID;
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+
+        String successMessage = "You added " + newClass + ".";
+        return ok(toJson(successMessage));
     }
 }
