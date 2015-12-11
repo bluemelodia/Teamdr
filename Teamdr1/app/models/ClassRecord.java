@@ -30,6 +30,13 @@ public class ClassRecord extends Model {
         Ebean.save(newRecord);
 	}
 
+    public static void deleteClass(String classID){
+        ClassRecord oldRecord = find.ref(classID);
+        Ebean.delete(oldRecord);
+    }
+
+
+
     // figure out how many classes there are
     public static int getNumClasses() {
         List<ClassRecord> allClasses = findAll();
