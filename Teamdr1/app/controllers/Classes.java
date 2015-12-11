@@ -18,13 +18,15 @@ public class Classes extends Controller {
         String user = session("connected");
         UserAccount userAccount = UserAccount.getUser(user);
 
-        // Check if the user has a team for this class
+        // Check if the user has a team for this class; if not, drop them from the class straight away
         if (TeamRecord.getTeamForClass(user, classId) == null) {
             userAccount.removeClass(classId);
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            String announcement = "You have dropped " + classId;
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
         }
-        System.out.println("User has a team for this class");
+        // User has a team for this class
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
+        String oldTeam = myTeam.tid;
         String[] teamMembers = myTeam.teamMembers.split(" ");
         for (String member: teamMembers) {
             if (member.equals(user)) {
@@ -42,10 +44,12 @@ public class Classes extends Controller {
                 if (team.tid.equals(myTeam.tid)) continue;
                 team.seenTeams.replace(myTeam.tid + " ", "");
             }
+            String teamName = myTeam.tid;
             myTeam.delete();
             userAccount.removeClass(classId);
             myTeam.save();
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            String announcement = "Team " + teamName + " has disbanded.";
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
         }
 
         System.out.println(myTeam.teamMembers);
@@ -60,7 +64,8 @@ public class Classes extends Controller {
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
         userAccount.removeClass(classId);
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        String announcement = "Because you have dropped " + classId + ", you were removed from team " + oldTeam;
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     public Result retrieveClass() {

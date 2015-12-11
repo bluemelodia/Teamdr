@@ -32,10 +32,12 @@ public class Team extends Controller {
         String user = session("connected");
         // Check if the user has a team for this class
         if (TeamRecord.getTeamForClass(user, classId) == null) {
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            String announcement = "You don't have a team for " + classId;
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
         }
 
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
+        String oldTeam = myTeam.tid;
         String[] teamMembers = myTeam.teamMembers.split(" ");
         for (String member: teamMembers) {
             if (member.equals(user)) {
@@ -50,9 +52,11 @@ public class Team extends Controller {
                 if (team.tid.equals(myTeam.tid)) continue;
                 team.seenTeams.replace(myTeam.tid + " ", "");
             }
+            String teamName = myTeam.tid;
             myTeam.delete();
             myTeam.save();
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            String announcement = "Team " + teamName + " has disbanded.";
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
         }
 
         System.out.println(myTeam.teamMembers);
@@ -65,7 +69,8 @@ public class Team extends Controller {
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        String announcement = "You have left " + oldTeam;
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     // Retrieve a team that you have not yet seen

@@ -1,4 +1,4 @@
-@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification])
+@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], message: String)
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -10,6 +10,7 @@
 	</script>
 </head>
 <body>
+
 <script type="text/javascript">
 
 function createClassForms() {
@@ -71,7 +72,8 @@ webix.ready(function () {
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Update Profile", href:"/update"}
           ]},
-          { view:"template", template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
+          {view:"template", id:"announcements", template:"@message", autoheight:true},
+          { view:"template", autoheight:true, template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
           {
             id: "classForms", rows: []
           }
@@ -80,6 +82,7 @@ webix.ready(function () {
 
     createClassForms();
     checkNotifs();
+    checkMessages();
 });
 
 </script>

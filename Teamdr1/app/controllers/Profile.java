@@ -24,7 +24,8 @@ public class Profile extends Controller {
 
     public Result viewProfile() {
         String user = session("connected");
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        String announcement = "";
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     public Result showUpdateProfilePage() {
@@ -84,7 +85,8 @@ public class Profile extends Controller {
 		p.save();
 
         UserAccount getUser = UserAccount.getUser(user);
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        String announcement = "Updated profile.";
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     public Result viewNotifications() {
@@ -221,6 +223,7 @@ public class Profile extends Controller {
             JsonNode errorJson = toJson("The class you tried to add does not exist.");
             return ok(errorPage.render(errorJson));
         }
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        String announcement = "You have added " + classID;
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 }
