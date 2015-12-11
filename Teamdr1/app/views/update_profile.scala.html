@@ -45,6 +45,21 @@
             });
         }
 
+        function viewClasses() {
+            alert("Classes:\n" +
+             "COMS3157 : Advanced Programming\n" +
+             "COMS4111 : Intro to Databases\n" +
+             "COMS4112 : Database Systems Implementation\n" +
+             "COMS4115 : Programming Languages and Translators\n" +
+             "COMS4118 : Operating Systems\n" +
+             "COMS4119 : Computer Networks\n" +
+             "COMS4156 : Advanced Software Engineering\n" +
+             "COMS6111 : Advanced Databases\n" +
+             "COMS6156 : Topics in Software Engineering\n" +
+             "COMS6998-7 : Micro-Service Apps and APIs"
+             );
+        }
+
         function set_profile(){
             $$('myform').setValues({
                 email: "@userProfile.email",
@@ -90,6 +105,7 @@
                             }},
                             { margin:5, cols:[
                                 {id:"btnAddClass", view:"button", type:"form", value:"Add", click:"addClass()"},
+                                {id:"btnSeeClasses", view:"button", value:"View Available Clases", click:"viewClasses()"},
                                 {id:"btnCancelAdd", view:"button", value:"Cancel", click:"location.href='/profile'"}
                                 ]
                             },

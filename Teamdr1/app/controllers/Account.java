@@ -64,7 +64,7 @@ public class Account extends Controller {
         System.out.println("SIGNING UP");
 
         int numberOfClasses = ClassRecord.getNumClasses();
-        if (numberOfClasses < 1) {
+        if (numberOfClasses < 1 && numberOfClasses <= 10) {
             ClassRecord.createNewClass("COMS4111", "Intro to Databases");
             ClassRecord.createNewClass("COMS4118", "Operating Systems");
             ClassRecord.createNewClass("COMS4156", "Advanced Software Engineering");
