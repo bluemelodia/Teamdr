@@ -48,89 +48,89 @@ import com.avaje.ebean.Ebean;
 */
 public class ClassTest extends WithApplication{
 
-    @Test
-    public void testcreateNewClass() {
-      ClassRecord.createNewClass("classID", "className");
+   //  @Test
+   //  public void testcreateNewClass() {
+   //    ClassRecord.createNewClass("classID", "className");
 
-      assertTrue(ClassRecord.exists("classID"));
+   //    assertTrue(ClassRecord.exists("classID"));
 
-      ClassRecord.deleteClass("classID");
+   //    ClassRecord.deleteClass("classID");
 
-    }
+   //  }
 
-    @Test
-    public void testgetNumClasses() {
+   //  @Test
+   //  public void testgetNumClasses() {
 
-      ClassRecord.createNewClass("classID", "className");
+   //    ClassRecord.createNewClass("classID", "className");
 
-      int classSize = ClassRecord.getNumClasses();
-      assertTrue(classSize >0);
-
-
-      ClassRecord.deleteClass("classID");
-
-    }
-
-    @Test
-    public void testClassFindList() {
-
-      ClassRecord.createNewClass("classID", "className");
-      ClassRecord.createNewClass("classID2", "className2");
+   //    int classSize = ClassRecord.getNumClasses();
+   //    assertTrue(classSize >0);
 
 
-      List<ClassRecord> class_list = ClassRecord.findAll();
+   //    ClassRecord.deleteClass("classID");
 
-      // System.out.println(acc_list.getClass().getName());
+   //  }
 
-      assertEquals("com.avaje.ebean.common.BeanList", class_list.getClass().getName());
+   //  @Test
+   //  public void testClassFindList() {
 
-      ClassRecord.deleteClass("classID");
-      ClassRecord.deleteClass("classID2");
-
-    }
+   //    ClassRecord.createNewClass("classID", "className");
+   //    ClassRecord.createNewClass("classID2", "className2");
 
 
-  	//test Account Routes
+   //    List<ClassRecord> class_list = ClassRecord.findAll();
 
-  	@Test
-    public void testAddClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(POST)
-            .uri("/addClass");
+   //    // System.out.println(acc_list.getClass().getName());
 
-        Result result = route(request);
-        assertEquals(303, result.status());
-    }
+   //    assertEquals("com.avaje.ebean.common.BeanList", class_list.getClass().getName());
 
-    @Test
-    public void testClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/class");
+   //    ClassRecord.deleteClass("classID");
+   //    ClassRecord.deleteClass("classID2");
 
-        Result result = route(request);
-        assertEquals(200, result.status());
-    }
+   //  }
+
+
+  	// //test Account Routes
+
+  	// @Test
+   //  public void testAddClassRoute() {
+   //      RequestBuilder request = new RequestBuilder()
+   //          .method(POST)
+   //          .uri("/addClass");
+
+   //      Result result = route(request);
+   //      assertEquals(303, result.status());
+   //  }
+
+   //  @Test
+   //  public void testClassRoute() {
+   //      RequestBuilder request = new RequestBuilder()
+   //          .method(GET)
+   //          .uri("/class");
+
+   //      Result result = route(request);
+   //      assertEquals(200, result.status());
+   //  }
     
-    @Test
-    public void testSetClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/setCurrentClass");
+   //  @Test
+   //  public void testSetClassRoute() {
+   //      RequestBuilder request = new RequestBuilder()
+   //          .method(GET)
+   //          .uri("/setCurrentClass");
 
-        Result result = route(request);
-        assertEquals(400, result.status());
-    }
+   //      Result result = route(request);
+   //      assertEquals(400, result.status());
+   //  }
 
-    @Test
-    public void testLeaveClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/leaveClass");
+   //  @Test
+   //  public void testLeaveClassRoute() {
+   //      RequestBuilder request = new RequestBuilder()
+   //          .method(GET)
+   //          .uri("/leaveClass");
 
-        Result result = route(request);
-        assertEquals(400, result.status());
-    }
+   //      Result result = route(request);
+   //      assertEquals(400, result.status());
+   //  }
 
 
 }
