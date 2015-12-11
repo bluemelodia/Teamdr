@@ -11,6 +11,21 @@
     <body>
         <script type="text/javascript">
 
+        function signup() {
+            var credentials = $$("myform").getValues();
+            $.ajax({
+                    url: '/signup',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(credentials),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jgXHR) {
+                        location.href = '/profile';
+                    }, error: function() {
+                        alert("User already exists, or username/password/email contains invalid characters.");
+                    }
+            });
+        }
 
          webix.ready(function () {
                 webix.ui({
@@ -26,9 +41,8 @@
                             ]
                         }},
                         { margin:5, cols:[
-                                {id:"btnSignUp", view:"button", type:"form", value:"Sign Up", click:"location.href='/signup'"},
+                                {id:"btnSignUp", view:"button", type:"form", value:"Sign Up", click:"signup()"},
                                 {id:"btnLogin", view:"button", value:"Login", click:"location.href='/login'"}
-
                             ]
                         }
                 ]
