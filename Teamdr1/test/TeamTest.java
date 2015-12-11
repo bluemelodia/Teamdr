@@ -96,7 +96,7 @@ public class TeamTest extends WithApplication {
 
     // }
 
-    //Testing Team-related routes
+    // Testing Team-related routes
     @Test
     public void testTeamRoute() {
         RequestBuilder request = new RequestBuilder()
