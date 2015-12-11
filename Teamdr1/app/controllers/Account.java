@@ -1,4 +1,5 @@
 package controllers;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.UserAccount;
 import models.UserProfile;
 import models.ClassRecord;
@@ -15,13 +16,15 @@ import java.util.*;
 public class Account extends Controller {
     // Enables passing of params into the form
     private static final Form<UserAccount> AccountForm = Form.form(UserAccount.class);
-    private static final Form<UserAccount> LoginForm = Form.form(UserAccount.class);
+    //private static final Form<UserAccount> LoginForm = Form.form(UserAccount.class);
     private static final Form<UserAccount> ForgotForm = Form.form(UserAccount.class);
 	private static final Form<UserProfile> ProfileForm = Form.form(UserProfile.class);
 
     public Result createUser() {
+        System.out.println("CREATE USER");
+
         // grab HTML form that was sent to this method, and extracts relevant fields from it
-        Form<UserAccount> form = AccountForm.bindFromRequest();
+        /*Form<UserAccount> form = AccountForm.bindFromRequest();
 		
         if (form.hasErrors()) { // Redirect with error
             return badRequest(account.render(form));
@@ -59,7 +62,7 @@ public class Account extends Controller {
 		//newAccount.updateProfile(username);
 		newAccount.save();
 		
-        session("connected", newAccount.username);
+        session("connected", newAccount.username);*/
         return redirect(routes.Profile.viewProfile());
     }
 
@@ -87,13 +90,18 @@ public class Account extends Controller {
     }
 
     public Result signIn() {
-        return ok(login.render(LoginForm));
+        String message1 = "";
+        String message2 = "";
+        return ok(login.render(message1, message2));
     }
 
     // Validate the user's credentials
     public Result authenticateUser() {
-        Form<UserAccount> form = LoginForm.bindFromRequest();
-        if (form.hasErrors()) { // Redirect with error
+        System.out.println("LOGIN TRY TO");
+        JsonNode json = request().body().asJson();
+
+        //Form<UserAccount> form = LoginForm.bindFromRequest();
+        /*if (form.hasErrors()) { // Redirect with error
 			System.out.println("Error.");
             return badRequest(login.render(form));
         }
@@ -106,10 +114,10 @@ public class Account extends Controller {
         if (!getUser.password.equals(getAccount.password)) {
             form.reject("password", "Incorrect password.");
             return badRequest(login.render(form));
-        }
+        }*/
         // This stores info about the user's session
         // Other classes can fetch the username from here
-        session("connected", getAccount.username);
+        //session("connected", getAccount.username);
         return redirect(routes.Profile.viewProfile());
     }
 
