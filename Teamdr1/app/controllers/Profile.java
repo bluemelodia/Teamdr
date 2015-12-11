@@ -9,9 +9,13 @@ import views.html.errorPage;
 import views.html.profile;
 import views.html.update_profile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.net.URL;
+import java.net.URLConnection;
 
 import static play.libs.Json.toJson;
 
@@ -56,32 +60,24 @@ public class Profile extends Controller {
         // set to the new values
         p.description = description;
         p.pic_url = picture;
+        // if the url doesn't work, set the url to some default
+        try {
+            URL url = new URL(picture);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+        } catch (MalformedURLException e) {
+            p.pic_url = "";
+            System.out.println("MALFORMED URL EXCEPTION");
+            return badRequest(toJson("You provided an invalid photo URL."));
+        } catch (IOException e) {
+            p.pic_url = "";
+            System.out.println("IO EXCEPTION");
+            return badRequest(toJson("You provided an invalid photo URL."));
+        }
+
         p.email = email;
         p.save();
         UserAccount getUser = UserAccount.getUser(user);
-    /*
-
-        if (values.get("pictureURL") == null || (values.get("pictureURL")).toString().trim().length() < 1) {
-            pictureURL = p.pic_url;
-        }
-        else{
-            pictureURL = values.get("pictureURL")[0];
-        }
-
-        if (values.get("description") == null || (values.get("description")).toString().trim().length() < 1) {
-            description = p.email;
-        }
-        else{
-            description = values.get("description")[0];
-        }
-        System.out.println("Email: " + p.email + " url: " + p.pic_url + " description: " + p.description);
-		p.email = email;
-		p.pic_url = pictureURL;
-		p.description = description;
-		System.out.println("Also here");
-		p.save();
-
-        UserAccount getUser = UserAccount.getUser(user);*/
         String announcement = "Updated profile.";
         return ok(toJson("Accepted"));
         //return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));

@@ -23,8 +23,8 @@
                     success: function(data, textStatus, jgXHR) {
                         alert("SUCCESS");
                         location.href = '/profile';
-                    }, error: function() {
-                        alert("This should never happen, update profile should alway succeed...");
+                    }, error: function(request, status, error) {
+                        alert(request.responseText);
                     }
             });
         }
