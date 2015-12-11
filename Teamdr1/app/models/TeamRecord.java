@@ -40,9 +40,14 @@ public class TeamRecord extends Model {
         this.thisClass = thisClass;
     }
 
-    public static void createTeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
+    public TeamRecord() {
+
+    }
+
+    public static TeamRecord createTeamRecord(String tid, UserAccount user, String teamName, String thisClass) {
         TeamRecord newTeam = new TeamRecord(tid, user, teamName, thisClass);
         Ebean.save(newTeam); // Save this team into the database
+        return newTeam;
     }
 
     private static Model.Finder<String, TeamRecord> find = new Model.Finder<>(TeamRecord.class);
@@ -75,7 +80,7 @@ public class TeamRecord extends Model {
         return null;
     }
 
-    // Retrieve a team that you have not yet seen
+ // print all teams that user is member in
     public static TeamRecord userTeam(String username) {
         UserAccount thisUser = UserAccount.getUser(username);
         System.out.println("me: " + thisUser.username);
