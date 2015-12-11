@@ -86,6 +86,14 @@ public class UserProfileTest extends WithApplication {
 		assertEquals(p.username, uname2);
 		assertEquals(p.email, email2);
 		assertEquals(p.description, d2);
+		
+		String uname3 = null;
+		String email3 = null;
+		String d3 = null;
+		p.updateProfile(uname3, email3, d3);
+		assertEquals(p.username, null);
+		assertEquals(p.email, null);
+		assertEquals(p.description, null);
     }
 	
 }
