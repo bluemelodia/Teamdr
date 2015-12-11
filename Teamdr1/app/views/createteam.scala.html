@@ -1,37 +1,36 @@
-@import helper._
-@import com.fasterxml.jackson.databind.JsonNode
-@(classRecord: JsonNode)(errorNote: JsonNode)(errorNote2: JsonNode)
-@main("Create Team") {
-  <table align = center width=275 bgcolor=#000000>
-    <td><button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
-      <BR/></BR></tr>
-  </table>
-  <!--Passed into main.scala.html as the content-->
-  @helper.form(action = routes.Team.createTeam(), 'id -> "SignIn") {
-    <style type='text/css'>
-    body{
-    color:#000000; background-color:#ffffff;
-    font-family:arial, verdana, sans-serif; font-size:12pt;}
-
-    fieldset {
-    margin:auto;
-    font-size:12px;
-    padding:10px;
-    width:250px;
-    line-height:1.8;}
-    </style>
-    <fieldset>
-      <legend>Create Team for @classRecord.asText()</legend>
-        Team Name:<br>
-        <input type=text" name="teamName"><br>
-        @errorNote.asText()
-        <br>
-        Team ID:<br>
-        <input type=text" name="teamID"><br>
-        @errorNote2.asText()
-        <br>
-      <input type="submit" value="Create Team"/>
-    </fieldset>
-  }
-
-}
+@(classRecord: ClassRecord)
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css">
+        <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            webix.ready(function () {
+                webix.ui({
+                    view:"form",
+                    id: "myform",
+                    width: 600,
+                    elements:[
+                        { view:"fieldset", label:"Create Team for @classRecord.classID (@classRecord.className)", body:{
+                            rows:[
+                                { name:"teamName", view:"text", label:"Team Name (1-25 alphanumeric chars)", labelWidth:280, attributes:{ maxlength :25 }},
+                                { name:"teamID", view:"text", type:"password", label:"Team ID (1-25 alphanumeric chars)", labelWidth:280, attributes:{ maxlength :25 }}
+                            ]
+                        }},
+                        { margin:5, cols:[
+                                {id:"btnMakeTeam", view:"button", type:"form", value:"Create Team", click:"signup()"},
+                                {id:"btnCancelAdd", view:"button", value:"Cancel", click:"location.href='/profile'"}
+                            ]
+                        }
+                    ]
+                });
+            });
+        </script>
+    </body>
+</html>
