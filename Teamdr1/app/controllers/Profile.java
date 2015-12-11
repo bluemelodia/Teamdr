@@ -234,6 +234,9 @@ public class Profile extends Controller {
             }
         } else {
             String errorMessage = newClass + " does not exist.";
+            if (newClass.length() < 1) {
+                errorMessage = "The class you specified does not exist.";
+            }
             return badRequest(toJson(errorMessage));
         }
 
