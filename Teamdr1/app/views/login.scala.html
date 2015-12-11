@@ -35,7 +35,10 @@
                         { view:"fieldset", label:"Login", body:{
                             rows:[
                                 { name:"username", view:"text", label:"Username"},
-                                { name:"password", view:"text", type:"password", label:"Password"}
+                                { name:"error1", label:"@message1", height:20},
+                                { name:"password", view:"text", type:"password", label:"Password"},
+                                { name:"error2", label: "@message2", height:20}
+
                             ]
                         }},
                         { margin:5, cols:[

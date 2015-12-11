@@ -10,6 +10,8 @@ import play.libs.Json;
 import views.html.*;
 import java.util.*;
 
+import static play.libs.Json.toJson;
+
 /**
  * Created by bluemelodia on 11/11/15.
  */
@@ -97,20 +99,17 @@ public class Account extends Controller {
 
     // Validate the user's credentials
     public Result authenticateUser() {
-        System.out.println("LOGIN TRY TO");
         JsonNode json = request().body().asJson();
+        // sanitize the input, thus preventing SQL injections
+        String username = json.get("username").toString().replaceAll("[^A-Za-z0-9]", "");
+        String password = json.get("password").toString().replaceAll("[^A-Za-z0-9]", "");
 
-        //Form<UserAccount> form = LoginForm.bindFromRequest();
-        /*if (form.hasErrors()) { // Redirect with error
-			System.out.println("Error.");
-            return badRequest(login.render(form));
+        if (!UserAccount.exists(username)) {
+            String message1 = "The user " + username + " does not exist.";
+            String message2 = "";
+            return badRequest(login.render(message1, message2));
         }
-        UserAccount getAccount = form.get();
-        if (!UserAccount.exists(getAccount.username)) {
-            form.reject("username", "User does not exist.");
-            return badRequest(login.render(form));
-        }
-        UserAccount getUser = UserAccount.getUser(getAccount.username);
+        /*UserAccount getUser = UserAccount.getUser(getAccount.username);
         if (!getUser.password.equals(getAccount.password)) {
             form.reject("password", "Incorrect password.");
             return badRequest(login.render(form));
@@ -118,7 +117,7 @@ public class Account extends Controller {
         // This stores info about the user's session
         // Other classes can fetch the username from here
         //session("connected", getAccount.username);
-        return redirect(routes.Profile.viewProfile());
+        return ok(toJson("Accepted"));
     }
 
     public Result logoutUser() {
