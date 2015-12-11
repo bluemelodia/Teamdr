@@ -88,7 +88,7 @@ public class Account extends Controller {
         for (ClassRecord classRecord: allClasses) {
             System.out.println("ADDED CLASS: " + classRecord.className + " " + classRecord.classID);
         }
-        return ok(account.render(AccountForm));
+        return ok(account.render());
     }
 
     public Result signIn() {

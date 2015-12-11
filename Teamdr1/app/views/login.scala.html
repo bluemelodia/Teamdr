@@ -31,12 +31,12 @@
                 webix.ui({
                     view:"form",
                     id: "myform",
-                    width: 300,
+                    width: 600,
                     elements:[
                         { view:"fieldset", label:"Login", body:{
                             rows:[
-                                { name:"username", view:"text", label:"Username", attributes:{ maxlength :25 }},
-                                { name:"password", view:"text", type:"password", label:"Password", attributes:{ maxlength :25 }},
+                                { name:"username", view:"text", label:"Username (1-25 alphanumeric chars)", labelWidth:250, attributes:{ maxlength :25 }},
+                                { name:"password", view:"text", type:"password", label:"Password (1-25 alphanumeric chars)", labelWidth:250, attributes:{ maxlength :25 }},
                             ]
                         }},
                         { margin:5, cols:[
