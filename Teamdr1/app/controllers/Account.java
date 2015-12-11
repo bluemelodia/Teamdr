@@ -9,6 +9,7 @@ import play.data.Form;
 import play.libs.Json;
 import views.html.*;
 import java.util.*;
+import java.util.stream.Collector;
 
 import static play.libs.Json.toJson;
 
@@ -23,32 +24,21 @@ public class Account extends Controller {
 	private static final Form<UserProfile> ProfileForm = Form.form(UserProfile.class);
 
     public Result createUser() {
-        System.out.println("CREATE USER");
         JsonNode json = request().body().asJson();
         String username = json.get("username").toString().replaceAll("[^A-Za-z0-9]", "");
         String password = json.get("password").toString().replaceAll("[^A-Za-z0-9]", "");
         String email = json.get("email").toString().replaceAll("[^A-Za-z0-9@.]", "");
-        System.out.println("username: " + username + " password: " + password + " email: " + email);
 
         if (username.length() < 1 || password.length() < 1) {
             System.out.println("Failed the username/password check.");
-            return badRequest(login.render());
+            return badRequest(toJson("You provided an invalid username or password."));
         } if (email.length() < 1) {
             email = "";
         }
         if (UserAccount.exists(username)) {
             System.out.println("Failed the exists check");
-            return badRequest(login.render());
+            return badRequest(toJson("The username you provided already exists."));
         }
-
-        // TODO: Should really diversify the error messages once I learn how to return diff response for different errors to JavaScript
-        /*
-        for (int i = 0; i < username.length(); i++) {
-            if (!Character.isLetterOrDigit(username.charAt(i))) {
-                form.reject("username", "Alphanumeric characters only.");
-                return badRequest(account.render(form));
-            }
-        }*/
 
         // save the data sent through HTTP POST
         UserAccount newAccount = new UserAccount();
@@ -107,17 +97,17 @@ public class Account extends Controller {
         String password = json.get("password").toString().replaceAll("[^A-Za-z0-9]", "");
         System.out.println("ABOUT TO GO");
         if (username.length() < 1 || password.length() < 1) {
-            return badRequest(login.render());
+            return badRequest(toJson("You provided an invalid username or password."));
         }
         if (!UserAccount.exists(username)) {
             System.out.println("NOT EXIST!");
             String message1 = "The user " + username + " does not exist.";
             String message2 = "";
-            return badRequest(login.render());
+            return badRequest("The username you provided does not exist.");
         }
         UserAccount getUser = UserAccount.getUser(username);
         if (!getUser.password.equals(password)) {
-            return badRequest(login.render());
+            return badRequest("You provided the wrong password for this username.");
         }
         // This stores info about the user's session
         // Other classes can fetch the username from here

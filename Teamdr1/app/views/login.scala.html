@@ -21,8 +21,8 @@
                     contentType: 'application/json',
                     success: function(data, textStatus, jgXHR) {
                         location.href = '/profile';
-                    }, error: function() {
-                        alert("Invalid username and/or password.");
+                    }, error: function(request, status, error) {
+                        alert(request.responseText);
                     }
                 });
             }

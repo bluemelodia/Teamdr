@@ -61,18 +61,20 @@ public class Profile extends Controller {
         p.description = description;
         p.pic_url = picture;
         // if the url doesn't work, set the url to some default
-        try {
-            URL url = new URL(picture);
-            URLConnection conn = url.openConnection();
-            conn.connect();
-        } catch (MalformedURLException e) {
-            p.pic_url = "";
-            System.out.println("MALFORMED URL EXCEPTION");
-            return badRequest(toJson("You provided an invalid photo URL."));
-        } catch (IOException e) {
-            p.pic_url = "";
-            System.out.println("IO EXCEPTION");
-            return badRequest(toJson("You provided an invalid photo URL."));
+        if (picture.length() > 0) {
+            try {
+                URL url = new URL(picture);
+                URLConnection conn = url.openConnection();
+                conn.connect();
+            } catch (MalformedURLException e) {
+                p.pic_url = "";
+                System.out.println("MALFORMED URL EXCEPTION");
+                return badRequest(toJson("You provided an invalid photo URL."));
+            } catch (IOException e) {
+                p.pic_url = "";
+                System.out.println("IO EXCEPTION");
+                return badRequest(toJson("You provided an invalid photo URL."));
+            }
         }
 
         p.email = email;

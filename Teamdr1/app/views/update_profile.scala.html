@@ -12,7 +12,6 @@
     <body>
         <script type="text/javascript">
         function update() {
-            alert("update!");
             var userInfo = $$("myform").getValues();
             $.ajax({
                     url: '/update',
@@ -21,7 +20,6 @@
                     data: JSON.stringify(userInfo),
                     contentType: 'application/json',
                     success: function(data, textStatus, jgXHR) {
-                        alert("SUCCESS");
                         location.href = '/profile';
                     }, error: function(request, status, error) {
                         alert(request.responseText);
