@@ -43,29 +43,23 @@ public class Profile extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-		
-		UserProfile p = UserProfile.getUser(user);
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String email = null;
-        String pictureURL = null;
-        String description = null;
+
+        JsonNode json = request().body().asJson();
+        String description = json.get("description").toString().replaceAll("[^A-Za-z0-9$-_.+!*'(), ]", "");
+        String picture = json.get("picture").toString().replaceAll("[^A-Za-z0-9$-_.+!*'(),]", "");
+        String email = json.get("email").toString().replaceAll("[^A-Za-z0-9@.]", "");
+        System.out.println("description: " + description + " picture: " + picture + " email: " + email);
+
+        UserProfile p = UserProfile.getUser(user);
         System.out.println(p.email + " " + p.pic_url + " " + p.description);
-        System.out.println("Values: " + values);
-        if (values == null) {
-            System.out.println("values is null");
-            email = p.email;
-            pictureURL = p.pic_url;
-            description = p.description;
-        }
-        System.out.println("OLD: " + values.get("email")[0] + (values.get("email")).toString().replace(" ", "").length());
-        if (values.get("email") == null || (values.get("email")).toString().trim().length() < 1) {
-            System.out.println("old email");
-            email = p.email;
-        }
-        else{
-            System.out.println("new email");
-            email = values.get("email")[0];
-        }
+
+        // set to the new values
+        p.description = description;
+        p.pic_url = picture;
+        p.email = email;
+        p.save();
+        UserAccount getUser = UserAccount.getUser(user);
+    /*
 
         if (values.get("pictureURL") == null || (values.get("pictureURL")).toString().trim().length() < 1) {
             pictureURL = p.pic_url;
@@ -87,9 +81,10 @@ public class Profile extends Controller {
 		System.out.println("Also here");
 		p.save();
 
-        UserAccount getUser = UserAccount.getUser(user);
+        UserAccount getUser = UserAccount.getUser(user);*/
         String announcement = "Updated profile.";
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+        return ok(toJson("Accepted"));
+        //return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     public Result viewNotifications() {
