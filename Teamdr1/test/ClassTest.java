@@ -48,28 +48,28 @@ import com.avaje.ebean.Ebean;
 */
 public class ClassTest extends WithApplication{
 
-    // @Test
-    // public void testcreateNewClass() {
-    //   ClassRecord.createNewClass("classID", "className");
+    @Test
+    public void testcreateNewClass() {
+      ClassRecord.createNewClass("classID", "className");
 
-    //   assertTrue(ClassRecord.exists("classID"));
+      assertTrue(ClassRecord.exists("classID"));
 
-    //   ClassRecord.deleteClass("classID");
+      ClassRecord.deleteClass("classID");
 
-    // }
+    }
 
-    // @Test
-    // public void testgetNumClasses() {
+    @Test
+    public void testgetNumClasses() {
 
-    //   ClassRecord.createNewClass("classID", "className");
+      ClassRecord.createNewClass("classID", "className");
 
-    //   int classSize = ClassRecord.getNumClasses();
-    //   assertTrue(classSize >0);
+      int classSize = ClassRecord.getNumClasses();
+      assertTrue(classSize >0);
 
 
-    //   ClassRecord.deleteClass("classID");
+      ClassRecord.deleteClass("classID");
 
-    // }
+    }
 
     @Test
     public void testClassFindList() {
