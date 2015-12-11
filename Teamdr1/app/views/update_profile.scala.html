@@ -13,7 +13,33 @@
         <script type="text/javascript">
         function update() {
             alert("update!");
+            var userInfo = $$("myform").getValues();
+            $.ajax({
+                    url: '/update',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(userInfo),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jgXHR) {
+                        alert("SUCCESS");
+                        location.href = '/profile';
+                    }, error: function() {
+                        alert("This should never happen, update profile should alway succeed...");
+                    }
+            });
         }
+
+        function addClass() {
+            alert("add!");
+        }
+
+        function set_profile(){
+            $$('myform').setValues({
+                email: "@userProfile.email",
+                picture: "@userProfile.pic_url",
+                description: "@userProfile.description"
+            });
+        };
 
         webix.ready(function () {
             webix.ui({
@@ -59,6 +85,7 @@
                     }
                 ]
             });
+            set_profile();
         });
         </script>
     </body>
