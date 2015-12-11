@@ -94,7 +94,7 @@ public class Account extends Controller {
     public Result signIn() {
         String message1 = "";
         String message2 = "";
-        return ok(login.render(message1, message2));
+        return ok(login.render());
     }
 
     // Validate the user's credentials
@@ -103,20 +103,23 @@ public class Account extends Controller {
         // sanitize the input, thus preventing SQL injections
         String username = json.get("username").toString().replaceAll("[^A-Za-z0-9]", "");
         String password = json.get("password").toString().replaceAll("[^A-Za-z0-9]", "");
-
+        System.out.println("ABOUT TO GO");
+        if (username.length() < 1 || password.length() < 1) {
+            return badRequest(login.render());
+        }
         if (!UserAccount.exists(username)) {
+            System.out.println("NOT EXIST!");
             String message1 = "The user " + username + " does not exist.";
             String message2 = "";
-            return badRequest(login.render(message1, message2));
+            return badRequest(login.render());
         }
-        /*UserAccount getUser = UserAccount.getUser(getAccount.username);
-        if (!getUser.password.equals(getAccount.password)) {
-            form.reject("password", "Incorrect password.");
-            return badRequest(login.render(form));
-        }*/
+        UserAccount getUser = UserAccount.getUser(username);
+        if (!getUser.password.equals(password)) {
+            return badRequest(login.render());
+        }
         // This stores info about the user's session
         // Other classes can fetch the username from here
-        //session("connected", getAccount.username);
+        session("connected", username);
         return ok(toJson("Accepted"));
     }
 
