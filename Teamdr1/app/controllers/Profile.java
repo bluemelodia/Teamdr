@@ -49,9 +49,9 @@ public class Profile extends Controller {
         }
 
         JsonNode json = request().body().asJson();
-        String description = json.get("description").toString().replaceAll("[^A-Za-z0-9$-_.+!*'(), ]", "");
+        String description = json.get("description").toString().replaceAll("[^A-Za-z0-9$-.+!*(), ]", "");
         String picture = json.get("picture").toString().replaceAll("[^A-Za-z0-9$-_.+!*'(),]", "");
-        String email = json.get("email").toString().replaceAll("[^A-Za-z0-9@.]", "");
+        String email = json.get("email").toString().replaceAll("[^A-Za-z0-9@!#$%&'*+-/=?^_`{|}~]", "");
         System.out.println("description: " + description + " picture: " + picture + " email: " + email);
 
         UserProfile p = UserProfile.getUser(user);
@@ -60,7 +60,7 @@ public class Profile extends Controller {
         // set to the new values
         p.description = description;
         p.pic_url = picture;
-        // if the url doesn't work, set the url to some default
+        // if the url doesn't work, prevent the user from making the change
         if (picture.length() > 0) {
             try {
                 URL url = new URL(picture);
@@ -77,12 +77,21 @@ public class Profile extends Controller {
             }
         }
 
+        // if the email is invalid, prevent the user from making the change
+        // Source: http://www.tutorialspoint.com/javaexamples/regular_email.htm
         p.email = email;
+        System.out.println("email length: " + email.trim().length());
+        if (email.trim().length() > 0) {
+            String emailCheck = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+            Boolean test = email.matches(emailCheck);
+            if (!test) {
+                return badRequest(toJson("You provided an invalid email."));
+            }
+        }
         p.save();
         UserAccount getUser = UserAccount.getUser(user);
         String announcement = "Updated profile.";
         return ok(toJson("Accepted"));
-        //return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
     }
 
     public Result viewNotifications() {
