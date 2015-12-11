@@ -20,6 +20,7 @@
                     data: JSON.stringify(credentials),
                     contentType: 'application/json',
                     success: function(data, textStatus, jgXHR) {
+                        alert("SUCCESS");
                         location.href = '/profile';
                     }, error: function() {
                         alert("User already exists, or username/password/email contains invalid characters.");
@@ -37,7 +38,7 @@
                             rows:[
                                 { name:"username", view:"text", label:"Username (1-25 alphanumeric chars)", labelWidth:250, attributes:{ maxlength :25 }},
                                 { name:"password", view:"text", type:"password", label:"Password (1-25 alphanumeric chars)", labelWidth:250, attributes:{ maxlength :25 }},
-                                { name:"email", view:"text", type:"password", label:"Email (optional)", labelWidth:250, attributes:{ maxlength :25 }}
+                                { name:"email", view:"text", label:"Email (optional)", labelWidth:250, attributes:{ maxlength :25 }}
                             ]
                         }},
                         { margin:5, cols:[

@@ -24,36 +24,36 @@ public class Account extends Controller {
 
     public Result createUser() {
         System.out.println("CREATE USER");
+        JsonNode json = request().body().asJson();
+        String username = json.get("username").toString().replaceAll("[^A-Za-z0-9]", "");
+        String password = json.get("password").toString().replaceAll("[^A-Za-z0-9]", "");
+        String email = json.get("email").toString().replaceAll("[^A-Za-z0-9@.]", "");
+        System.out.println("username: " + username + " password: " + password + " email: " + email);
 
-        // grab HTML form that was sent to this method, and extracts relevant fields from it
-        /*Form<UserAccount> form = AccountForm.bindFromRequest();
-		
-        if (form.hasErrors()) { // Redirect with error
-            return badRequest(account.render(form));
+        if (username.length() < 1 || password.length() < 1) {
+            System.out.println("Failed the username/password check.");
+            return badRequest(login.render());
+        } if (email.length() < 1) {
+            email = "";
         }
-        // convert HTML form to an Account model object, containing the params
-        UserAccount newAccount = form.get();
-		String username = form.data().get("username");
-		String email = form.data().get("email");
-		
-        if (UserAccount.exists(newAccount.username)) {
-            form.reject("username", "User already exists.");
-            return badRequest(account.render(form));
-        }
-		
-		if (username.isEmpty()) {
-            form.reject("username", "Must provide username.");
-            return badRequest(account.render(form));
+        if (UserAccount.exists(username)) {
+            System.out.println("Failed the exists check");
+            return badRequest(login.render());
         }
 
+        // TODO: Should really diversify the error messages once I learn how to return diff response for different errors to JavaScript
+        /*
         for (int i = 0; i < username.length(); i++) {
             if (!Character.isLetterOrDigit(username.charAt(i))) {
                 form.reject("username", "Alphanumeric characters only.");
                 return badRequest(account.render(form));
             }
-        }
+        }*/
 
         // save the data sent through HTTP POST
+        UserAccount newAccount = new UserAccount();
+        newAccount.username = username;
+        newAccount.password = password;
 		UserProfile newProfile = new UserProfile();
         String startingDescription = "I love CS!";
 		newProfile.updateProfile(username, email, startingDescription);
@@ -63,14 +63,16 @@ public class Account extends Controller {
 		System.out.println(newProfile.email);
 		//newAccount.updateProfile(username);
 		newAccount.save();
-		
-        session("connected", newAccount.username);*/
-        return redirect(routes.Profile.viewProfile());
+		System.out.println("success");
+        session("connected", newAccount.username);
+        return ok(toJson("Accepted"));
     }
 
     // Get the signup form
     public Result signUp() {
         // Pre-populate the classes database if there are no classes available
+        System.out.println("SIGNING UP");
+
         int numberOfClasses = ClassRecord.getNumClasses();
         if (numberOfClasses < 1) {
             ClassRecord.createNewClass("COMS4111", "Intro to Databases");
