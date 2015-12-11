@@ -1,4 +1,4 @@
-@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification])
+@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], message: String)
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -74,12 +74,14 @@ webix.ready(function () {
           { view:"template", template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
           {
             id: "classForms", rows: []
-          }
+          },
+          {view:"template", type:"footer", template:"@message"}
       ]
     });
 
     createClassForms();
     checkNotifs();
+    checkMessages();
 });
 
 </script>
