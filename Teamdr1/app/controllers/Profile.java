@@ -42,6 +42,9 @@ public class Profile extends Controller {
 
     public Result showUpdateProfilePage() {
         String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
         UserProfile profile = UserProfile.getUser(user);
         return ok(update_profile.render(profile));
     }

@@ -293,6 +293,8 @@ public class Team extends Controller {
             return redirect(routes.Account.signIn());
         };
         UserAccount thisUser = UserAccount.getUser(user);
+
+
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String thisTeam = values.get("rejectedTeam")[0];
         if (!TeamRecord.exists(thisTeam)) {

@@ -87,7 +87,7 @@ public class Classes extends Controller {
         String announcement = "Because you have dropped " + classId + ", you were removed from team " + oldTeam;
         return ok(toJson(announcement));
     }
-
+    /*
     public Result retrieveClass() {
         return ok(classes.render(ClassForm));
     }
@@ -106,5 +106,5 @@ public class Classes extends Controller {
         }
 
         return redirect(routes.Classes.retrieveClass());
-    }
+    }*/
 }
