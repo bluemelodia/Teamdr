@@ -185,7 +185,8 @@ public class Team extends Controller {
             System.out.println("There are no teams...leave!");
             String noTeams = "There are no other teams in this class, or you have swiped on all of them";
             JsonNode errorJson = toJson(noTeams);
-            return ok(errorPage.render(errorJson)); // There are no other teams available
+            //TODO: just make this into an alert when no teams in the class
+            return redirect(routes.Account.signIn()); // There are no other teams available
         } else {
             String teamDetails = "";
 
@@ -231,7 +232,8 @@ public class Team extends Controller {
             //return badRequest(routes.Team.showTeams());
 
             JsonNode errorJson = toJson("This team was already disbanded");
-            return ok(errorPage.render(errorJson));
+            //TODO: just do this as an alert
+            return redirect(routes.Account.signIn());
             //form.reject("password", "Incorrect password.");
             //return badRequest(login.render(form))
             //

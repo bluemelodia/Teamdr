@@ -5,7 +5,6 @@ import models.*;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.errorPage;
 import views.html.profile;
 import views.html.update_profile;
 
@@ -154,9 +153,6 @@ public class Profile extends Controller {
             theirTeam.add(theirMembers[j].trim());
         }
 
-        // Get yourself
-        String user = session("connected");
-
         // Do the merge only if you aren't already on the same team as the requester
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classID);
         Boolean sameTeam = false;
@@ -189,7 +185,7 @@ public class Profile extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-        
+
         JsonNode json = request().body().asJson();
         System.out.println("REJECT");
         int notificationID = json.asInt();
