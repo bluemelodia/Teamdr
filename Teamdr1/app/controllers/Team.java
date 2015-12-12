@@ -16,6 +16,9 @@ import static play.libs.Json.toJson;
 public class Team extends Controller {
     public Result teamDetails(String classId) {
         String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
         ArrayList<UserAccount> members = new ArrayList<>();
         if (myTeam != null) {
@@ -124,14 +127,14 @@ public class Team extends Controller {
         return null;
     }
     
-    public Result showError() {
+    /*public Result showError() {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
         JsonNode errorJson = toJson("I think you are lost...");
         return ok(errorPage.render(errorJson));
-    }
+    }*/
 
     // This method helps pick the correct class, based on form submission, for the team search
     public Result setCurrentClass(String classId) {

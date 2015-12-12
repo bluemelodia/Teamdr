@@ -124,6 +124,11 @@ public class Profile extends Controller {
 
     // This one only called in type 1 call
     public Result acceptNotification() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+
         JsonNode json = request().body().asJson();
         int notificationID = json.asInt();
         System.out.println(notificationID);
@@ -180,6 +185,11 @@ public class Profile extends Controller {
 
     // Just delete the record
     public Result rejectNotification() {
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        
         JsonNode json = request().body().asJson();
         System.out.println("REJECT");
         int notificationID = json.asInt();

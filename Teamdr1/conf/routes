@@ -21,8 +21,6 @@ GET     /team                      controllers.Team.showTeams()
 POST 	/left     				   controllers.Team.swipeLeft()
 POST    /right                     controllers.Team.swipeRight()
 
-#GET     /class                     controllers.Classes.retrieveClass()
-#POST    /class                     controllers.Classes.putClass()
 GET     /createTeam                controllers.Team.showCreateTeamPage()
 POST    /createTeam                controllers.Team.createTeam()
 GET     /setCurrentClass           controllers.Team.setCurrentClass(classId: String)
@@ -31,7 +29,6 @@ GET     /leaveClass                controllers.Classes.leaveClass(classId: Strin
 GET     /teamDetails               controllers.Team.teamDetails(classId: String)
 
 GET     /notifs                    controllers.Profile.viewNotifications()
-GET     /error                     controllers.Team.showError()
 POST    /acceptNotification        controllers.Profile.acceptNotification()
 POST    /rejectNotification        controllers.Profile.rejectNotification()
 
