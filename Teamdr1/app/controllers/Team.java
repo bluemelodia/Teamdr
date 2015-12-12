@@ -152,10 +152,15 @@ public class Team extends Controller {
             return redirect(routes.Profile.viewProfile());
         }
 
-        System.out.println("currentClass changed to: " + classId);
-
+        // check if the user is in the class, otherwise don't let them do this
         UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+        List<String> classes = thisUser.getClassList();
+        if (!classes.contains(classId)) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
         thisUser.changeCurrentClass(classId); // set the current class
+        System.out.println("currentClass changed to: " + classId);
         String currentClass = thisUser.currentClass;
 
         // If the user does not have a team for this class, have them make a new team
