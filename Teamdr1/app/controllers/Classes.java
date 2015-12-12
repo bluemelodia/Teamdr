@@ -22,7 +22,7 @@ public class Classes extends Controller {
         if (TeamRecord.getTeamForClass(user, classId) == null) {
             userAccount.removeClass(classId);
             String announcement = "You have dropped " + classId;
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
         // User has a team for this class
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
@@ -49,7 +49,7 @@ public class Classes extends Controller {
             userAccount.removeClass(classId);
             myTeam.save();
             String announcement = "Team " + teamName + " has disbanded.";
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
         }
 
         System.out.println(myTeam.teamMembers);
@@ -65,7 +65,7 @@ public class Classes extends Controller {
         }
         userAccount.removeClass(classId);
         String announcement = "Because you have dropped " + classId + ", you were removed from team " + oldTeam;
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
     public Result retrieveClass() {

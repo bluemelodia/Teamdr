@@ -37,7 +37,7 @@ public class Profile extends Controller {
             return redirect(routes.Account.signIn());
         }
 
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
     }
 
     public Result showUpdateProfilePage() {

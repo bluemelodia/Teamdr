@@ -30,10 +30,30 @@ public class Team extends Controller {
 
     public Result leaveTeam(String classId) {
         String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        JsonNode json = request().body().asJson();
+        System.out.println("CLASS ID: " + classId);
+
+        // check if class exists, blocks URL hacking
+        List<ClassRecord> cs = ClassRecord.findAll();
+        boolean found = false;
+        for (int i = 0; i < cs.size(); i++) {
+            if(classId.equals(cs.get(i).classID)) {
+                found = true;
+            }
+        }
+        if (!found) {
+            String error = classId + " does not exist.";
+            return badRequest(toJson(error));
+        }
+
         // Check if the user has a team for this class
         if (TeamRecord.getTeamForClass(user, classId) == null) {
+            System.out.println("No team for class");
             String announcement = "You don't have a team for " + classId;
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+            return badRequest(toJson(announcement));
         }
 
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
@@ -56,7 +76,7 @@ public class Team extends Controller {
             myTeam.delete();
             myTeam.save();
             String announcement = "Team " + teamName + " has disbanded.";
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+            return ok(toJson(announcement));
         }
 
         System.out.println(myTeam.teamMembers);
@@ -70,7 +90,7 @@ public class Team extends Controller {
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
         String announcement = "You have left " + oldTeam;
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user), announcement));
+        return ok(toJson(announcement));
     }
 
     // Retrieve a team that you have not yet seen

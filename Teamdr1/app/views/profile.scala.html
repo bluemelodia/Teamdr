@@ -1,4 +1,4 @@
-@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification], message: String)
+@(userProfile: UserProfile, userAccount: UserAccount, notifList: List[Notification])
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -13,8 +13,23 @@
 
 <script type="text/javascript">
 
-function createClassForms() {
+function leaveTeam(id) {
+    $.ajax({
+        url: '/leaveTeam?classId='+id,
+        type: 'GET',
+        dataType: 'json',
+        data: JSON.stringify(id),
+        contentType: 'application/json',
+        success: function(data, textStatus, jgXHR) {
+            alert(data);
+            location.href = '/profile';
+        }, error: function(request, status, error) {
+            alert(request.responseText);
+        }
+    });
+}
 
+function createClassForms() {
   @for(classId <- userAccount.getClassList()) {
     $$('classForms').addView({
           id:"frm@classId",
@@ -33,9 +48,10 @@ function createClassForms() {
                   },
                   { id: "btnLeaveTeam@classId",
                     view:"button",
+                    name:"leavingTeam",
                     value:"Leave Team", 
                     type:"form",
-                    click:"location.href='/leaveTeam?classId=@classId'"
+                    click:"leaveTeam('@classId')"
                   },
                   { id: "btnLeaveClass@classId",
                     view:"button",
@@ -72,7 +88,6 @@ webix.ready(function () {
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Update Profile", href:"/update"}
           ]},
-          {view:"template", id:"announcements", template:"@message", autoheight:true},
           { view:"template", autoheight:true, template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Picture URL: @userProfile.pic_url<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
           {
             id: "classForms", rows: []
