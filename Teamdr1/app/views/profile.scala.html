@@ -29,6 +29,22 @@ function leaveTeam(id) {
     });
 }
 
+function leaveClass(id) {
+    $.ajax({
+        url: '/leaveClass?classId='+id,
+        type: 'GET',
+        dataType: 'json',
+        data: JSON.stringify(id),
+        contentType: 'application/json',
+        success: function(data, textStatus, jgXHR) {
+            alert(data);
+            location.href = '/profile';
+        }, error: function(request, status, error) {
+            alert("FAIL" + request.responseText);
+        }
+    });
+}
+
 function createClassForms() {
   @for(classId <- userAccount.getClassList()) {
     $$('classForms').addView({
@@ -57,7 +73,7 @@ function createClassForms() {
                     view:"button",
                     value:"Leave Class", 
                     type:"form",
-                    click:"location.href='/leaveClass?classId=@classId'"
+                    click:"leaveClass('@classId')"
                   },
                   { id: "bthShowTeam@classId",
                     view:"button",

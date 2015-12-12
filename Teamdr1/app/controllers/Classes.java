@@ -7,6 +7,8 @@ import play.mvc.Result;
 import views.html.*;
 import java.util.List;
 
+import static play.libs.Json.toJson;
+
 /**
  * Created by bluemelodia on 11/12/15.
  */
@@ -16,13 +18,30 @@ public class Classes extends Controller {
 
     public Result leaveClass(String classId) {
         String user = session("connected");
-        UserAccount userAccount = UserAccount.getUser(user);
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
 
+        // check if class exists, blocks URL hacking
+        List<ClassRecord> cs = ClassRecord.findAll();
+        boolean found = false;
+        for (int i = 0; i < cs.size(); i++) {
+            if(classId.equals(cs.get(i).classID)) {
+                found = true;
+            }
+        }
+        if (!found) {
+            String error = classId + " does not exist.";
+            return badRequest(toJson(error));
+        }
+
+        UserAccount userAccount = UserAccount.getUser(user);
         // Check if the user has a team for this class; if not, drop them from the class straight away
         if (TeamRecord.getTeamForClass(user, classId) == null) {
             userAccount.removeClass(classId);
+            //userAccount.save();
             String announcement = "You have dropped " + classId;
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            return ok(toJson(announcement));
         }
         // User has a team for this class
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
@@ -49,7 +68,7 @@ public class Classes extends Controller {
             userAccount.removeClass(classId);
             myTeam.save();
             String announcement = "Team " + teamName + " has disbanded.";
-            return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+            return ok(toJson(announcement));
         }
 
         System.out.println(myTeam.teamMembers);
@@ -64,8 +83,9 @@ public class Classes extends Controller {
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
         userAccount.removeClass(classId);
+        //userAccount.save();
         String announcement = "Because you have dropped " + classId + ", you were removed from team " + oldTeam;
-        return ok(profile.render(UserProfile.getUser(user), UserAccount.getUser(user), Notification.getNotifs(user)));
+        return ok(toJson(announcement));
     }
 
     public Result retrieveClass() {
