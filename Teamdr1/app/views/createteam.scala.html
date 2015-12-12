@@ -11,6 +11,23 @@
     </head>
     <body>
         <script type="text/javascript">
+            function createTeam() {
+                var newTeam = $$("myform").getValues();
+                $.ajax({
+                    url: '/createTeam',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(newTeam),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jgXHR) {
+                        alert(data);
+                        location.href = '/profile';
+                    }, error: function(request, status, error) {
+                        alert(request.responseText);
+                    }
+                });
+            };
+
             webix.ready(function () {
                 webix.ui({
                     view:"form",
@@ -24,7 +41,7 @@
                             ]
                         }},
                         { margin:5, cols:[
-                                {id:"btnMakeTeam", view:"button", type:"form", value:"Create Team", click:"signup()"},
+                                {id:"btnMakeTeam", view:"button", type:"form", value:"Create Team", click:"createTeam()"},
                                 {id:"btnCancelAdd", view:"button", value:"Cancel", click:"location.href='/profile'"}
                             ]
                         }

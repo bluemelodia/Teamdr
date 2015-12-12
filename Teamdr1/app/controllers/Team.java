@@ -319,46 +319,32 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
+        JsonNode json = request().body().asJson();
+        String teamName = json.get("teamName").toString().replaceAll("[^A-Za-z0-9]", "");
+        String tid = json.get("teamID").toString().replaceAll("[^A-Za-z0-9]", "");
         UserAccount thisUser = UserAccount.getUser(user);
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String teamName = values.get("teamName")[0];
-        String tid = values.get("teamID")[0];
-        JsonNode error;
-        JsonNode error2;
         JsonNode className = toJson(thisUser.currentClass);
 
         if (teamName.length() < 1 && tid.length() < 1) {
-            error = toJson("TeamName is required.");
-            error2 = toJson("TeamID is required.");
-            return badRequest(createteam.render(ClassRecord.getClass(thisUser.currentClass)));
+            return badRequest(toJson("Team Name and Team ID are required."));
         } else if (teamName.length() < 1) {
-            error = toJson("TeamName is required.");
-            error2 = toJson("");
-            return badRequest(createteam.render(ClassRecord.getClass(thisUser.currentClass)));
+            return badRequest(toJson("TeamName is required."));
         } else if (tid.length() < 1) {
-            error = toJson("");
-            error2 = toJson("TeamID is required.");
-            return badRequest(createteam.render(ClassRecord.getClass(thisUser.currentClass)));
+            return badRequest(toJson("Team ID is required."));
         }
 
         // Check to see if the team already exists
         if (TeamRecord.exists(tid)) {
-            error = toJson("Team ID already exists!");
-            error2 = toJson("");
-            return badRequest(createteam.render(ClassRecord.getClass(thisUser.currentClass)));
+            String error = "Team " + tid + " already exists!";
+            return badRequest(toJson(error));
         }
 
         // User cannot have more than one team for this class
         if (hasTeam(thisUser.currentClass, thisUser)) {
-            error = toJson("You are already in a team for this class.");
-            error2 = toJson("");
-            return badRequest(createteam.render(ClassRecord.getClass(thisUser.currentClass)));
+            return badRequest(toJson("You already have a team for this class."));
         } else {
             // Create a new team
             TeamRecord.createTeamRecord(tid, thisUser, teamName, thisUser.currentClass);
-            JsonNode json = toJson(thisUser.currentClass);
-            error = toJson("");
-            error2 = toJson("");
 
             // Code to check the created teams
             List<TeamRecord> allTeams = TeamRecord.findAll();
@@ -370,7 +356,7 @@ public class Team extends Controller {
                 System.out.println();
             }
             // Redirect to the show teams page
-            return redirect(routes.Team.showTeams());
+            return ok(toJson("Successfully created team " + teamName));
         }
     }
 
