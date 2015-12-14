@@ -27,7 +27,8 @@
 
 function showUser() {
     @for(member <- teamList) {
-        $$('users').addView({
+        @if(member.username != userAccount.username) {
+            $$('users').addView({
             id:"frm@member",
             view: "form",
             elements:[
@@ -42,6 +43,7 @@ function showUser() {
                 {id:"btnRate", view:"button", type:"form", value:"Rate", click:"accept('@member.username')"}
             ]
         }, -1);
+        }
     }
 }
 
