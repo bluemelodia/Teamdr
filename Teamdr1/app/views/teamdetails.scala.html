@@ -13,8 +13,7 @@
     <script type="text/javascript">
 
 function rateUser(rated) {
-    var rating = $$("ratingForm").getValue();
-    alert(rating + " " + rated);
+    alert(rated);
     $.ajax({
         url: '/rate?rated='+rated +'&rating='+rating,
         type: 'GET',
