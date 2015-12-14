@@ -14,7 +14,13 @@
             function addMember() {
                 @for(teamMember <- teamProfile.listIterator()) {
                     $$('teamForm').addView({
-
+                        id:"frm@teamMember",
+                        view: "form",
+                        elements:[
+                            {view:"label", label:"Name: @teamMember.username"},
+                            {view:"label", label:"Description: @teamMember.description"},
+                            {view:"label", label:"Rating: to be added" }
+                        ]
                     }, -1);
                 }
             }
@@ -33,6 +39,9 @@
                         elements:[
                             { view:"fieldset", label:"Current Team", body:{
                             rows:[
+                                {
+                                    view:"label", label:"Team Name: @teamRecord.teamName"
+                                },
                                 {
                                     id: "teamForm", rows: []
                                 }
