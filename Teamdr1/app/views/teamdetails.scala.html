@@ -16,7 +16,7 @@ function rateUser(rated) {
     var rating = $$("ratingForm").getValue();
     alert(rating);
     $.ajax({
-        url: '/rate?rated='+rated,
+        url: '/rate?rated='+rated +'&rating='+rating,
         type: 'GET',
         dataType: 'json',
         data: JSON.stringify(rating),

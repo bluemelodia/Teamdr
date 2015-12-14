@@ -14,7 +14,16 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
-    public Result rateUser(String rated) {
+    public Result rateUser(String rated, String rating) {
+        System.out.println("CRAZY");
+        String user = session("connected");
+        if (user == null) { // unauthorized user login, kick them back to login screen
+            return redirect(routes.Account.signIn());
+        }
+        System.out.println("Ratings");
+        //int rating = Integer.parseInt(json.get("rating").toString());
+        System.out.println("RATE: " + rated + " RATING: " + rating);
+
         return ok(toJson("Rated user"));
     }
 
