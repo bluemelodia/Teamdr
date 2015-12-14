@@ -25,6 +25,40 @@
                 }
             }
 
+            function accept(teamName) {
+                alert(teamName);
+                $.ajax({
+                    url: '/right',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(teamName),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jgXHR) {
+                        alert(data);
+                        location.href = '/profile';
+                    }, error: function(request, status, error) {
+                       alert(request.responseText);
+                    }
+                });
+            }
+
+            function reject(teamName) {
+                alert(teamName);
+                $.ajax({
+                    url: '/left',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(teamName),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jgXHR) {
+                        alert(data);
+                        location.href = '/profile';
+                    }, error: function(request, status, error) {
+                       alert(request.responseText);
+                    }
+                });
+            }
+
             webix.ready(function () {
             webix.ui({
                 rows:[
@@ -40,7 +74,7 @@
                             { view:"fieldset", label:"Current Team", body:{
                             rows:[
                                 {
-                                    view:"label", label:"Team Name: @teamRecord.teamName"
+                                    name:"currentTeamName", view:"label", label:"Team Name: @teamRecord.teamName"
                                 },
                                 {
                                     id: "teamForm", rows: []
@@ -48,8 +82,8 @@
                             ]
                             }},
                             { margin:5, cols:[
-                                {id:"btnAccept", view:"button", type:"form", value:"Accept", click:"accept()"},
-                                {id:"btnReject", view:"button", type:"form", value:"Reject", click:"reject()"}
+                                {id:"btnAccept", view:"button", type:"form", value:"Accept", click:"accept('@teamRecord.teamName')"},
+                                {id:"btnReject", view:"button", type:"form", value:"Reject", click:"reject('@teamRecord.teamName')"}
                                 ]
                             }
                         ]
