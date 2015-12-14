@@ -20,7 +20,7 @@
                     data: JSON.stringify(credentials),
                     contentType: 'application/json',
                     success: function(data, textStatus, jgXHR) {
-                        alert("SUCCESS");
+                        alert("Sign up success.");
                         location.href = '/profile';
                     }, error: function(request, status, error) {
                         alert(request.responseText);

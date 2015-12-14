@@ -1,5 +1,6 @@
 package models;
 import com.avaje.ebean.Model;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import controllers.Classes;
 import play.data.validation.Constraints;
 import java.util.*;
@@ -25,6 +26,8 @@ public class UserProfile extends Model {
 	public String email;
 	public String pic_url;
 	public String description;
+	public Boolean hasRating = false;
+	public int rating = 0;
 
 	// Finds all the UserProfile records on file, sorts them by usernames
 	// Return as list of UserProfile records; elsewhere can iterate through the list

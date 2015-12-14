@@ -15,9 +15,13 @@
 function showUser() {
   @for(member <- teamList) {
     $$('users').addView(
+
       { view:"template",
-        template:"Name: @member.username<br/>Email: @UserProfile.getUser(member.username).email<br/>Description: @UserProfile.getUser(member.username).description"
-      }, -1);
+        template:"Name: @member.username<br/>Email: @UserProfile.getUser(member.username).email<br/>Description: @UserProfile.getUser(member.username).description<br/>Rating: @UserProfile.getUser(member.username).rating"
+
+      },
+
+      -1);
   }
 }
 

@@ -45,6 +45,27 @@ function leaveClass(id) {
     });
 }
 
+//          { view:"template", autoheight:true, template:"@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Picture URL: @userProfile.pic_url<br/>Description: @userProfile.description<br/>", attributes:{ maxlength :255 } },
+
+    function createDescription() {
+      @for(classId <- userAccount.getClassList()) {
+    $$('info').addView({
+          id:"frm@userProfile",
+          view:"form",
+          elements:[
+              { view:"label", maxHeight:40, label:"Username: @userProfile.username"},
+              { view:"label", maxHeight:40, label:"E-mail: @userProfile.email"},
+              { view:"label", maxHeight:40, label:"Picture URL: @userProfile.pic_url"},
+              @if(userProfile.rating != 0) {
+              { view:"label", maxHeight:40, label:"Rating: @userProfile.rating"},
+              } @if(userProfile.rating == 0) {
+              { view:"label", maxHeight:40, label:"Rating: No ratings yet"},
+              }
+          ]
+      }, -1);
+  }
+}
+
 function createClassForms() {
   @for(classId <- userAccount.getClassList()) {
     $$('classForms').addView({
@@ -104,13 +125,15 @@ webix.ready(function () {
             {id:"1", value:"Logout", href:"/logout"},
             {id:"2", value:"Update Profile", href:"/update"}
           ]},
-          { view:"template", autoheight:true, template:"<h1>@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Picture URL: @userProfile.pic_url<br/>Description: @userProfile.description", attributes:{ maxlength :255 } },
+          {
+            id: "info", rows: []
+          },
           {
             id: "classForms", rows: []
           }
       ]
     });
-
+    createDescription();
     createClassForms();
     checkNotifs();
     checkMessages();
