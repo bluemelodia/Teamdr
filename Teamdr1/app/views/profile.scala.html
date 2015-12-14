@@ -48,7 +48,6 @@ function leaveClass(id) {
 //          { view:"template", autoheight:true, template:"@userProfile.username</h1><br/>E-mail: @userProfile.email<br/>Picture URL: @userProfile.pic_url<br/>Description: @userProfile.description<br/>", attributes:{ maxlength :255 } },
 
     function createDescription() {
-      @for(classId <- userAccount.getClassList()) {
     $$('info').addView({
           id:"frm@userProfile",
           view:"form",
@@ -63,7 +62,6 @@ function leaveClass(id) {
               }
           ]
       }, -1);
-  }
 }
 
 function createClassForms() {

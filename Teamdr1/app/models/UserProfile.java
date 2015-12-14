@@ -26,8 +26,7 @@ public class UserProfile extends Model {
 	public String email;
 	public String pic_url;
 	public String description;
-	public Boolean hasRating = false;
-	public int rating = 0;
+	public int rating = 0; // will be 0 until someone gives a rating
 
 	// Finds all the UserProfile records on file, sorts them by usernames
 	// Return as list of UserProfile records; elsewhere can iterate through the list
