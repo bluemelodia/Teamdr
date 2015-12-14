@@ -186,7 +186,7 @@ public class Team extends Controller {
             String noTeams = "There are no other teams in this class, or you have swiped on all of them";
             JsonNode errorJson = toJson(noTeams);
             //TODO: just make this into an alert when no teams in the class
-            return redirect(routes.Account.signIn()); // There are no other teams available
+            return ok(error.render(UserAccount.getUser(user).currentClass)); // There are no other teams available
         } else {
             List<UserProfile> teamDetails = new ArrayList<>();
 

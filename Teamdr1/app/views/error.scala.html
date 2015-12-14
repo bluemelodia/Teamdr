@@ -1,0 +1,41 @@
+@(thisClass: String)
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css">
+    <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <script type="text/javascript">
+            webix.ready(function () {
+            webix.ui({
+                rows:[
+                    { view:"template", type:"header", template:"Team Search for @thisClass"},
+                    { id:"menuBar", view:"menu", data:[
+                        {id:"1", value:"Logout", href:"/logout"},
+                        {id:"2", value:"Profile", href:"/profile"}
+                    ]},
+                    {
+                        view:"form",
+                        id: "myform",
+                        elements:[
+                            { view:"fieldset", label:"Current Team", body:{
+                            rows:[
+                                {
+                                    name:"currentTeamName", view:"label", label:"You have swiped on all teams."
+                                }
+                            ]
+                            }}
+                        ]
+                    }
+                ]
+            });
+            addMember();
+        });
+        </script>
+  </body>
+</html>
