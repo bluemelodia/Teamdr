@@ -42,6 +42,53 @@ public class UserAccount extends Model {
         return me.allClasses;
     }
 
+    // quick check to see if this user has already been rated by this rater
+    public Boolean hasRated(String rater) {
+        List<String> ratingList = new ArrayList<>();
+        String[] myRaters = allRaters.split("\\|");
+        for (String theRater : myRaters) {
+            if (theRater.equals(rater)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // add new rater to the list
+    public void addRater(String rater) {
+        List<String> ratingList = getRatingList();
+        if (!ratingList.contains(rater)) {
+            ratingList.add(rater);
+        }
+        this.saveRaters(ratingList);
+    }
+
+    // convert raters into strings
+    public List<String> getRatingList() {
+        List<String> ratingList = new ArrayList<>();
+        String[] myRaters = allRaters.split("\\|");
+        for (String rater : myRaters) {
+            if (!rater.isEmpty()) {
+                ratingList.add(rater);
+            }
+        }
+        return ratingList;
+    }
+
+    public void saveRaters(List<String> myRaters) {
+        if (myRaters.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (String rater : myRaters) {
+                sb.append("|" + rater);
+            }
+            allRaters = sb.substring(1);
+        } else {
+            allRaters = "";
+        }
+        System.out.println("AllClasses: " + allRaters);
+        Ebean.save(this);
+    }
+
     // Check if this user already exists
     public static boolean exists(String username) {
         return(find.where().eq("username", username).findRowCount() == 1) ? true : false;
