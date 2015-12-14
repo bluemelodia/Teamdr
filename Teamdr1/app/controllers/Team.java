@@ -188,7 +188,7 @@ public class Team extends Controller {
             //TODO: just make this into an alert when no teams in the class
             return redirect(routes.Account.signIn()); // There are no other teams available
         } else {
-            String teamDetails = "";
+            List<UserProfile> teamDetails = new ArrayList<>();
 
             // Get the team info
             TeamRecord teamToDisplay = TeamRecord.getTeam(currentTeam.tid);
@@ -199,21 +199,19 @@ public class Team extends Controller {
                 UserAccount currentUser = UserAccount.getUser(members[i]);
                 System.out.println(members[i] + " username: " + currentUser.username);
                 if (currentUser == null || currentUser.username.length() < 1) continue;
-                teamDetails += "    " + currentUser.username.toString() + " (";
-                UserProfile currentProfile = UserProfile.getUser(currentUser.username);
-                teamDetails += "        " + currentProfile.description + "),";
+                teamDetails.add(UserProfile.getUser(currentUser.username));
             }
-            if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
+            /*if (teamDetails.length() > 0 && teamDetails.charAt(teamDetails.length()-1)==',') {
                 teamDetails = teamDetails.substring(0, teamDetails.length()-1);
             } if (teamDetails.length() >= 255) { // Varchar can only have 255 chars
                 teamDetails = teamDetails.substring(0, 251);
                 teamDetails += "...";
-            }
+            }*/
             JsonNode teamMembers = toJson(teamDetails);
             currentTeamJSON = toJson(currentTeam);
             JsonNode className = toJson(thisUser.currentClass);
             JsonNode errorMessage = toJson("");
-            return ok(team.render(currentTeamJSON, teamMembers, className, errorMessage));
+            return ok(team.render(currentTeam, teamDetails));
         }
     }
 

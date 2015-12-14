@@ -1,45 +1,54 @@
-@import com.fasterxml.jackson.databind.JsonNode
-@(teamRecords: JsonNode)(teamDetails: JsonNode)(className: JsonNode)(error: JsonNode)
-@main("Teams") {
+@(teamRecord: TeamRecord, teamProfile: List[UserProfile])
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css">
+        <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function addMember() {
+                @for(teamMember <- teamProfile.listIterator()) {
+                    $$('teamForm').addView({
 
-    <table align="center" width=743 bgcolor=#000000>
-		
-			<td align="center">
-                <button onclick="window.location='@routes.Account.logoutUser()';" value="logout">Logout</button>
-                <button onclick="window.location='@routes.Profile.viewProfile()';" value="update">View Profile</button>
-                <BR/></BR>
-			</td>
+                    }, -1);
+                }
+            }
 
-	</table>
-    <table align="center">
-       <tr>
-           <td><h4>Team Search For @className.asText()</h4></td>
-       </tr>
-       <tr>
-           <br>
-           <td><strong>Team ID:</strong> @teamRecords.findValue("tid").asText()<br></td>
-        </tr>
-        <tr>
-           <td><strong>Team Name:</strong> @teamRecords.findValue("teamName").asText()<br></td>
-       </tr>
-        <tr>
-            <td><strong>Team Members:</strong><br>
-            @teamDetails.asText()</td>
-        </tr>
-        <tr>
-            @helper.form(action = routes.Team.swipeRight()) {
-                <fieldset>
-                    <input type="text" name="acceptedTeam" value="@teamRecords.findValue("tid").asText()" readonly/>
-                    <input type="submit" value="Accept"/>
-                </fieldset>
-            }
-            @helper.form(action = routes.Team.swipeLeft()) {
-                <fieldset>
-                    <input type="text" name="rejectedTeam" value="@teamRecords.findValue("tid").asText()" readonly/>
-                    <input type="submit" value="Reject"/>
-                </fieldset>
-            }
-        </tr>
-        @error.asText()
-    </table>
-}
+            webix.ready(function () {
+            webix.ui({
+                rows:[
+                    { view:"template", type:"header", template:"Team Search for @teamRecord.thisClass" },
+                    { id:"menuBar", view:"menu", data:[
+                        {id:"1", value:"Logout", href:"/logout"},
+                        {id:"2", value:"Profile", href:"/profile"}
+                    ]},
+                    {
+                        view:"form",
+                        id: "myform",
+                        elements:[
+                            { view:"fieldset", label:"Current Team", body:{
+                            rows:[
+                                {
+                                    id: "teamForm", rows: []
+                                }
+                            ]
+                            }},
+                            { margin:5, cols:[
+                                {id:"btnAccept", view:"button", type:"form", value:"Accept", click:"accept()"},
+                                {id:"btnReject", view:"button", type:"form", value:"Reject", click:"reject()"}
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+            addMember();
+        });
+        </script>
+    </body>
+</html>
