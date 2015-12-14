@@ -61,6 +61,7 @@ function showUser() {
 
 webix.ready(function () {
     webix.ui({
+      view:"scrollview", id:"scrollview", scroll:"y", width:screen.width,  body:{
       rows:[
           { view:"template",
             type:"header", template:"Team Details" },
@@ -77,6 +78,7 @@ webix.ready(function () {
             id: "users", rows: []
         }
         ]
+        }
         });
         showUser();
         });
