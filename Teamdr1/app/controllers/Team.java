@@ -23,6 +23,49 @@ public class Team extends Controller {
         System.out.println("Ratings");
         //int rating = Integer.parseInt(json.get("rating").toString());
         System.out.println("RATE: " + rated + " RATING: " + rating);
+        try { // if you enter anything other than a number, you're hacking
+            Integer.parseInt(rating);
+        } catch(NumberFormatException e) {
+            return redirect(routes.Account.signIn());
+        }
+        int rate = Integer.parseInt(rating);
+        if (rate < 1 || rate > 5) { // clearly you're hacking if the rating is outside of the 1-5 range
+            return redirect(routes.Account.signIn());
+        }
+
+        String ratedUser = rated.replaceAll("[^A-Za-z0-9]", "");
+
+        // does this user exist? if you weren't hacking, they should...
+        if (!UserAccount.exists(ratedUser)) {
+            return redirect(routes.Account.signIn());
+        }
+
+        // are you still in a team for this class?
+        if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
+            System.out.println("No team for class");
+            String announcement = "You don't have a team for " + UserAccount.getUser(user).currentClass;
+            return badRequest(toJson(announcement));
+        }
+
+        // you have a team for this class, now get their team for this class
+        TeamRecord yourTeam = TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass);
+        TeamRecord theirTeam = TeamRecord.getTeamForClass(user, UserAccount.getUser(ratedUser).currentClass);
+
+        if (theirTeam == null) {
+            return badRequest(toJson(ratedUser + " no longer in this class."));
+        }
+
+        // are you even in the same team as the person you're rating?
+        if (!yourTeam.teamName.equals(theirTeam.teamName)) {
+            return badRequest(toJson("You cannot rate " + ratedUser + " who isn't on your team."));
+        }
+
+        // have you rated this person before?
+        if (UserAccount.getUser(ratedUser).hasRated(user)) {
+            return badRequest(toJson("You've already rated " + ratedUser));
+        }
+
+        // ok, you can rate this user
 
         return ok(toJson("Rated user"));
     }
