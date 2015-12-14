@@ -215,27 +215,15 @@ public class Team extends Controller {
         }
     }
 
-    public Result swipeRight() {
+    public Result swipeRight(String teamName) {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
         UserAccount thisUser = UserAccount.getUser(user);
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        System.out.println("REQUEST: " + values);
-        String thisTeam = values.get("acceptedTeam")[0];
+        String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
         if (!TeamRecord.exists(thisTeam)) {
-            //System.out.println("The team does not exist anymore!!!!");
-            //return redirect(routes.Team.showTeams());
-            //return badRequest(routes.Team.showTeams());
-
-            JsonNode errorJson = toJson("This team was already disbanded");
-            //TODO: just do this as an alert
-            return redirect(routes.Account.signIn());
-            //form.reject("password", "Incorrect password.");
-            //return badRequest(login.render(form))
-            //
-            //return redirect(routes.Team.showTeams());
+            return badRequest(toJson("Team you swiped on does not exist."));
         }
         System.out.println("This team exists!!!!!");
         System.out.println("RIGHT: " + thisTeam);
@@ -250,7 +238,7 @@ public class Team extends Controller {
             Notification currentNotif = notifs.get(j);
             // This user was already invited to join this team
             if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
-                return redirect(routes.Profile.viewNotifications());
+                return ok(toJson("You already have an invitation to join this team. Go to notifications."));
             }
         }
         // TeamRecord currentTeam = showCurrentTeam(user);
@@ -281,27 +269,29 @@ public class Team extends Controller {
             UserAccount currentUser = UserAccount.getUser(people[i]);
             Notification.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
         }
-
+        TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
         //update team with currently shown team and user
         //td = td.updateTeam(thisTeam, user);
         //System.out.println("new team " + td.teamMembers);
         //td.save();
-        return redirect(routes.Team.showTeams());
+        return ok("You sent a request to join " + thisTeam);
     }
 
     // Swipe left: go to the next team, mark this one as seen
-    public Result swipeLeft() {
+    public Result swipeLeft(String teamName) {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         };
         UserAccount thisUser = UserAccount.getUser(user);
 
-
-        final Map<String, String[]> values = request().body().asFormUrlEncoded();
-        String thisTeam = values.get("rejectedTeam")[0];
+        JsonNode json = request().body().asJson();
+        System.out.println("HIHIHIHI");
+        System.out.println(teamName);
+        String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
+        System.out.println("THIS TEAM: " + thisTeam);
         if (!TeamRecord.exists(thisTeam)) {
-            return redirect(routes.Team.showTeams());
+            return badRequest(toJson("Team you swiped on does not exist."));
         }
         System.out.println("LEFT: " + thisTeam);
         TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
@@ -311,7 +301,7 @@ public class Team extends Controller {
 
         System.out.println("This team: " + thisTeam);
         //System.out.println("SEEN TEAMS: " + seenTeams);
-        return redirect(routes.Team.showTeams());
+        return ok(toJson("You rejected " + thisTeam));
     }
 
     public Result showCreateTeamPage() {

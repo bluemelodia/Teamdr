@@ -18,8 +18,8 @@ GET     /addClass                  controllers.Profile.showUpdateProfilePage()
 POST    /addClass                  controllers.Profile.addClass()
 
 GET     /team                      controllers.Team.showTeams()
-POST 	/left     				   controllers.Team.swipeLeft()
-POST    /right                     controllers.Team.swipeRight()
+GET 	/left     				   controllers.Team.swipeLeft(teamName: String)
+GET     /right                     controllers.Team.swipeRight(teamName: String)
 
 GET     /createTeam                controllers.Team.showCreateTeamPage()
 POST    /createTeam                controllers.Team.createTeam()
