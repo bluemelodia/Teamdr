@@ -28,6 +28,7 @@ public class UserAccount extends Model {
 
     public String currentClass = "";
     public String allClasses = ""; // list of all classes user is in
+    public String allRaters = ""; // list of all people who have rated this user
 
     // Finds all the UserAccount records on file, sorts them by usernames
     // Return as list of UserAccount records; elsewhere can iterate through the list

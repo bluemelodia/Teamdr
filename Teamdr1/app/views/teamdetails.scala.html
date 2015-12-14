@@ -12,17 +12,37 @@
   <body>
     <script type="text/javascript">
 
-function showUser() {
+/*function showUser() {
   @for(member <- teamList) {
     $$('users').addView(
+      id:"frm@member",
+      view: "form",
+      elements:[
+      {view:"label", label:"Name: "},
+      {view:"label", label:"Description: "},
+      {view:"label", label:"Rating: to be added" }
+      ]
+    }, -1);
+}*/
 
-      { view:"template",
-        template:"Name: @member.username<br/>Email: @UserProfile.getUser(member.username).email<br/>Description: @UserProfile.getUser(member.username).description<br/>Rating: @UserProfile.getUser(member.username).rating"
-
-      },
-
-      -1);
-  }
+function showUser() {
+    @for(member <- teamList) {
+        $$('users').addView({
+            id:"frm@member",
+            view: "form",
+            elements:[
+                { view:"label", label:"Username: @member.username"},
+                { view:"label", label:"E-mail: @UserProfile.getUser(member.username).email"},
+                { view:"label", label:"Picture URL: @UserProfile.getUser(member.username).pic_url"},
+                @if(UserProfile.getUser(member.username).rating != 0) {
+                { view:"label", label:"Rating: @UserProfile.getUser(member.username).rating"},
+                } @if(UserProfile.getUser(member.username).rating == 0) {
+                { view:"label", label:"Rating: No ratings yet"},
+                }
+                {id:"btnRate", view:"button", type:"form", value:"Rate", click:"accept('@member.username')"}
+            ]
+        }, -1);
+    }
 }
 
 webix.ready(function () {
@@ -35,7 +55,7 @@ webix.ready(function () {
             {id:"2", value:"Back to Profile", href:"/profile"}
           ]},
           @if(teamRecord != null) {
-            { view:"template", template:"<h1>Team Name: @teamRecord.teamName</h1><br/>Team ID: @teamRecord.tid<br/>Class: @teamRecord.thisClass"},
+            { view:"template", autoheight:true, template:"<h1>Team Name: @teamRecord.teamName</h1><br/>Team ID: @teamRecord.tid<br/>Class: @teamRecord.thisClass"},
           } else {
             {view:"template", template:"<h1>You are not in a team for this class.</h1><br/>"},
           }
