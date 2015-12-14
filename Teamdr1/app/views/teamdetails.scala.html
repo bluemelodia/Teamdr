@@ -12,18 +12,22 @@
   <body>
     <script type="text/javascript">
 
-/*function showUser() {
-  @for(member <- teamList) {
-    $$('users').addView(
-      id:"frm@member",
-      view: "form",
-      elements:[
-      {view:"label", label:"Name: "},
-      {view:"label", label:"Description: "},
-      {view:"label", label:"Rating: to be added" }
-      ]
-    }, -1);
-}*/
+function rateUser(rated) {
+    alert(rated);
+    $.ajax({
+        url: '/rate?rated='+rated,
+        type: 'GET',
+        dataType: 'json',
+        data: JSON.stringify(rated),
+        contentType: 'application/json',
+        success: function(data, textStatus, jgXHR) {
+            alert(data);
+            location.href = location.href;
+        }, error: function(request, status, error) {
+            alert(request.responseText);
+        }
+        });
+}
 
 function showUser() {
     @for(member <- teamList) {
@@ -40,7 +44,7 @@ function showUser() {
                 } @if(UserProfile.getUser(member.username).rating == 0) {
                 { view:"label", label:"Rating: No ratings yet"},
                 }
-                {id:"btnRate", view:"button", type:"form", value:"Rate", click:"accept('@member.username')"}
+                {id:"btnRate", view:"button", type:"form", value:"Rate", click:"rateUser('@member.username')"}
             ]
         }, -1);
         }

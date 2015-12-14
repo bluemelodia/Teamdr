@@ -27,6 +27,7 @@ GET     /setCurrentClass           controllers.Team.setCurrentClass(classId: Str
 GET     /leaveTeam                 controllers.Team.leaveTeam(classId: String)
 GET     /leaveClass                controllers.Classes.leaveClass(classId: String)
 GET     /teamDetails               controllers.Team.teamDetails(classId: String)
+GET     /rate                      controllers.Team.rateUser(rated: String)
 
 GET     /notifs                    controllers.Profile.viewNotifications()
 POST    /acceptNotification        controllers.Profile.acceptNotification()

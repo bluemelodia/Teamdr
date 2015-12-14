@@ -14,6 +14,10 @@ import static play.libs.Json.toJson;
  * Created by anfalboussayoud on 11/11/15.
  */
 public class Team extends Controller {
+    public Result rateUser(String rated) {
+        return ok(toJson("Rated user"));
+    }
+
     public Result teamDetails(String classId) {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
