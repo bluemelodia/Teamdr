@@ -66,8 +66,10 @@ public class Team extends Controller {
         }
 
         // ok, you can rate this user
+        UserProfile.getUser(ratedUser).rate(rate);
+        UserAccount.getUser(ratedUser).addRater(user); // save the rating
 
-        return ok(toJson("Rated user"));
+        return ok(toJson("You gave " + ratedUser + " a " + rate + "."));
     }
 
     public Result teamDetails(String classId) {

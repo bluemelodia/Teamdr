@@ -26,13 +26,23 @@ public class UserProfile extends Model {
 	public String email;
 	public String pic_url;
 	public String description;
-	public int rating = 0; // will be 0 until someone gives a rating
+	public double rating = 0; // will be 0 until someone gives a rating
 
 	// Finds all the UserProfile records on file, sorts them by usernames
 	// Return as list of UserProfile records; elsewhere can iterate through the list
 	// of records and process them by calling this method
 	public static List<UserProfile> findAll() {
 		return UserProfile.find.orderBy("email").findList();
+	}
+
+	// rate the user
+	public void rate(int rate) {
+		if (this.rating == 0) { // haven't been rated before
+			this.rating = rate;
+		} else { // otherwise, average the two ratings
+			this.rating = (this.rating + rate)/2.0;
+		}
+		Ebean.save(this);
 	}
 
 	// Check if this user already exists

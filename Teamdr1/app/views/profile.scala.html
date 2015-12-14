@@ -55,7 +55,7 @@ function leaveClass(id) {
               { view:"label", maxHeight:40, label:"Username: @userProfile.username"},
               { view:"label", maxHeight:40, label:"E-mail: @userProfile.email"},
               { view:"label", maxHeight:40, label:"Picture URL: @userProfile.pic_url"},
-              { view:"label", maxHeight:40, label:"Description: @userProfile.description"},
+              { view:"label", label:"Description: @userProfile.description"},
               @if(userProfile.rating != 0) {
               { view:"label", maxHeight:40, label:"Rating: @userProfile.rating"},
               } @if(userProfile.rating == 0) {
@@ -97,7 +97,7 @@ function createClassForms() {
                   },
                   { id: "bthShowTeam@classId",
                     view:"button",
-                    value:"Show Team Details",
+                    value:"Show Teammates",
                     type:"form",
                     click:"location.href='/teamDetails?classId=@classId'"
                   }
