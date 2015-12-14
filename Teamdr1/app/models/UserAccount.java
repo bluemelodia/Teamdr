@@ -54,6 +54,12 @@ public class UserAccount extends Model {
         return false;
     }
 
+    public int numRaters() {
+        List<String> ratingList = new ArrayList<>();
+        String[] myRaters = allRaters.split("\\|");
+        return myRaters.length;
+    }
+
     // add new rater to the list
     public void addRater(String rater) {
         List<String> ratingList = getRatingList();

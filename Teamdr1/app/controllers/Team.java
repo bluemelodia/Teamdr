@@ -69,6 +69,9 @@ public class Team extends Controller {
         UserProfile.getUser(ratedUser).rate(rate);
         UserAccount.getUser(ratedUser).addRater(user); // save the rating
 
+        // send rating notification
+
+
         return ok(toJson("You gave " + ratedUser + " a " + rate + "."));
     }
 

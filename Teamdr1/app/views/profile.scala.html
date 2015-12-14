@@ -57,7 +57,7 @@ function leaveClass(id) {
               { view:"label", maxHeight:40, label:"Picture URL: @userProfile.pic_url"},
               { view:"label", label:"Description: @userProfile.description"},
               @if(userProfile.rating != 0) {
-              { view:"label", maxHeight:40, label:"Rating: @userProfile.rating"},
+              { view:"label", maxHeight:40, label:"Rating: @userProfile.rating (@userAccount.numRaters() Ratings)"},
               } @if(userProfile.rating == 0) {
               { view:"label", maxHeight:40, label:"Rating: No ratings yet"},
               }
