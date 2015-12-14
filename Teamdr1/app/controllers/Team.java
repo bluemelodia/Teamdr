@@ -269,12 +269,13 @@ public class Team extends Controller {
             UserAccount currentUser = UserAccount.getUser(people[i]);
             Notification.createNewNotification(currentUser.username, thisUser.currentClass, 1, myTeam.tid, teamDetails);
         }
+        //TODO: issue with this not refreshing into the next team
         TeamRecord.addSeenTeam(thisUser.username, thisUser.currentClass, thisTeam);
         //update team with currently shown team and user
         //td = td.updateTeam(thisTeam, user);
         //System.out.println("new team " + td.teamMembers);
         //td.save();
-        return ok("You sent a request to join " + thisTeam);
+        return ok(toJson("You sent a request to join " + thisTeam));
     }
 
     // Swipe left: go to the next team, mark this one as seen

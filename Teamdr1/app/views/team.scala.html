@@ -26,7 +26,6 @@
             }
 
             function accept(teamName) {
-                alert(teamName);
                 $.ajax({
                     url: '/right?teamName='+teamName,
                     type: 'GET',
@@ -43,7 +42,6 @@
             }
 
             function reject(teamName) {
-                alert(teamName);
                 $.ajax({
                     url: '/left?teamName='+teamName,
                     type: 'GET',
