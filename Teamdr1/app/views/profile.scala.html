@@ -117,20 +117,22 @@ function checkNotifs() {
 
 webix.ready(function () {
     webix.ui({
-      rows:[
-          { view:"template",
-            type:"header", template:"Profile" },
-          { id:"menuBar", view:"menu", data:[
-            {id:"1", value:"Logout", href:"/logout"},
-            {id:"2", value:"Update Profile", href:"/update"}
-          ]},
-          {
-            id: "info", rows: []
-          },
-          {
-            id: "classForms", rows: []
-          }
-      ]
+      view:"scrollview", id:"scrollview", scroll:"y", width:screen.width,  body:{
+    rows:[
+    { view:"template",
+    type:"header", template:"Profile" },
+    { id:"menuBar", view:"menu", data:[
+    {id:"1", value:"Logout", href:"/logout"},
+    {id:"2", value:"Update Profile", href:"/update"}
+    ]},
+    {
+    id: "info", rows: []
+    },
+    {
+    id: "classForms", rows: []
+    }
+    ]
+    }
     });
     createDescription();
     createClassForms();
