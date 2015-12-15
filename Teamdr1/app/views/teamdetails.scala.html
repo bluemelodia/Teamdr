@@ -13,7 +13,9 @@
     <script type="text/javascript">
 
 function rateUser(rated) {
-    alert(rated);
+    //alert(rated);
+    var rating = $$('ratingForm' + rated).getValue();
+    alert (rating);
     $.ajax({
         url: '/rate?rated='+rated +'&rating='+rating,
         type: 'GET',
@@ -44,14 +46,14 @@ function showUser() {
                 } @if(UserProfile.getUser(member.username).rating == 0) {
                 { view:"label", label:"Rating: No ratings yet"},
                 }
-                {view:"radio", id:"ratingForm@member", label:"Rate:", value:5, options:[
+                {view:"radio", id:"ratingForm@member.username", label:"Rate:", value:5, options:[
                     { id:1, value:"1 (Terrible)" }, //the initially selected item
                     { id:2, value:"2 (Meh)" },
                     { id:3, value:"3 (Average)" },
                     { id:4, value:"4 (Great)" },
                     { id:5, value:"5 (Outstanding)" }
                 ]},
-                {id:"btnRate", view:"button", type:"form", value:"Rate", click:"rateUser('@member.username')"}
+                {id:"btnRate@member", view:"button", type:"form", value:"Rate", click:"rateUser('@member.username')"}
             ]
         }, -1);
         }
