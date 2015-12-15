@@ -9,7 +9,10 @@ scalaVersion := "2.11.6"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "org.mockito" % "mockito-all" % "1.9.5",
+  "org.powermock" % "powermock-api-mockito" % "1.5.1",
+  "org.powermock" % "powermock-module-junit4" % "1.6.2"
 )
 
 // Allows us to use Java
