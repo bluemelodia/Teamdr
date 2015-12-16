@@ -206,6 +206,17 @@ public class Team extends Controller {
         UserAccount thisUser = UserAccount.getUser(username);
         System.out.println("me: " + thisUser.username);
 
+        // is user in this class?
+        List<String> myClasses = UserAccount.getUser(thisUser.username).getClassList();
+        if (!myClasses.contains(thisUser.currentClass)) {
+            return null;
+        }
+
+        // is user in a team for this class?
+        if (TeamRecord.getTeamForClass(thisUser.username, thisUser.currentClass) == null) {
+            return null;
+        }
+
         List<TeamRecord> allTeams = TeamRecord.findAll();
         for (TeamRecord team: allTeams) {
             //System.out.println("Team: " + team.teamName + " id: " + team.tid + " members: " + team.teamMembers);
@@ -334,7 +345,7 @@ public class Team extends Controller {
 
         // don't go swiping when you don't have a team for this class
         if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("You must be in a team for this class to swipe."));
         }
 
         if (!TeamRecord.exists(thisTeam)) {
@@ -435,7 +446,7 @@ public class Team extends Controller {
 
         // don't go swiping when you don't have a team for this class
         if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("You must be in a team for this class to swipe."));
         }
 
         if (!TeamRecord.exists(thisTeam)) {
