@@ -379,6 +379,7 @@ public class Team extends Controller {
         }
 
         if (!TeamRecord.exists(thisTeam)) {
+            System.out.println("DNE");
             return badRequest(toJson("Team you swiped on does not exist."));
         }
         // don't swipe on your own team, this isn't even possible unless you're trying to hack
