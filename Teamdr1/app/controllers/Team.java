@@ -49,10 +49,24 @@ public class Team extends Controller {
             return redirect(routes.Profile.viewProfile());
         }
 
+        // are they still in this class?
+        List<String> theirClasses = UserAccount.getUser(ratedUser).getClassList();
+        if (!theirClasses.contains(UserAccount.getUser(user).currentClass)) {
+            String announcement = ratedUser + " is not in " + UserAccount.getUser(user).currentClass;
+            return badRequest(toJson(announcement));
+        }
+
         // are you still in a team for this class?
         if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
             System.out.println("No team for class");
             String announcement = "You don't have a team for " + UserAccount.getUser(user).currentClass;
+            return badRequest(toJson(announcement));
+        }
+
+        // are they still in a team for this class?
+        if (TeamRecord.getTeamForClass(ratedUser, UserAccount.getUser(ratedUser).currentClass) == null) {
+            System.out.println("No team for class");
+            String announcement = ratedUser + " doesn't have a team for " + UserAccount.getUser(user).currentClass;
             return badRequest(toJson(announcement));
         }
 
