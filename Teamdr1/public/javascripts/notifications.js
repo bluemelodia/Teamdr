@@ -93,7 +93,11 @@ webix.ready(function () {
     webix.ui({
       rows:[
           { view:"template",
-            type:"header", template:"Notifications" },
+            type:"header", template:"Notifs" },
+          { id:"menuBar", view:"menu", data:[
+              {id:"1", value:"Logout", href:"/logout"},
+              {id:"2", value:"Profile", href:"/profile"}
+          ]},
           {
             id: "notifForms", rows: []
           }

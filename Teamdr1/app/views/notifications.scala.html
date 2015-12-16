@@ -101,6 +101,10 @@ webix.ready(function () {
       rows:[
           { view:"template",
             type:"header", template:"Notifications" },
+          { id:"menuBar", view:"menu", data:[
+              {id:"1", value:"Logout", href:"/logout"},
+              {id:"2", value:"Profile", href:"/profile"}
+          ]},
           {
             id: "notifForms", rows: []
           }

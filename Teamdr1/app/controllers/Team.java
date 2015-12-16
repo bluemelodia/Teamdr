@@ -64,6 +64,13 @@ public class Team extends Controller {
             return badRequest(toJson(ratedUser + " no longer in this class."));
         }
 
+        // are you in the same class as this person?
+        String theirClass = theirTeam.thisClass;
+        List<String> myClasses = UserAccount.getUser(user).getClassList();
+        if (!myClasses.contains(theirClass)) {
+            return badRequest("You can't rate " + ratedUser + " without being in the same class as them.");
+        }
+
         // are you even in the same team as the person you're rating?
         if (!yourTeam.teamName.equals(theirTeam.teamName)) {
             return badRequest(toJson("You cannot rate " + ratedUser + " who isn't on your team."));
