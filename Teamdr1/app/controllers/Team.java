@@ -191,6 +191,28 @@ public class Team extends Controller {
             myTeam.delete();
             myTeam.save();
             String announcement = "Team " + teamName + " has disbanded.";
+
+            // remove this team from everyone's seen list
+            List<TeamRecord> everyTeam = TeamRecord.findAll();
+            for (int i = 0; i < everyTeam.size(); i++) {
+                TeamRecord thisTeam = everyTeam.get(i);
+                String[] seen = thisTeam.seenTeams.split(" ");
+                ArrayList<String> seenTeamsArr = new ArrayList<String>();
+                for (int j = 0; j < seen.length; j++) {
+                    seenTeamsArr.add(seen[j].trim());
+                }
+                if (seenTeamsArr.contains(teamName)) {
+                    thisTeam.seenTeams = "";
+                    for (int k = 0; k < seenTeamsArr.size(); k++) {
+                        if (seenTeamsArr.get(k).equals(teamName)) {
+                            continue;
+                        }
+                        thisTeam.seenTeams += seenTeamsArr.get(k) + " ";
+                    }
+                    thisTeam.save();
+                }
+            }
+
             return ok(toJson(announcement));
         }
 
