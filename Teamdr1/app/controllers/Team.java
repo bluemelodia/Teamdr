@@ -352,6 +352,7 @@ public class Team extends Controller {
 
         // don't go swiping when you don't have a team for this class
         if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
+            System.out.println("OOPS!!!!");
             return badRequest(toJson("You must be in a team for this class to swipe."));
         }
 

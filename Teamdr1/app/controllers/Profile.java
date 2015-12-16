@@ -145,6 +145,13 @@ public class Profile extends Controller {
             return ok(toJson("Accepted"));
         }
 
+        // Check if you are in a position to accept (are you still in a team and still in this class)
+        List<String> myClasses = UserAccount.getUser(user).getClassList();
+        if (!myClasses.contains(classID)) return ok(toJson("Accepted"));
+
+        TeamRecord myCurrentTeam = TeamRecord.getTeamForClass(user, classID);
+        if (myCurrentTeam == null) return ok(toJson("Accepted"));
+
         // Get the requester's team members
         TeamRecord requesterTeam = TeamRecord.getTeam(teamID);
         String[] theirMembers = (requesterTeam.teamMembers).split(" ");
