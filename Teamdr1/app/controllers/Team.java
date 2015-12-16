@@ -141,6 +141,22 @@ public class Team extends Controller {
             return badRequest(toJson(error));
         }
 
+        // don't go swiping if you aren't even in this class
+        if (UserAccount.getUser(user).currentClass.length() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
+        // Check if user is currently in this class
+        boolean foundClass = false;
+        List<String> allClasses = UserAccount.getUser(user).getClassList();
+        for (int i = 0; i < allClasses.size(); i++) {
+            if (allClasses.get(i).equals(classId)) {
+                foundClass = true;
+            }
+        } if (!foundClass) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
         // Check if the user has a team for this class
         if (TeamRecord.getTeamForClass(user, classId) == null) {
             System.out.println("No team for class");
