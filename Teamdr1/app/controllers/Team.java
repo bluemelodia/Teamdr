@@ -26,27 +26,27 @@ public class Team extends Controller {
         try { // if you enter anything other than a number, you're hacking
             Integer.parseInt(rating);
         } catch(NumberFormatException e) {
-            redirect(routes.Profile.viewProfile());
+            return redirect(routes.Profile.viewProfile());
         }
         int rate = Integer.parseInt(rating);
         if (rate < 1 || rate > 5) { // clearly you're hacking if the rating is outside of the 1-5 range
-            redirect(routes.Profile.viewProfile());
+            return redirect(routes.Profile.viewProfile());
         }
 
         String ratedUser = rated.replaceAll("[^A-Za-z0-9]", "");
 
         // does this user exist? if you weren't hacking, they should...
         if (!UserAccount.exists(ratedUser)) {
-            redirect(routes.Profile.viewProfile());
+            return redirect(routes.Profile.viewProfile());
         }
         // you are not allowed to rate yourself
         if (ratedUser.equals(user)) {
-            redirect(routes.Profile.viewProfile());
+            return redirect(routes.Profile.viewProfile());
         }
 
         // are you in any class?
         if (UserAccount.getUser(user).currentClass.length() < 1) {
-            redirect(routes.Profile.viewProfile());
+            return redirect(routes.Profile.viewProfile());
         }
 
         // are you still in a team for this class?
@@ -311,8 +311,39 @@ public class Team extends Controller {
         }
         UserAccount thisUser = UserAccount.getUser(user);
         String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
+        // don't go swiping if you aren't even in this class
+        if (UserAccount.getUser(user).currentClass.length() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
+        // don't go swiping when you don't have a team for this class
+        if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
         if (!TeamRecord.exists(thisTeam)) {
             return badRequest(toJson("Team you swiped on does not exist."));
+        }
+        // don't swipe on your own team, this isn't even possible unless you're trying to hack
+        if (thisTeam.equals(TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass))) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
+        // get all the classes and teams you are in, you can't swipe on any of these
+        List<String> allClasses = UserAccount.getUser(user).getClassList();
+        for (int i = 0; i < allClasses.size(); i++) {
+            TeamRecord currentTeam = TeamRecord.getTeamForClass(user, allClasses.get(i));
+            if (currentTeam == null) continue;
+            System.out.println("CURRENT TEAM: " + currentTeam.teamName);
+            if (thisTeam.equals(currentTeam.teamName)) {
+                System.out.println("GET OUT OT HERE");
+                return redirect(routes.Profile.viewProfile());
+            }
+        }
+
+        // don't swipe on a team that's not even in the class you're searching for
+        if (!TeamRecord.getTeam(thisTeam).thisClass.equals(UserAccount.getUser(user).currentClass)) {
+            return redirect(routes.Profile.viewProfile());
         }
         System.out.println("This team exists!!!!!");
         System.out.println("RIGHT: " + thisTeam);
