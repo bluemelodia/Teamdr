@@ -153,8 +153,8 @@ public class Team extends Controller {
             if (allClasses.get(i).equals(classId)) {
                 foundClass = true;
             }
-        } if (!foundClass) {
-            return redirect(routes.Profile.viewProfile());
+        } if (!foundClass) { // ok, because we want to refresh the page
+            return ok(toJson("You are no longer in " + classId));
         }
 
         // Check if the user has a team for this class
@@ -494,6 +494,9 @@ public class Team extends Controller {
         String tid = json.get("teamID").toString().replaceAll("[^A-Za-z0-9]", "");
         UserAccount thisUser = UserAccount.getUser(user);
         JsonNode className = toJson(thisUser.currentClass);
+        if (thisUser.currentClass.length() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
 
         if (teamName.length() < 1 && tid.length() < 1) {
             return badRequest(toJson("Team Name and Team ID are required."));
@@ -501,6 +504,12 @@ public class Team extends Controller {
             return badRequest(toJson("TeamName is required."));
         } else if (tid.length() < 1) {
             return badRequest(toJson("Team ID is required."));
+        }
+
+        // Check to see if the user is still in this class
+        List<String> userClasses = UserAccount.getUser(user).getClassList();
+        if (!userClasses.contains(thisUser.currentClass)) {
+            return badRequest(toJson("You must be in this class to make a team."));
         }
 
         // Check to see if the team already exists
