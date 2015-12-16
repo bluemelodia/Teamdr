@@ -39,6 +39,10 @@ public class Team extends Controller {
         if (!UserAccount.exists(ratedUser)) {
             return redirect(routes.Account.signIn());
         }
+        // you are not allowed to rate yourself
+        if (ratedUser.equals(user)) {
+            return redirect(routes.Account.signIn());
+        }
 
         // are you still in a team for this class?
         if (TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass) == null) {
@@ -80,6 +84,24 @@ public class Team extends Controller {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
+        }
+        // check if this class exists
+        List<ClassRecord> cs = ClassRecord.findAll();
+        // check if class exists, blocks URL hacking
+        boolean found = false;
+        for (int i = 0; i < cs.size(); i++) {
+            if(classId.equals(cs.get(i).classID)) {
+                found = true;
+            }
+        }
+        if (!found) {
+            return redirect(routes.Profile.viewProfile());
+        }
+        // check if the user is in the class, otherwise don't let them do this
+        UserAccount thisUser = UserAccount.getUser(session("connected")); // get this user
+        List<String> classes = thisUser.getClassList();
+        if (!classes.contains(classId)) {
+            return redirect(routes.Profile.viewProfile());
         }
         TeamRecord myTeam = TeamRecord.getTeamForClass(user, classId);
         ArrayList<UserAccount> members = new ArrayList<>();
