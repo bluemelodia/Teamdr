@@ -72,7 +72,7 @@ public class Team extends Controller {
 
         // you have a team for this class, now get their team for this class
         TeamRecord yourTeam = TeamRecord.getTeamForClass(user, UserAccount.getUser(user).currentClass);
-        TeamRecord theirTeam = TeamRecord.getTeamForClass(user, UserAccount.getUser(ratedUser).currentClass);
+        TeamRecord theirTeam = TeamRecord.getTeamForClass(ratedUser, UserAccount.getUser(ratedUser).currentClass);
 
         if (theirTeam == null) {
             return badRequest(toJson(ratedUser + " no longer in this class."));
@@ -85,8 +85,10 @@ public class Team extends Controller {
             return badRequest("You can't rate " + ratedUser + " without being in the same class as them.");
         }
 
+        System.out.println(yourTeam.teamName + " vs " + theirTeam.teamName);
         // are you even in the same team as the person you're rating?
         if (!yourTeam.teamName.equals(theirTeam.teamName)) {
+            System.out.println("CANNOT RATE NON-TEAM");
             return badRequest(toJson("You cannot rate " + ratedUser + " who isn't on your team."));
         }
 
