@@ -35,6 +35,22 @@ public class Classes extends Controller {
             return badRequest(toJson(error));
         }
 
+        // don't go swiping if you aren't even in this class
+        if (UserAccount.getUser(user).currentClass.length() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
+        // Check if user is currently in this class
+        boolean foundClass = false;
+        List<String> allClasses = UserAccount.getUser(user).getClassList();
+        for (int i = 0; i < allClasses.size(); i++) {
+            if (allClasses.get(i).equals(classId)) {
+                foundClass = true;
+            }
+        } if (!foundClass) {
+            return redirect(routes.Profile.viewProfile());
+        }
+
         UserAccount userAccount = UserAccount.getUser(user);
         // Check if the user has a team for this class; if not, drop them from the class straight away
         if (TeamRecord.getTeamForClass(user, classId) == null) {
