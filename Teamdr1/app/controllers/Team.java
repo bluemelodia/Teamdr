@@ -428,7 +428,7 @@ public class Team extends Controller {
         String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
         System.out.println("THIS TEAM: " + thisTeam);
 
-        // don't go swiping if you aren't even in this class
+        // don't go swiping if you aren't in any class
         if (UserAccount.getUser(user).currentClass.length() < 1) {
             return redirect(routes.Profile.viewProfile());
         }
