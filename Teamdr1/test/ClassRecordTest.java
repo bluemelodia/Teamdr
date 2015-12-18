@@ -69,7 +69,7 @@ public class ClassRecordTest extends WithApplication {
     }
 
     @Test
-    public void testcreateNewClass() {
+    public void createNewClassTest() {
       ClassRecord.createNewClass("classID", "className");
 
       assertTrue(ClassRecord.exists("classID"));
@@ -79,7 +79,7 @@ public class ClassRecordTest extends WithApplication {
     }
 
     @Test
-    public void testgetNumClasses() {
+    public void getNumClassesTest() {
 
       ClassRecord.createNewClass("classID", "className");
 
@@ -108,39 +108,5 @@ public class ClassRecordTest extends WithApplication {
       ClassRecord.deleteClass("classID2");
 
     }
-
-
-    //test Account Routes
-
-    @Test
-    public void testAddClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(POST)
-            .uri("/addClass");
-
-        Result result = route(request);
-        assertEquals(303, result.status());
-    }
-
-    @Test
-    public void testSetClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/setCurrentClass");
-
-        Result result = route(request);
-        assertEquals(400, result.status());
-    }
-
-    @Test
-    public void testLeaveClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/leaveClass");
-
-        Result result = route(request);
-        assertEquals(400, result.status());
-    }
-
 	
 }
