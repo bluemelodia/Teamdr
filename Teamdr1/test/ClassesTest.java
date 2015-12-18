@@ -54,17 +54,5 @@ public class ClassesTest extends WithApplication {
         Evolutions.cleanupEvolutions(database);
         database.shutdown();
     }
-
-    //Testing Classes-related routes
-    @Test
-    public void classesRouteTest() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/class");
-
-        Result result = route(request);
-        assertEquals(200, result.status());
-    }
-	
 	
 }

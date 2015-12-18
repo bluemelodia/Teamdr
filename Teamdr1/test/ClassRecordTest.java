@@ -123,16 +123,6 @@ public class ClassRecordTest extends WithApplication {
     }
 
     @Test
-    public void testClassRoute() {
-        RequestBuilder request = new RequestBuilder()
-            .method(GET)
-            .uri("/class");
-
-        Result result = route(request);
-        assertEquals(200, result.status());
-    }
-    
-    @Test
     public void testSetClassRoute() {
         RequestBuilder request = new RequestBuilder()
             .method(GET)
