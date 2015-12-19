@@ -45,7 +45,8 @@ public class Team extends Controller {
         }
 
         // are you in any class?
-        if (UserAccount.getUser(user).currentClass.length() < 1) {
+        List<String> thisClasses = UserAccount.getUser(user).getClassList();
+        if (thisClasses.size() < 1) {
             return redirect(routes.Profile.viewProfile());
         }
 
@@ -381,7 +382,11 @@ public class Team extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
         String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
         // don't go swiping if you aren't even in this class
-        if (UserAccount.getUser(user).currentClass.length() < 1) {
+        List<String> thisClasses = UserAccount.getUser(user).getClassList();
+        if (thisClasses.size() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+        if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
             return redirect(routes.Profile.viewProfile());
         }
 
@@ -483,8 +488,12 @@ public class Team extends Controller {
         String thisTeam = teamName.toString().replaceAll("[^A-Za-z0-9]", "");
         System.out.println("THIS TEAM: " + thisTeam);
 
-        // don't go swiping if you aren't in any class
-        if (UserAccount.getUser(user).currentClass.length() < 1) {
+        // don't go swiping if you aren't even in this class
+        List<String> thisClasses = UserAccount.getUser(user).getClassList();
+        if (thisClasses.size() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+        if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
             return redirect(routes.Profile.viewProfile());
         }
 
@@ -549,7 +558,12 @@ public class Team extends Controller {
         String tid = json.get("teamID").toString().replaceAll("[^A-Za-z0-9]", "");
         UserAccount thisUser = UserAccount.getUser(user);
         JsonNode className = toJson(thisUser.currentClass);
-        if (thisUser.currentClass.length() < 1) {
+        // don't go swiping if you aren't even in this class
+        List<String> thisClasses = UserAccount.getUser(user).getClassList();
+        if (thisClasses.size() < 1) {
+            return redirect(routes.Profile.viewProfile());
+        }
+        if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
             return redirect(routes.Profile.viewProfile());
         }
 
