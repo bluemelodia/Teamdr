@@ -559,12 +559,14 @@ public class Team extends Controller {
         UserAccount thisUser = UserAccount.getUser(user);
         JsonNode className = toJson(thisUser.currentClass);
         // don't go swiping if you aren't even in this class
+        System.out.println("HERE");
         List<String> thisClasses = UserAccount.getUser(user).getClassList();
+        System.out.println("THIS CLASSES: " + thisClasses);
         if (thisClasses.size() < 1) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("You aren't in any classes."));
         }
         if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("You aren't in this class."));
         }
 
         if (teamName.length() < 1 && tid.length() < 1) {
@@ -577,7 +579,9 @@ public class Team extends Controller {
 
         // Check to see if the user is still in this class
         List<String> userClasses = UserAccount.getUser(user).getClassList();
-        if (!userClasses.contains(thisUser.currentClass)) {
+        System.out.println("Classes: " + userClasses);
+        System.out.println("Current class: " + thisUser.currentClass);
+        if (userClasses.size() < 1 || !userClasses.contains(thisUser.currentClass)) {
             return badRequest(toJson("You must be in this class to make a team."));
         }
 
