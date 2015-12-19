@@ -229,7 +229,6 @@ public class Team extends Controller {
                     thisTeam.save();
                 }
             }
-
             // disable all notifications related to this class
             Notification.disableNotifs(classId, user);
 
@@ -246,6 +245,9 @@ public class Team extends Controller {
             UserAccount moi = UserAccount.getUser(member);
             Notification.createNewNotification(moi.username, moi.currentClass, 3, myTeam.tid, message);
         }
+        // disable all notifications related to this class
+        Notification.disableNotifs(classId, user);
+
         String announcement = "You have left " + oldTeam;
         return ok(toJson(announcement));
     }

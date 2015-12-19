@@ -35,6 +35,7 @@ public class Notification {
     @Constraints.Required
     public String teamID;  // team ID of the requester team
 
+    @Constraints.Required
     public Boolean disabled = false;
 
     public Notification(String username, String classID, int type, String teamID, String message) {
@@ -59,10 +60,12 @@ public class Notification {
 
     // silently disable the notification, to avoid the swiping bug
     public static void disableNotifs(String classID, String username) {
+        System.out.println("DELETING PURGE!");
         List<Notification> classNotifs = getNotifs(username);
         for (int i = 0; i < classNotifs.size(); i++) {
             Notification thisNotif = classNotifs.get(i);
             thisNotif.disabled = true;
+            System.out.println("Disabled: " + thisNotif.classID + " " + thisNotif.notifID);
             Ebean.save(thisNotif);
         }
     }
@@ -77,6 +80,7 @@ public class Notification {
 
     public static void deleteNotif(int notifID) {
         Notification notif = find.ref(Integer.toString(notifID));
+        System.out.println("DELETING: " + notif);
         Ebean.delete(notif);
     }
 

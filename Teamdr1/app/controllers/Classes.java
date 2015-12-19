@@ -104,7 +104,7 @@ public class Classes extends Controller {
             }
 
             Notification.disableNotifs(classId, user);
-            
+
             return ok(toJson(announcement));
         }
 
@@ -121,6 +121,10 @@ public class Classes extends Controller {
         }
         userAccount.removeClass(classId);
         //userAccount.save();
+
+        // disable all notifications related to this class
+        Notification.disableNotifs(classId, user);
+
         String announcement = "Because you have dropped " + classId + ", you were removed from team " + oldTeam;
         return ok(toJson(announcement));
     }
