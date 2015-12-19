@@ -37,11 +37,6 @@ public class Classes extends Controller {
             return badRequest(toJson(error));
         }
 
-        // don't go swiping if you aren't even in this class
-        if (UserAccount.getUser(user).currentClass.length() < 1) {
-            return redirect(routes.Profile.viewProfile());
-        }
-
         // Check if user is currently in this class
         boolean foundClass = false;
         List<String> allClasses = UserAccount.getUser(user).getClassList();

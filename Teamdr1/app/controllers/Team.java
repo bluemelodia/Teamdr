@@ -148,7 +148,6 @@ public class Team extends Controller {
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
         }
-        JsonNode json = request().body().asJson();
         System.out.println("CLASS ID: " + classId);
 
         // check if class exists, blocks URL hacking
@@ -163,12 +162,10 @@ public class Team extends Controller {
             String error = classId + " does not exist.";
             return badRequest(toJson(error));
         }
+        System.out.println("Class does exist");
+        System.out.println("Your current class: " + UserAccount.getUser(user).currentClass);
 
-        // don't go swiping if you aren't even in this class
-        if (UserAccount.getUser(user).currentClass.length() < 1) {
-            return redirect(routes.Profile.viewProfile());
-        }
-
+        System.out.println("You're in this class");
         // Check if user is currently in this class
         boolean foundClass = false;
         List<String> allClasses = UserAccount.getUser(user).getClassList();
@@ -546,7 +543,7 @@ public class Team extends Controller {
         String user = session("connected");
         if (user == null) { // unauthorized user login, kick them back to login screen
             return redirect(routes.Account.signIn());
-        };
+        }
         JsonNode json = request().body().asJson();
         String teamName = json.get("teamName").toString().replaceAll("[^A-Za-z0-9]", "");
         String tid = json.get("teamID").toString().replaceAll("[^A-Za-z0-9]", "");
