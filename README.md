@@ -41,3 +41,4 @@ Updated specs: pre-populate the database with CS classes. Users are not allowed 
 
 Tips: If DB is storing garbage values, do activator clean, activator run.
 Ex. {"username":"1","password":null} when right value should be {"username":"turtles","password":"flops"}
+[Project] Helping students find the teammates they need
