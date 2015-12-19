@@ -38,8 +38,9 @@ import play.twirl.api.Content;
 import play.test.FakeRequest;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockIgnore("javax.crypto.*")
-public class ProfileTest extends WithApplication {
+//@PowerMockIgnore("javax.crypto.*")
+@PowerMockIgnore({"javax.management.*", "javax.crypto.*"})
+class ProfileTest extends WithApplication {
 
 
 
