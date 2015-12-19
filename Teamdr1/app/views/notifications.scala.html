@@ -98,6 +98,7 @@ function getNotifs() {
 
 webix.ready(function () {
     webix.ui({
+    view:"scrollview", id:"scrollview", scroll:"y", width:screen.width,  body:{
       rows:[
           { view:"template",
             type:"header", template:"Notifications" },
@@ -109,8 +110,8 @@ webix.ready(function () {
             id: "notifForms", rows: []
           }
       ]
-    });
-
+      }
+      });
     getNotifs();
 });
 
