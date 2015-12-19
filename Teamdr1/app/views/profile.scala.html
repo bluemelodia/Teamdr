@@ -40,7 +40,7 @@ function leaveClass(id) {
             alert(data);
             location.href = '/profile';
         }, error: function(request, status, error) {
-            alert("FAIL" + request.responseText);
+            alert(request.responseText);
         }
     });
 }

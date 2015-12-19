@@ -45,7 +45,7 @@ public class Classes extends Controller {
                 foundClass = true;
             }
         } if (!foundClass) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest("You aren't in this class anymore.");
         }
 
         UserAccount userAccount = UserAccount.getUser(user);
