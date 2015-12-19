@@ -46,7 +46,8 @@ public class Account extends Controller {
         newAccount.password = password;
 		UserProfile newProfile = new UserProfile();
         String startingDescription = "I love CS!";
-		newProfile.updateProfile(username, email, startingDescription);
+        String startingURL = "";
+		newProfile.updateProfile(username, email, startingURL, startingDescription);
 		newProfile.save();
 		newAccount.profile = newProfile;
 		newAccount.addProfile(username, email);

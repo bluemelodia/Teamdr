@@ -61,6 +61,7 @@ public class UserProfileTest extends WithApplication {
 		assertEquals(p.username, null);
 		assertEquals(p.email, null);
 		assertEquals(p.description, null);
+		assertEquals(p.pic_url, null);
     }
 
 	@Test
@@ -69,31 +70,38 @@ public class UserProfileTest extends WithApplication {
 		String uname = "JohnDoe";
 		String email = "john@john.com";
 		String d = "I am John.";
+		String p1 = "https://upload.wikimedia.org/wikipedia/commons/d/d9/Florida_Box_Turtle_Digon3a.jpg";
 		
-		p.updateProfile(uname, email, d);
+		p.updateProfile(uname, email, p1, d);
 		assertEquals(p.username, uname);
 		assertEquals(p.email, email);
 		assertEquals(p.description, d);
+		assertEquals(p.pic_url, p1);
 		
 		String uname2 = "JohnDo";
 		String email2 = "john@john@john.co";
 		String d2 = "I am John";
+		String p2 = "http://www.ecology.com/wp-content/uploads/2012/05/eastern-box-turtle.jpg";
 		assertNotEquals(p.username, uname2);
 		assertNotEquals(p.email, email2);
 		assertNotEquals(p.description, d2);
+		assertNotEquals(p.pic_url, p2);
 		
-		p.updateProfile(uname2, email2, d2);
+		p.updateProfile(uname2, email2, p2, d2);
 		assertEquals(p.username, uname2);
 		assertEquals(p.email, email2);
 		assertEquals(p.description, d2);
+		assertEquals(p.pic_url, p2);
 		
 		String uname3 = null;
 		String email3 = null;
 		String d3 = null;
-		p.updateProfile(uname3, email3, d3);
+		String p3 = null;
+		p.updateProfile(uname3, email3, p3, d3);
 		assertEquals(p.username, null);
 		assertEquals(p.email, null);
 		assertEquals(p.description, null);
+		assertEquals(p.pic_url, null);
     }
 	
 }

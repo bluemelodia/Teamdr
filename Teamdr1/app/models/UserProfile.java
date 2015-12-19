@@ -55,9 +55,10 @@ public class UserProfile extends Model {
 		return find.ref(username);
 	}
 
-	public UserProfile updateProfile(String uname, String e, String d) {
+	public UserProfile updateProfile(String uname, String e, String p, String d) {
 		this.username = uname;
 		this.email = e;
+		this.pic_url = p;
 		this.description = d;
 		return this;
 	}
