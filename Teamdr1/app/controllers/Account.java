@@ -47,6 +47,19 @@ public class Account extends Controller {
 		UserProfile newProfile = new UserProfile();
         String startingDescription = "I love CS!";
         String startingURL = "";
+
+        // don't let user sign up with a bad email
+        email = email.replaceAll("[^A-Za-z0-9@!#$%&'*+-/=?^_`{|}~]", "");
+        if (email.trim().length() < 1) {
+            email = "";
+        } if (email.trim().length() > 0) {
+            String emailCheck = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+            Boolean test = email.matches(emailCheck);
+            if (!test) {
+                email = "";
+            }
+        }
+
 		newProfile.updateProfile(username, email, startingURL, startingDescription);
 		newProfile.save();
 		newAccount.profile = newProfile;
