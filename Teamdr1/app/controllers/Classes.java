@@ -103,6 +103,8 @@ public class Classes extends Controller {
                 }
             }
 
+            Notification.disableNotifs(classId, user);
+            
             return ok(toJson(announcement));
         }
 

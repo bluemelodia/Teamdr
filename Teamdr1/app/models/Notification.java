@@ -35,6 +35,8 @@ public class Notification {
     @Constraints.Required
     public String teamID;  // team ID of the requester team
 
+    public Boolean disabled = false;
+
     public Notification(String username, String classID, int type, String teamID, String message) {
         this.username = username;
         this.classID = classID;
@@ -53,6 +55,16 @@ public class Notification {
 
     public static List<Notification> getNotifs(String username) {
         return Notification.find.where().eq("username", username).orderBy("classID").findList();
+    }
+
+    // silently disable the notification, to avoid the swiping bug
+    public static void disableNotifs(String classID, String username) {
+        List<Notification> classNotifs = getNotifs(username);
+        for (int i = 0; i < classNotifs.size(); i++) {
+            Notification thisNotif = classNotifs.get(i);
+            thisNotif.disabled = true;
+            Ebean.save(thisNotif);
+        }
     }
 
     public static boolean notifExists(int notifID) {

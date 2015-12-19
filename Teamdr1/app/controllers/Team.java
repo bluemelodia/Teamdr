@@ -47,7 +47,10 @@ public class Team extends Controller {
         // are you in any class?
         List<String> thisClasses = UserAccount.getUser(user).getClassList();
         if (thisClasses.size() < 1) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("You are not in any classes"));
+        }
+        if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
+            return badRequest(toJson("You aren't in this class."));
         }
 
         // are they still in this class?
@@ -227,6 +230,9 @@ public class Team extends Controller {
                 }
             }
 
+            // disable all notifications related to this class
+            Notification.disableNotifs(classId, user);
+
             return ok(toJson(announcement));
         }
 
@@ -384,10 +390,10 @@ public class Team extends Controller {
         // don't go swiping if you aren't even in this class
         List<String> thisClasses = UserAccount.getUser(user).getClassList();
         if (thisClasses.size() < 1) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest("You aren't in any classes.");
         }
         if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest("You aren't in this class.");
         }
 
         // don't go swiping when you don't have a team for this class
@@ -433,7 +439,7 @@ public class Team extends Controller {
         for (int j = 0; j < notifs.size(); j++) {
             Notification currentNotif = notifs.get(j);
             // This user was already invited to join this team
-            if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam)) {
+            if (currentNotif.classID.equals(thisUser.currentClass) && currentNotif.teamID.equals(thisTeam) && !currentNotif.disabled) {
                 return ok(toJson("You already have an invitation to join this team. Go to notifications."));
             }
         }
@@ -491,10 +497,10 @@ public class Team extends Controller {
         // don't go swiping if you aren't even in this class
         List<String> thisClasses = UserAccount.getUser(user).getClassList();
         if (thisClasses.size() < 1) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest("You aren't in any classes.");
         }
         if (!thisClasses.contains(UserAccount.getUser(user).currentClass)) {
-            return redirect(routes.Profile.viewProfile());
+            return badRequest(toJson("Team you swiped on does not exist."));
         }
 
         // don't go swiping when you don't have a team for this class
