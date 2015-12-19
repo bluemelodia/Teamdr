@@ -56,6 +56,22 @@ function showUser() {
             ]
         }, -1);
         }
+        @if(member.username == userAccount.username) {
+            $$('users').addView({
+            id:"frm@member",
+            view: "form",
+            elements:[
+                { view:"label", label:"Username: @member.username"},
+                { view:"label", label:"E-mail: @UserProfile.getUser(member.username).email"},
+                { view:"label", label:"Picture URL: @UserProfile.getUser(member.username).pic_url"},
+                @if(UserProfile.getUser(member.username).rating != 0) {
+                { view:"label", label:"Rating: @UserProfile.getUser(member.username).rating (@UserAccount.getUser(member.username).numRaters() Ratings)"},
+                } @if(UserProfile.getUser(member.username).rating == 0) {
+                { view:"label", label:"Rating: No ratings yet"},
+                }
+            ]
+            }, -1);
+        }
     }
 }
 
